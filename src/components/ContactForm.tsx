@@ -32,7 +32,7 @@ export default function ContactForm({ propertyTitle, contactEmail }: ContactForm
     try {
       // Send email using web3forms
       const form = new FormData();
-      form.append('access_key', '4bfea069-13f8-43f2-b94b-5d5fd81364d8');
+      form.append('access_key', import.meta.env.VITE_WEB3FORMS_ACCESS_KEY || '0469cb33-7c50-44d8-b019-c70583307942');
       form.append('name', formData.name);
       form.append('phone', formData.phone);
       form.append('email', formData.email);
