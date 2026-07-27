@@ -84,7 +84,7 @@ export const SEO: React.FC<SEOProps> = (props) => {
           "description": description,
           "url": url,
           "logo": image,
-          "telephone": "+91-XXXXXXXXXX", // Add your phone number
+          "telephone": "+91 98861 04532",
           "address": {
             "@type": "PostalAddress",
             "addressLocality": "Bangalore",

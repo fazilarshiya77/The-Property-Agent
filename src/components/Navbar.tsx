@@ -91,11 +91,11 @@ export default function Navbar() {
             {/* Desktop CTA */}
             <div className="hidden md:flex items-center space-x-5">
               <a
-                href="tel:+919876543210"
+                href="tel:+919886104532"
                 className="flex items-center space-x-2 text-sm font-semibold text-neutral-600 hover:text-brand-500 transition-colors duration-300"
               >
                 <Phone className="h-4 w-4 text-brand-500" />
-                <span className="hidden lg:inline">+91 98765 43210</span>
+                <span className="hidden lg:inline">+91 98861 04532</span>
               </a>
               <Link
                 to="/about#contact"
@@ -167,11 +167,11 @@ export default function Navbar() {
             </div>
             <div className="mt-8 pt-6 border-t border-neutral-100">
               <a
-                href="tel:+919876543210"
+                href="tel:+919886104532"
                 className="flex items-center space-x-3 px-4 py-3 text-neutral-600 hover:text-brand-500 transition-colors"
               >
                 <Phone className="h-5 w-5" />
-                <span className="text-sm font-medium">+91 98765 43210</span>
+                <span className="text-sm font-medium">+91 98861 04532</span>
               </a>
               <Link
                 to="/about#contact"

@@ -277,12 +277,12 @@ export default function PropertyDetails() {
                       <div className="text-sm font-medium text-navy-800">{property.contactEmail}</div>
                     </div>
                   </a>
-                  <a href="tel:+919876543210"
+                  <a href="tel:+919886104532"
                     className="flex items-center space-x-3 p-3 rounded-xl bg-neutral-50 hover:bg-neutral-100 transition-colors">
                     <Phone className="h-5 w-5 text-brand-500" />
                     <div>
                       <div className="text-xs text-neutral-500">Phone</div>
-                      <div className="text-sm font-medium text-navy-800">+91 98765 43210</div>
+                      <div className="text-sm font-medium text-navy-800">+91 98861 04532</div>
                     </div>
                   </a>
                 </div>
