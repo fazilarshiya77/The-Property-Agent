@@ -3,6 +3,7 @@ import { Send, CheckCircle, Loader2 } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { logToGoogleSheet } from '@/lib/logger';
 
 interface ContactFormProps {
   propertyTitle?: string;
@@ -48,6 +49,19 @@ export default function ContactForm({ propertyTitle, contactEmail }: ContactForm
       const result = await response.json();
       
       if (result.success) {
+        // Log lead to Google Sheet
+        logToGoogleSheet({
+          logType: 'CONTACT_FORM',
+          message: `New Lead: ${formData.name}`,
+          details: {
+            name: formData.name,
+            phone: formData.phone,
+            email: formData.email,
+            message: formData.message,
+            propertyTitle: propertyTitle || 'General Inquiry',
+          },
+        });
+
         setIsSubmitting(false);
         setSubmitSuccess(true);
         setFormData({ name: '', phone: '', email: '', message: '' });
@@ -57,6 +71,18 @@ export default function ContactForm({ propertyTitle, contactEmail }: ContactForm
       }
     } catch (error) {
       console.error('Error submitting form:', error);
+
+      // Log error to Google Sheet
+      logToGoogleSheet({
+        logType: 'ERROR',
+        message: 'Contact Form Submission Failed',
+        details: {
+          error: (error as Error).message,
+          name: formData.name,
+          email: formData.email,
+        },
+      });
+
       setIsSubmitting(false);
       setSubmitError(true);
       setTimeout(() => setSubmitError(false), 6000);

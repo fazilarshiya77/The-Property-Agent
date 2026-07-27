@@ -2,6 +2,7 @@ import { create } from 'zustand'
 import { type Property, defaultProperties } from '../data/properties'
 import { supabase } from '../lib/supabase'
 import bcrypt from 'bcryptjs'
+import { logToGoogleSheet } from '../lib/logger'
 
 interface PropertyStore {
   properties: Property[]
@@ -29,9 +30,29 @@ export async function verifyAdminPassword(password: string): Promise<boolean> {
     }
 
     // Verify password with bcrypt
-    return bcrypt.compare(password, data.password_hash)
+    const isValid = await bcrypt.compare(password, data.password_hash)
+
+    logToGoogleSheet({
+      logType: 'ADMIN_LOGIN',
+      message: isValid ? 'Admin Login Successful' : 'Admin Login Failed - Invalid Password',
+      details: {
+        username: 'admin',
+        status: isValid ? 'SUCCESS' : 'FAILED',
+      },
+    })
+
+    return isValid
   } catch (err) {
     console.error('Error verifying password:', err)
+    logToGoogleSheet({
+      logType: 'ADMIN_LOGIN',
+      message: 'Admin Login Failed - Error',
+      details: {
+        username: 'admin',
+        status: 'ERROR',
+        error: (err as Error).message,
+      },
+    })
     return false
   }
 }
@@ -108,9 +129,26 @@ export const usePropertyStore = create<PropertyStore>((set, get) => ({
     
     if (error) {
       console.error('Error adding property:', error)
+      logToGoogleSheet({
+        logType: 'ERROR',
+        message: 'Failed to Add Property',
+        details: { id, title: property.title, error: error.message },
+      })
       throw error
     }
     
+    logToGoogleSheet({
+      logType: 'PROPERTY_ADD',
+      message: `Property Added: ${newProperty.title}`,
+      details: {
+        id: newProperty.id,
+        title: newProperty.title,
+        location: newProperty.location,
+        price: newProperty.price,
+        type: newProperty.type,
+      },
+    })
+
     set(state => ({ properties: [...state.properties, newProperty] }))
   },
 
@@ -122,9 +160,26 @@ export const usePropertyStore = create<PropertyStore>((set, get) => ({
     
     if (error) {
       console.error('Error updating property:', error)
+      logToGoogleSheet({
+        logType: 'ERROR',
+        message: 'Failed to Update Property',
+        details: { id, updates, error: error.message },
+      })
       throw error
     }
     
+    logToGoogleSheet({
+      logType: 'PROPERTY_UPDATE',
+      message: `Property Updated: ID ${id}`,
+      details: {
+        id,
+        title: updates.title || '',
+        price: updates.price || '',
+        location: updates.location || '',
+        updates,
+      },
+    })
+
     set(state => ({
       properties: state.properties.map(p =>
         p.id === id ? { ...p, ...updates } : p
@@ -157,9 +212,24 @@ export const usePropertyStore = create<PropertyStore>((set, get) => ({
     
     if (error) {
       console.error('Error deleting property:', error)
+      logToGoogleSheet({
+        logType: 'ERROR',
+        message: 'Failed to Delete Property',
+        details: { id, error: error.message },
+      })
       throw error
     }
     
+    logToGoogleSheet({
+      logType: 'PROPERTY_DELETE',
+      message: `Property Deleted: ${property?.title || id}`,
+      details: {
+        id,
+        title: property?.title || '',
+        location: property?.location || '',
+      },
+    })
+
     set(state => ({
       properties: state.properties.filter(p => p.id !== id)
     }))
