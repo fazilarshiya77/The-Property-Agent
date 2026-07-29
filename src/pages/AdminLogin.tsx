@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Lock, Eye, EyeOff, AlertCircle, Mail } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { setAdminAuthenticated } from '../stores/propertyStore';
@@ -25,13 +25,13 @@ export default function AdminLogin() {
       });
 
       if (supabaseError) {
-        setError(supabaseError.message);
+        setError('Ran into an issue, please try again later.');
       } else if (data.user) {
         setAdminAuthenticated(true);
         navigate('/admin/dashboard');
       }
     } catch (err) {
-      setError('An unexpected error occurred');
+      setError('Ran into an issue, please try again later.');
     } finally {
       setLoading(false);
     }
@@ -105,19 +105,10 @@ export default function AdminLogin() {
           <button
             type="submit"
             disabled={loading || !email || !password}
-            className="w-full bg-brand-500 hover:bg-brand-600 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-3 rounded-xl transition-all hover:shadow-lg hover:shadow-brand-500/25 mb-4"
+            className="w-full bg-brand-500 hover:bg-brand-600 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-3 rounded-xl transition-all hover:shadow-lg hover:shadow-brand-500/25"
           >
             {loading ? 'Signing In...' : 'Sign In'}
           </button>
-
-          <div className="text-center">
-            <Link
-              to="/admin/forgot-password"
-              className="text-brand-600 hover:text-brand-700 font-medium text-sm"
-            >
-              Forgot your password?
-            </Link>
-          </div>
         </form>
       </div>
     </div>

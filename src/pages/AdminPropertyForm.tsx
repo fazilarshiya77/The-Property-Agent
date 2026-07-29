@@ -138,7 +138,7 @@ export default function AdminPropertyForm() {
       console.log('Successfully uploaded images:', newImageUrls)
     } catch (err) {
       console.error('Error uploading images:', err)
-      alert(`Error uploading images: ${err instanceof Error ? err.message : 'Unknown error'}`)
+      alert('Ran into an issue, please try again later.')
       // Clear previews on error
       setPendingImagePreviews([])
     } finally {
@@ -160,7 +160,7 @@ export default function AdminPropertyForm() {
       navigate('/admin/dashboard');
     } catch (err) {
       console.error('Error submitting property:', err)
-      alert('Error saving property')
+      alert('Ran into an issue, please try again later.')
     }
   };
 

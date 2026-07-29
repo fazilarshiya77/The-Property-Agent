@@ -10,8 +10,6 @@ import About from "./pages/About";
 import AdminLogin from "./pages/AdminLogin";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminPropertyForm from "./pages/AdminPropertyForm";
-import ForgotPassword from "./pages/ForgotPassword";
-import ResetPassword from "./pages/ResetPassword";
 import { SEOProvider, SEO } from "./components/SEO";
 
 function AppLayout() {
@@ -22,8 +20,6 @@ function AppLayout() {
     return (
       <Routes>
         <Route path="/admin" element={<AdminLogin />} />
-        <Route path="/admin/forgot-password" element={<ForgotPassword />} />
-        <Route path="/admin/reset-password" element={<ResetPassword />} />
         <Route path="/admin/dashboard" element={<AdminDashboard />} />
         <Route path="/admin/new" element={<AdminPropertyForm />} />
         <Route path="/admin/edit/:id" element={<AdminPropertyForm />} />

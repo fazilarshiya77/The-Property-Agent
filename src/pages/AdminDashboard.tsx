@@ -30,7 +30,7 @@ export default function AdminDashboard() {
         await deleteProperty(id);
       } catch (err) {
         console.error('Error deleting property:', err)
-        alert('Error deleting property')
+        alert('Ran into an issue, please try again later.')
       }
     }
   };
