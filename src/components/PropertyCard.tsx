@@ -31,7 +31,7 @@ export default function PropertyCard({ property }: PropertyCardProps) {
           {!imageLoaded && <div className="absolute inset-0 skeleton bg-neutral-100" />}
           <img
             src={property.images[0]}
-            alt={property.title}
+            alt={`${property.title} — ${property.type === 'rent' ? 'For Rent' : 'For Sale'} in ${property.location}`}
             className={`w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out ${
               imageLoaded ? 'opacity-100' : 'opacity-0'
             }`}

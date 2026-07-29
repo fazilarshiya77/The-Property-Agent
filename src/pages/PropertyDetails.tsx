@@ -3,11 +3,12 @@ import { usePropertyStore } from '../stores/propertyStore';
 import ImageCarousel from '../components/ImageCarousel';
 import ContactForm from '../components/ContactForm';
 import PropertyCard from '../components/PropertyCard';
-import { Bed, Bath, Maximize, MapPin, CheckCircle, ArrowLeft, Mail, Phone, Share2, Heart, Building, Layers, Compass } from 'lucide-react';
+import { Bed, Bath, Maximize, MapPin, CheckCircle, ArrowLeft, Mail, Phone, Share2, Heart, Building, Layers, Compass, Home, ChevronRight } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useScrollReveal } from '../hooks/useScrollReveal';
 import { getAmenityIcon } from '../lib/amenityIcons';
 import { SEO } from '../components/SEO';
+import type { BreadcrumbItem, PropertySchemaData } from '../components/SEO';
 
 export default function PropertyDetails() {
   const { id } = useParams<{ id: string }>();
@@ -82,32 +83,100 @@ export default function PropertyDetails() {
     ...(property.facing ? [{ icon: Compass, label: 'Facing', value: property.facing }] : []),
   ];
 
+  // ─── SEO Data ─────────────────────────────
+  const breadcrumbs: BreadcrumbItem[] = [
+    { name: 'Home', url: '/' },
+    { name: 'Properties', url: '/listings' },
+    { name: property.title, url: `/listings/${property.id}` },
+  ];
+
+  const propertySchemaData: PropertySchemaData = {
+    name: property.title,
+    description: property.description,
+    price: property.price,
+    type: property.type,
+    bedrooms: property.bedrooms,
+    bathrooms: property.bathrooms,
+    area: property.area,
+    location: property.location,
+    areaName: property.areaName,
+    images: property.images,
+    amenities: property.amenities,
+    furnished: property.furnished === 'fully' ? 'Fully Furnished' : property.furnished === 'semi' ? 'Semi Furnished' : 'Unfurnished',
+    availability: property.availability,
+    deposit: property.deposit,
+    floor: property.floor,
+    facing: property.facing,
+    reviews: property.reviews.map(r => ({
+      name: r.name,
+      rating: r.rating,
+      text: r.text,
+      date: r.date,
+    })),
+  };
+
+  // Build a rich, unique meta description for this property
+  const metaDescription = `${property.title} in ${property.location}. ${property.type === 'rent' ? `For Rent at ₹${property.price.toLocaleString('en-IN')}/month` : `For Sale at ${formatPrice(property.price, property.type)}`}. ${property.bedrooms} bedrooms, ${property.bathrooms} bathrooms, ${property.area} sqft. ${property.furnished === 'fully' ? 'Fully furnished.' : property.furnished === 'semi' ? 'Semi-furnished.' : ''} ${property.availability === 'Immediate' || property.availability === 'Ready to Move' ? 'Ready to move in.' : `Possession: ${property.availability}.`} Contact Trishna Properties: +91 98861 04532.`;
+
   return (
     <div className="min-h-screen bg-neutral-50">
       <SEO
-        title={`${property.title} - Prishna Properties Bangalore`}
-        description={`${property.title} in ${property.location}. ${property.type === 'rent' ? 'For Rent' : 'For Sale'} - ${property.bedrooms} bedrooms, ${property.bathrooms} bathrooms, ${property.area} sqft. Contact Prishna Properties today!`}
-        keywords={`${property.title}, ${property.location}, ${property.areaName}, properties ${property.type === 'rent' ? 'for rent' : 'for sale'} Bangalore, ${property.bedrooms} BHK Bangalore, real estate`}
-        type="website"
+        title={`${property.title} — ${property.areaName}, Bangalore`}
+        description={metaDescription}
+        keywords={`${property.title}, ${property.areaName} ${property.type === 'rent' ? 'rent' : 'sale'}, ${property.bedrooms}BHK ${property.areaName}, ${property.location}, properties ${property.type === 'rent' ? 'for rent' : 'for sale'} ${property.areaName} Bangalore, ${property.furnished === 'fully' ? 'furnished apartments' : 'apartments'} ${property.areaName}, Trishna Properties ${property.areaName}, real estate ${property.areaName} Bangalore`}
+        type="product"
         image={property.images[0]}
+        canonicalPath={`/listings/${property.id}`}
         location={property.location}
         geoRegion="IN-KA"
         geoPosition="12.9716;77.5946"
+        breadcrumbs={breadcrumbs}
+        propertyData={propertySchemaData}
       />
+
       <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4">
+        {/* ─── BREADCRUMB NAVIGATION ─── */}
+        <nav aria-label="Breadcrumb" className="mb-4">
+          <ol className="flex items-center flex-wrap gap-1 text-sm" itemScope itemType="https://schema.org/BreadcrumbList">
+            <li className="flex items-center" itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
+              <Link to="/" className="text-neutral-500 hover:text-brand-500 transition-colors flex items-center" itemProp="item">
+                <Home className="h-3.5 w-3.5 mr-1" aria-hidden="true" />
+                <span itemProp="name">Home</span>
+              </Link>
+              <meta itemProp="position" content="1" />
+            </li>
+            <ChevronRight className="h-3 w-3 text-neutral-400 mx-1" aria-hidden="true" />
+            <li className="flex items-center" itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
+              <Link to="/listings" className="text-neutral-500 hover:text-brand-500 transition-colors" itemProp="item">
+                <span itemProp="name">Properties</span>
+              </Link>
+              <meta itemProp="position" content="2" />
+            </li>
+            <ChevronRight className="h-3 w-3 text-neutral-400 mx-1" aria-hidden="true" />
+            <li className="flex items-center" itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
+              <span className="text-navy-900 font-medium truncate max-w-[200px]" itemProp="name">{property.title}</span>
+              <meta itemProp="position" content="3" />
+            </li>
+          </ol>
+        </nav>
+
         {/* Back + Actions */}
         <div className="flex items-center justify-between mb-4">
           <button onClick={() => navigate(-1)}
-            className="flex items-center space-x-2 text-neutral-600 hover:text-navy-900 transition-colors text-sm font-medium">
-            <ArrowLeft className="h-4 w-4" />
+            className="flex items-center space-x-2 text-neutral-600 hover:text-navy-900 transition-colors text-sm font-medium"
+            aria-label="Go back to previous page"
+          >
+            <ArrowLeft className="h-4 w-4" aria-hidden="true" />
             <span>Back</span>
           </button>
           <div className="flex items-center space-x-2">
-            <button className="p-2 rounded-lg hover:bg-neutral-100 text-neutral-500 transition-colors">
+            <button className="p-2 rounded-lg hover:bg-neutral-100 text-neutral-500 transition-colors" aria-label="Share property">
               <Share2 className="h-5 w-5" />
             </button>
             <button onClick={() => setIsLiked(!isLiked)}
-              className="p-2 rounded-lg hover:bg-neutral-100 transition-colors">
+              className="p-2 rounded-lg hover:bg-neutral-100 transition-colors"
+              aria-label={isLiked ? "Remove from favorites" : "Add to favorites"}
+            >
               <Heart className={`h-5 w-5 ${isLiked ? 'fill-red-500 text-red-500' : 'text-neutral-500'}`} />
             </button>
           </div>
@@ -119,7 +188,7 @@ export default function PropertyDetails() {
         {/* Content Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8 mt-6 sm:mt-8">
           {/* Main Content */}
-          <div className="lg:col-span-2 space-y-4 sm:space-y-6">
+          <article className="lg:col-span-2 space-y-4 sm:space-y-6" itemScope itemType="https://schema.org/Residence">
             {/* Header */}
             <div ref={headerRef} className="bg-white rounded-2xl shadow-card p-4 sm:p-6 lg:p-8">
               <div className="flex flex-wrap items-center gap-2 mb-3">
@@ -131,20 +200,20 @@ export default function PropertyDetails() {
                 {property.furnished === 'fully' && (
                   <span className="px-3 py-1 rounded-full text-xs font-semibold bg-green-50 text-green-700">Fully Furnished</span>
                 )}
-                {property.availability === 'Immediate' && (
+                {(property.availability === 'Immediate' || property.availability === 'Ready to Move') && (
                   <span className="px-3 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-700">Ready to Move</span>
                 )}
               </div>
 
-              <h1 className="text-xl sm:text-2xl lg:text-3xl font-display font-bold text-navy-900 mb-2 tracking-wide">{property.title}</h1>
-              <div className="flex items-center text-neutral-500 mb-4">
-                <MapPin className="h-4 w-4 mr-1.5 text-brand-500" />
-                <span className="text-sm">{property.location}</span>
+              <h1 className="text-xl sm:text-2xl lg:text-3xl font-display font-bold text-navy-900 mb-2 tracking-wide" itemProp="name">{property.title}</h1>
+              <div className="flex items-center text-neutral-500 mb-4" itemProp="address" itemScope itemType="https://schema.org/PostalAddress">
+                <MapPin className="h-4 w-4 mr-1.5 text-brand-500" aria-hidden="true" />
+                <span className="text-sm" itemProp="addressLocality">{property.location}</span>
               </div>
 
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pt-4 border-t border-neutral-100">
                 <div>
-                  <span className="text-2xl sm:text-3xl font-bold text-navy-900">
+                  <span className="text-2xl sm:text-3xl font-bold text-navy-900" itemProp="price">
                     {formatPrice(property.price, property.type)}
                   </span>
                   {property.type === 'rent' && <span className="text-neutral-500 text-sm">/month</span>}
@@ -163,7 +232,7 @@ export default function PropertyDetails() {
               <div ref={specsRef} className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
                 {specs.map((spec) => (
                   <div key={spec.label} className="flex items-center space-x-3 p-2.5 sm:p-3 bg-neutral-50 rounded-xl">
-                    <spec.icon className="h-5 w-5 text-brand-500 flex-shrink-0" />
+                    <spec.icon className="h-5 w-5 text-brand-500 flex-shrink-0" aria-hidden="true" />
                     <div>
                       <div className="text-xs text-neutral-500">{spec.label}</div>
                       <div className="text-sm font-semibold text-navy-900">{spec.value}</div>
@@ -180,7 +249,7 @@ export default function PropertyDetails() {
                 <div ref={highlightsRef} className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {property.highlights.map((h, i) => (
                     <div key={i} className="flex items-start space-x-2.5">
-                      <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5" />
+                      <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5" aria-hidden="true" />
                       <span className="text-sm text-neutral-700">{h}</span>
                     </div>
                   ))}
@@ -191,7 +260,7 @@ export default function PropertyDetails() {
             {/* Description */}
             <div ref={descRef} className="bg-white rounded-2xl shadow-card p-6 lg:p-8">
               <h2 className="text-lg font-display font-bold text-navy-900 mb-4 tracking-wide">About This Property</h2>
-              <p className="text-neutral-600 text-sm leading-relaxed">{property.description}</p>
+              <p className="text-neutral-600 text-sm leading-relaxed" itemProp="description">{property.description}</p>
             </div>
 
             {/* Amenities */}
@@ -202,7 +271,7 @@ export default function PropertyDetails() {
                   const AmenityIcon = getAmenityIcon(amenity);
                   return (
                     <div key={index} className="flex flex-col items-center justify-center text-sm text-neutral-700 p-3 rounded-xl bg-neutral-50 hover:bg-brand-50/50 transition-colors text-center">
-                      <AmenityIcon className="h-5 w-5 text-brand-500 mb-1.5" />
+                      <AmenityIcon className="h-5 w-5 text-brand-500 mb-1.5" aria-hidden="true" />
                       <span>{amenity}</span>
                     </div>
                   );
@@ -216,13 +285,14 @@ export default function PropertyDetails() {
                 <h2 className="text-lg font-display font-bold text-navy-900 mb-5 tracking-wide">Location</h2>
                 <div className="rounded-xl overflow-hidden border border-neutral-100" style={{ height: 300 }}>
                   <iframe
-                    title="Property Location"
+                    title={`Map showing location of ${property.title} in ${property.areaName}, Bangalore`}
                     width="100%"
                     height="100%"
                     style={{ border: 0 }}
                     loading="lazy"
                     referrerPolicy="no-referrer-when-downgrade"
                     src={`https://www.google.com/maps?q=${encodeURIComponent(property.mapQuery)}&output=embed`}
+                    aria-label={`Google Maps view of ${property.title} location`}
                   />
                 </div>
               </div>
@@ -234,22 +304,22 @@ export default function PropertyDetails() {
                 <div className="flex items-center justify-between mb-6">
                   <h2 className="text-lg font-display font-bold text-navy-900 tracking-wide">Customer Reviews</h2>
                   <div className="flex items-center gap-2">
-                    <div className="text-yellow-500 text-lg">★</div>
+                    <div className="text-yellow-500 text-lg" aria-hidden="true">★</div>
                     <span className="text-xl font-bold text-navy-900">{averageRating}</span>
                     <span className="text-sm text-neutral-500">({property.reviews.length} reviews)</span>
                   </div>
                 </div>
                 <div ref={reviewsRef} className="space-y-6">
-                  {property.reviews.map((review, index) => (
+                  {property.reviews.map((review) => (
                     <div key={review.id} className="border-b border-neutral-100 pb-6 last:border-b-0 last:pb-0">
                       <div className="mb-3">
                         <div className="flex items-center justify-between mb-1">
                           <h3 className="text-sm font-semibold text-navy-900">{review.name}</h3>
                           <span className="text-xs text-neutral-500">{review.date}</span>
                         </div>
-                        <div className="flex items-center gap-1 mb-2">
+                        <div className="flex items-center gap-1 mb-2" aria-label={`Rating: ${review.rating} out of 5 stars`}>
                           {[...Array(5)].map((_, i) => (
-                            <div key={i} className={`text-sm ${i < review.rating ? 'text-yellow-500' : 'text-neutral-300'}`}>★</div>
+                            <div key={i} className={`text-sm ${i < review.rating ? 'text-yellow-500' : 'text-neutral-300'}`} aria-hidden="true">★</div>
                           ))}
                         </div>
                       </div>
@@ -259,10 +329,10 @@ export default function PropertyDetails() {
                 </div>
               </div>
             )}
-          </div>
+          </article>
 
           {/* Sidebar */}
-          <div className="lg:col-span-1 space-y-6">
+          <aside className="lg:col-span-1 space-y-6" aria-label="Contact and inquiry">
             <div className="lg:sticky lg:top-24">
               <ContactForm propertyTitle={property.title} contactEmail={property.contactEmail} />
 
@@ -270,16 +340,20 @@ export default function PropertyDetails() {
                 <h3 className="text-lg font-display font-bold text-navy-900 mb-4 tracking-wide">Contact Directly</h3>
                 <div className="space-y-4">
                   <a href={`mailto:${property.contactEmail}`}
-                    className="flex items-center space-x-3 p-3 rounded-xl bg-neutral-50 hover:bg-neutral-100 transition-colors">
-                    <Mail className="h-5 w-5 text-brand-500" />
+                    className="flex items-center space-x-3 p-3 rounded-xl bg-neutral-50 hover:bg-neutral-100 transition-colors"
+                    aria-label={`Email Trishna Properties at ${property.contactEmail}`}
+                  >
+                    <Mail className="h-5 w-5 text-brand-500" aria-hidden="true" />
                     <div>
                       <div className="text-xs text-neutral-500">Email</div>
                       <div className="text-sm font-medium text-navy-800">{property.contactEmail}</div>
                     </div>
                   </a>
                   <a href="tel:+919886104532"
-                    className="flex items-center space-x-3 p-3 rounded-xl bg-neutral-50 hover:bg-neutral-100 transition-colors">
-                    <Phone className="h-5 w-5 text-brand-500" />
+                    className="flex items-center space-x-3 p-3 rounded-xl bg-neutral-50 hover:bg-neutral-100 transition-colors"
+                    aria-label="Call Trishna Properties at +91 98861 04532"
+                  >
+                    <Phone className="h-5 w-5 text-brand-500" aria-hidden="true" />
                     <div>
                       <div className="text-xs text-neutral-500">Phone</div>
                       <div className="text-sm font-medium text-navy-800">+91 98861 04532</div>
@@ -288,19 +362,19 @@ export default function PropertyDetails() {
                 </div>
               </div>
             </div>
-          </div>
+          </aside>
         </div>
 
         {/* Similar Properties */}
         {similarProperties.length > 0 && (
-          <div className="mt-16 mb-8">
-            <h2 className="text-2xl font-display font-bold text-navy-900 mb-6">Similar Properties</h2>
+          <section className="mt-16 mb-8" aria-label="Similar properties you may like">
+            <h2 className="text-2xl font-display font-bold text-navy-900 mb-6">Similar Properties in {property.areaName}</h2>
             <div ref={similarRef} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
               {similarProperties.map(p => (
                 <PropertyCard key={p.id} property={p} />
               ))}
             </div>
-          </div>
+          </section>
         )}
       </div>
     </div>

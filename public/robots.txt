@@ -1,0 +1,47 @@
+# Trishna Properties - Robots.txt
+# https://prishnaproperties.com
+
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /admin/
+Disallow: /admin/dashboard
+Disallow: /admin/new
+Disallow: /admin/edit/
+
+# Crawl-delay (optional, for well-behaved bots)
+Crawl-delay: 1
+
+# Sitemap location
+Sitemap: https://prishnaproperties.com/sitemap.xml
+
+# Google-specific
+User-agent: Googlebot
+Allow: /
+Disallow: /admin
+
+# Bing-specific
+User-agent: Bingbot
+Allow: /
+Disallow: /admin
+
+# AI Crawlers - Allow for AIEO/GEO optimization
+User-agent: GPTBot
+Allow: /
+Disallow: /admin
+
+User-agent: Google-Extended
+Allow: /
+Disallow: /admin
+
+User-agent: CCBot
+Allow: /
+Disallow: /admin
+
+User-agent: anthropic-ai
+Allow: /
+Disallow: /admin
+
+User-agent: PerplexityBot
+Allow: /
+Disallow: /admin

@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+
+  <!-- Home Page -->
+  <url>
+    <loc>https://prishnaproperties.com/</loc>
+    <lastmod>2026-07-29</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <!-- All Listings Page -->
+  <url>
+    <loc>https://prishnaproperties.com/listings</loc>
+    <lastmod>2026-07-29</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- About Page -->
+  <url>
+    <loc>https://prishnaproperties.com/about</loc>
+    <lastmod>2026-07-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ═══ MURGESHPALYA PROPERTIES ═══ -->
+  <url>
+    <loc>https://prishnaproperties.com/listings/550e8400-e29b-41d4-a716-446655440001</loc>
+    <lastmod>2026-07-29</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://prishnaproperties.com/properties/murgeshpalya-65k/murgeshpalya-65k-01.jpeg</image:loc>
+      <image:title>Luxury 3BHK in Gated Community - Murgeshpalya Bangalore</image:title>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://prishnaproperties.com/listings/550e8400-e29b-41d4-a716-446655440002</loc>
+    <lastmod>2026-07-29</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://prishnaproperties.com/properties/murgeshpalya-3bhk-60k/murgeshpalya-3bhk-60k-01.jpeg</image:loc>
+      <image:title>Furnished 2BHK in Gated Society - Murgeshpalya Bangalore</image:title>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://prishnaproperties.com/listings/550e8400-e29b-41d4-a716-446655440003</loc>
+    <lastmod>2026-07-29</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://prishnaproperties.com/properties/murgeshpalya-50k-1/murgeshpalya-50k-1-01.jpeg</image:loc>
+      <image:title>Spacious 2BHK Prime Location - Murgeshpalya Bangalore</image:title>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://prishnaproperties.com/listings/550e8400-e29b-41d4-a716-446655440004</loc>
+    <lastmod>2026-07-29</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://prishnaproperties.com/properties/murgeshpalya-50k-2/murgeshpalya-50k-2-01.jpeg</image:loc>
+      <image:title>Modern 2BHK Well Ventilated - Murgeshpalya Bangalore</image:title>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://prishnaproperties.com/listings/550e8400-e29b-41d4-a716-446655440005</loc>
+    <lastmod>2026-07-29</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://prishnaproperties.com/properties/murgeshpalya-50k-3/murgeshpalya-50k-3-01.jpeg</image:loc>
+      <image:title>Cozy 2BHK Great Value - Murgeshpalya Bangalore</image:title>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://prishnaproperties.com/listings/550e8400-e29b-41d4-a716-446655440006</loc>
+    <lastmod>2026-07-29</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://prishnaproperties.com/properties/murgeshpalya-46k/murgeshpalya-46k-01.jpeg</image:loc>
+      <image:title>Budget-Friendly 2BHK with Parking - Murgeshpalya Bangalore</image:title>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://prishnaproperties.com/listings/550e8400-e29b-41d4-a716-446655440007</loc>
+    <lastmod>2026-07-29</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://prishnaproperties.com/properties/murgeshpalya-52k/murgeshpalya-52k-01.jpeg</image:loc>
+      <image:title>Premium 3BHK Family Home - Murgeshpalya Bangalore</image:title>
+    </image:image>
+  </url>
+
+  <!-- ═══ CV RAMAN NAGAR ═══ -->
+  <url>
+    <loc>https://prishnaproperties.com/listings/550e8400-e29b-41d4-a716-446655440008</loc>
+    <lastmod>2026-07-29</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://prishnaproperties.com/properties/cv-raman-nagar/cv-raman-nagar-01.jpeg</image:loc>
+      <image:title>Elegant 2BHK - CV Raman Nagar Bangalore</image:title>
+    </image:image>
+  </url>
+
+  <!-- ═══ GM PALYA ═══ -->
+  <url>
+    <loc>https://prishnaproperties.com/listings/550e8400-e29b-41d4-a716-446655440009</loc>
+    <lastmod>2026-07-29</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://prishnaproperties.com/properties/gm-palya/gm-palya-01.jpeg</image:loc>
+      <image:title>Charming Home - GM Palya Bangalore</image:title>
+    </image:image>
+  </url>
+
+  <!-- ═══ BRIGADE PROPERTIES (SALE) ═══ -->
+  <url>
+    <loc>https://prishnaproperties.com/listings/550e8400-e29b-41d4-a716-446655440010</loc>
+    <lastmod>2026-07-29</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://prishnaproperties.com/properties/brigade-valencia/brigade-valencia-01.jpg</image:loc>
+      <image:title>Brigade Valencia Premium Apartments - Bommasandra Bangalore</image:title>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://prishnaproperties.com/listings/550e8400-e29b-41d4-a716-446655440011</loc>
+    <lastmod>2026-07-29</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://prishnaproperties.com/properties/brigade-eternia/brigade-eternia-01.png</image:loc>
+      <image:title>Brigade Eternia Modern Living - Yelahanka Bangalore</image:title>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://prishnaproperties.com/listings/550e8400-e29b-41d4-a716-446655440012</loc>
+    <lastmod>2026-07-29</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://prishnaproperties.com/properties/brigade-insignia/brigade-insignia-01.jpg</image:loc>
+      <image:title>Brigade Insignia Ultra Luxury - Devinagar Bangalore</image:title>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://prishnaproperties.com/listings/550e8400-e29b-41d4-a716-446655440013</loc>
+    <lastmod>2026-07-29</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://prishnaproperties.com/properties/kaggadasapura/kaggadasapura-01.jpeg</image:loc>
+      <image:title>Independent House - Kaggadasapura Bangalore</image:title>
+    </image:image>
+  </url>
+
+  <!-- ═══ GODREJ PROPERTIES ═══ -->
+  <url>
+    <loc>https://prishnaproperties.com/listings/550e8400-e29b-41d4-a716-446655440014</loc>
+    <lastmod>2026-07-29</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://prishnaproperties.com/properties/godrej-lakeside/godrej-lakeside-01.jpg</image:loc>
+      <image:title>Godrej Lakeside Orchard - Sarjapur Road Bangalore</image:title>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://prishnaproperties.com/listings/550e8400-e29b-41d4-a716-446655440015</loc>
+    <lastmod>2026-07-29</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://prishnaproperties.com/properties/godrej-vanantara/godrej-vanantara-01.jpg</image:loc>
+      <image:title>Godrej Vanantara Forest Township - Bannerghatta Road Bangalore</image:title>
+    </image:image>
+  </url>
+
+  <!-- ═══ MAHINDRA PROPERTIES ═══ -->
+  <url>
+    <loc>https://prishnaproperties.com/listings/550e8400-e29b-41d4-a716-446655440016</loc>
+    <lastmod>2026-07-29</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://prishnaproperties.com/properties/mahindra-blossom/mahindra-blossom-01.jpg</image:loc>
+      <image:title>Mahindra Blossom Whitefield Premium - Bangalore</image:title>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://prishnaproperties.com/listings/550e8400-e29b-41d4-a716-446655440017</loc>
+    <lastmod>2026-07-29</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://prishnaproperties.com/properties/mahindra-zen/mahindra-zen-01.jpg</image:loc>
+      <image:title>Mahindra Zen Nature-Crafted Homes - Singasandra Bangalore</image:title>
+    </image:image>
+  </url>
+
+</urlset>
