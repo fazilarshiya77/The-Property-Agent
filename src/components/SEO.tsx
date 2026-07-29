@@ -3,7 +3,7 @@ import { Helmet, HelmetProvider } from 'react-helmet-async';
 import { useLocation } from 'react-router-dom';
 
 // ─── CONSTANTS ──────────────────────────────────────────
-const SITE_URL = 'https://prishnaproperties.com';
+const SITE_URL = 'https://www.trishnapropertymanagement.in';
 const SITE_NAME = 'Trishna Properties';
 const DEFAULT_OG_IMAGE = `${SITE_URL}/logo.jpeg`;
 const PHONE = '+91 98861 04532';
