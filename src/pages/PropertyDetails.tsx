@@ -116,14 +116,14 @@ export default function PropertyDetails() {
   };
 
   // Build a rich, unique meta description for this property
-  const metaDescription = `${property.title} in ${property.location}. ${property.type === 'rent' ? `For Rent at ₹${property.price.toLocaleString('en-IN')}/month` : `For Sale at ${formatPrice(property.price, property.type)}`}. ${property.bedrooms} bedrooms, ${property.bathrooms} bathrooms, ${property.area} sqft. ${property.furnished === 'fully' ? 'Fully furnished.' : property.furnished === 'semi' ? 'Semi-furnished.' : ''} ${property.availability === 'Immediate' || property.availability === 'Ready to Move' ? 'Ready to move in.' : `Possession: ${property.availability}.`} Contact Trishna Properties: +91 98861 04532.`;
+  const metaDescription = `${property.title} in ${property.location}. ${property.type === 'rent' ? `For Rent at ₹${property.price.toLocaleString('en-IN')}/month` : `For Sale at ${formatPrice(property.price, property.type)}`}. ${property.bedrooms} bedrooms, ${property.bathrooms} bathrooms, ${property.area} sqft. ${property.furnished === 'fully' ? 'Fully furnished.' : property.furnished === 'semi' ? 'Semi-furnished.' : ''} ${property.availability === 'Immediate' || property.availability === 'Ready to Move' ? 'Ready to move in.' : `Possession: ${property.availability}.`} Contact EHT Trishna Property Management: +91 98861 04532.`;
 
   return (
     <div className="min-h-screen bg-neutral-50">
       <SEO
         title={`${property.title} — ${property.areaName}, Bangalore`}
         description={metaDescription}
-        keywords={`${property.title}, ${property.areaName} ${property.type === 'rent' ? 'rent' : 'sale'}, ${property.bedrooms}BHK ${property.areaName}, ${property.location}, properties ${property.type === 'rent' ? 'for rent' : 'for sale'} ${property.areaName} Bangalore, ${property.furnished === 'fully' ? 'furnished apartments' : 'apartments'} ${property.areaName}, Trishna Properties ${property.areaName}, real estate ${property.areaName} Bangalore`}
+        keywords={`${property.title}, ${property.areaName} ${property.type === 'rent' ? 'rent' : 'sale'}, ${property.bedrooms}BHK ${property.areaName}, ${property.location}, properties ${property.type === 'rent' ? 'for rent' : 'for sale'} ${property.areaName} Bangalore, ${property.furnished === 'fully' ? 'furnished apartments' : 'apartments'} ${property.areaName}, EHT Trishna Property Management ${property.areaName}, Trishna Properties ${property.areaName}, real estate ${property.areaName} Bangalore`}
         type="product"
         image={property.images[0]}
         canonicalPath={`/listings/${property.id}`}
@@ -341,7 +341,7 @@ export default function PropertyDetails() {
                 <div className="space-y-4">
                   <a href={`mailto:${property.contactEmail}`}
                     className="flex items-center space-x-3 p-3 rounded-xl bg-neutral-50 hover:bg-neutral-100 transition-colors"
-                    aria-label={`Email Trishna Properties at ${property.contactEmail}`}
+                    aria-label={`Email EHT Trishna Property Management at ${property.contactEmail}`}
                   >
                     <Mail className="h-5 w-5 text-brand-500" aria-hidden="true" />
                     <div>
@@ -351,7 +351,7 @@ export default function PropertyDetails() {
                   </a>
                   <a href="tel:+919886104532"
                     className="flex items-center space-x-3 p-3 rounded-xl bg-neutral-50 hover:bg-neutral-100 transition-colors"
-                    aria-label="Call Trishna Properties at +91 98861 04532"
+                    aria-label="Call EHT Trishna Property Management at +91 98861 04532"
                   >
                     <Phone className="h-5 w-5 text-brand-500" aria-hidden="true" />
                     <div>

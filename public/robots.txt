@@ -1,4 +1,4 @@
-# Trishna Properties - Robots.txt
+# EHT Trishna Property Management - Robots.txt
 # https://www.trishnapropertymanagement.in
 
 User-agent: *

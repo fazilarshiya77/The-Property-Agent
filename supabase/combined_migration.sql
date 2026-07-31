@@ -1,5 +1,5 @@
 -- =========================================================
--- TRISHNA PROPERTIES - COMBINED CLIENT SUPABASE MIGRATION SCRIPT
+-- EHT TRISHNA PROPERTY MANAGEMENT - COMBINED CLIENT SUPABASE MIGRATION SCRIPT
 -- Run this entire script in your client's Supabase SQL Editor
 -- =========================================================
 

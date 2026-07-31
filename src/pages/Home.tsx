@@ -13,32 +13,32 @@ import type { FAQItem, BreadcrumbItem } from '../components/SEO';
 // ─── FAQ DATA (used by both UI and schema) ──────────────
 const faqData: FAQItem[] = [
   {
-    question: "What areas in Bangalore does Trishna Properties cover?",
-    answer: "Trishna Properties covers 10+ prime locations across Bangalore including Murgeshpalya, CV Raman Nagar, GM Palya, Kaggadasapura, Bommasandra, Yelahanka, Devinagar, Sarjapur Road, Bannerghatta Road, Whitefield, and Singasandra. Our focus is on well-connected residential neighborhoods with good access to IT parks, schools, hospitals, and public transport including metro stations."
+    question: "What areas in Bangalore does EHT Trishna Property Management cover?",
+    answer: "EHT Trishna Property Management covers 10+ prime locations across Bangalore including Murgeshpalya, CV Raman Nagar, GM Palya, Kaggadasapura, Bommasandra, Yelahanka, Devinagar, Sarjapur Road, Bannerghatta Road, Whitefield, and Singasandra. Our focus is on well-connected residential neighborhoods with good access to IT parks, schools, hospitals, and public transport including metro stations."
   },
   {
-    question: "Are all properties on Trishna Properties verified?",
-    answer: "Yes, every property listed on Trishna Properties is personally inspected and verified by our team before going live. We check for legal documentation authenticity, property condition, amenities availability, and overall living quality. This ensures you get exactly what you see in the listing — no surprises, no hidden issues."
+    question: "Are all properties on EHT Trishna Property Management verified?",
+    answer: "Yes, every property listed on EHT Trishna Property Management is personally inspected and verified by our team before going live. We check for legal documentation authenticity, property condition, amenities availability, and overall living quality. This ensures you get exactly what you see in the listing — no surprises, no hidden issues."
   },
   {
     question: "What documents do I need to rent a property in Bangalore?",
-    answer: "To rent a property in Bangalore through Trishna Properties, you typically need: identity proof (Aadhaar Card, PAN Card, or Passport), address proof, income proof (salary slips or IT returns for the last 3 months), passport-sized photographs, and a security deposit (usually 2-10 months' rent). Our team guides you through the entire documentation process to make it seamless."
+    answer: "To rent a property in Bangalore through EHT Trishna Property Management, you typically need: identity proof (Aadhaar Card, PAN Card, or Passport), address proof, income proof (salary slips or IT returns for the last 3 months), passport-sized photographs, and a security deposit (usually 2-10 months' rent). Our team guides you through the entire documentation process to make it seamless."
   },
   {
-    question: "How long does the rental process take with Trishna Properties?",
-    answer: "The rental process with Trishna Properties typically takes 2-7 business days from property selection to move-in. This includes property visits, documentation verification, rental agreement signing, and key handover. Most of our properties are available for immediate occupancy, and we handle all paperwork and coordination with property owners."
+    question: "How long does the rental process take with EHT Trishna Property Management?",
+    answer: "The rental process with EHT Trishna Property Management typically takes 2-7 business days from property selection to move-in. This includes property visits, documentation verification, rental agreement signing, and key handover. Most of our properties are available for immediate occupancy, and we handle all paperwork and coordination with property owners."
   },
   {
-    question: "Does Trishna Properties charge brokerage fees?",
-    answer: "Trishna Properties maintains a transparent fee structure that is clearly communicated upfront before you commit. Our service charges vary by property type and value. We believe in honest, upfront pricing with absolutely no hidden costs. Contact our team at +91 98861 04532 for specific details about any property."
+    question: "Does EHT Trishna Property Management charge brokerage fees?",
+    answer: "EHT Trishna Property Management maintains a transparent fee structure that is clearly communicated upfront before you commit. Our service charges vary by property type and value. We believe in honest, upfront pricing with absolutely no hidden costs. Contact our team at +91 98861 04532 for specific details about any property."
   },
   {
     question: "What is the average rent for a 2BHK apartment in Murgeshpalya, Bangalore?",
     answer: "The average rent for a 2BHK apartment in Murgeshpalya, Bangalore ranges from ₹46,000 to ₹60,000 per month depending on furnishing level, floor, and amenities. Fully furnished apartments with maintenance included are priced around ₹50,000-60,000, while semi-furnished options start from ₹46,000. Security deposits typically range from ₹1.5 Lakhs to ₹2 Lakhs."
   },
   {
-    question: "Does Trishna Properties help with buying apartments from Brigade, Godrej, and Mahindra?",
-    answer: "Yes, Trishna Properties is an authorized channel partner for premium developers including Brigade Group (Brigade Valencia, Brigade Eternia, Brigade Insignia), Godrej Properties (Godrej Lakeside Orchard, Godrej Vanantara), and Mahindra Lifespaces (Mahindra Blossom, Mahindra Zen). We offer expert guidance on new launch projects, pricing, payment plans, and possession timelines across Bangalore."
+    question: "Does EHT Trishna Property Management help with buying apartments from Brigade, Godrej, and Mahindra?",
+    answer: "Yes, EHT Trishna Property Management is an authorized channel partner for premium developers including Brigade Group (Brigade Valencia, Brigade Eternia, Brigade Insignia), Godrej Properties (Godrej Lakeside Orchard, Godrej Vanantara), and Mahindra Lifespaces (Mahindra Blossom, Mahindra Zen). We offer expert guidance on new launch projects, pricing, payment plans, and possession timelines across Bangalore."
   },
   {
     question: "Which areas in East Bangalore are best for renting a family home?",
@@ -91,8 +91,8 @@ export default function Home() {
     <div className="min-h-screen bg-neutral-50/50">
       <SEO
         title="Premium Rental Homes & Properties for Sale in Bangalore"
-        description="Trishna Properties offers 50+ verified rental homes and premium properties for sale in Bangalore. Browse apartments in Murgeshpalya, CV Raman Nagar, GM Palya, Whitefield, Sarjapur Road & more. 200+ happy families. Trusted by Bangalore residents since 5+ years."
-        keywords="Trishna Properties, Prishna Properties, rental homes Bangalore, properties for sale Bangalore, 2BHK Murgeshpalya rent, 3BHK CV Raman Nagar, apartments GM Palya, Brigade Valencia Bommasandra, Godrej Lakeside Sarjapur, Mahindra Blossom Whitefield, verified properties Bangalore, premium rentals East Bangalore, furnished apartments near IT parks Bangalore, best real estate agent Bangalore"
+        description="EHT Trishna Property Management offers 50+ verified rental homes and premium properties for sale in Bangalore. Browse apartments in Murgeshpalya, CV Raman Nagar, GM Palya, Whitefield, Sarjapur Road & more. 200+ happy families. Trusted by Bangalore residents since 5+ years."
+        keywords="EHT Trishna Property Management, Trishna Properties, Prishna Properties, rental homes Bangalore, properties for sale Bangalore, 2BHK Murgeshpalya rent, 3BHK CV Raman Nagar, apartments GM Palya, Brigade Valencia Bommasandra, Godrej Lakeside Sarjapur, Mahindra Blossom Whitefield, verified properties Bangalore, premium rentals East Bangalore, furnished apartments near IT parks Bangalore, best real estate agent Bangalore"
         type="website"
         canonicalPath="/"
         location="Bangalore, Karnataka, India"
@@ -109,7 +109,7 @@ export default function Home() {
           <img
             ref={heroParallaxRef}
             src="/properties/godrej-lakeside/hero-bg.jpg"
-            alt="Premium luxury apartment interior in Bangalore — Trishna Properties"
+            alt="Premium luxury apartment interior in Bangalore — EHT Trishna Property Management"
             className="w-full h-[120%] object-cover"
             fetchPriority="high"
           />
@@ -159,7 +159,7 @@ export default function Home() {
       </section>
 
       {/* ─── STATS BAR ─────────────────────────── */}
-      <section className="py-6 sm:py-10 bg-white border-b border-neutral-100" aria-label="Trishna Properties statistics">
+      <section className="py-6 sm:py-10 bg-white border-b border-neutral-100" aria-label="EHT Trishna Property Management statistics">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <div ref={statsRef} className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 md:gap-8">
             <StatsCounter end={50} suffix="+" label="Properties Listed" />
@@ -170,18 +170,18 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ─── ABOUT TRISHNA (AIEO/GEO Content Block) ─── */}
-      <section className="py-8 sm:py-12 bg-white" aria-label="About Trishna Properties">
+      {/* ─── ABOUT EHT TRISHNA PROPERTY MANAGEMENT (AIEO/GEO Content Block) ─── */}
+      <section className="py-8 sm:py-12 bg-white" aria-label="About EHT Trishna Property Management">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <h2 className="text-xl sm:text-2xl lg:text-3xl font-display font-bold text-navy-900 mb-3 sm:mb-4">
               Bangalore's Trusted Real Estate Partner
             </h2>
             <p className="text-neutral-600 text-sm sm:text-base leading-relaxed max-w-3xl mx-auto">
-              <strong>Trishna Properties</strong> (also known as Prishna Properties) is a leading real estate agency based in <strong>Bengaluru, Karnataka</strong>, specializing in premium verified rental homes and properties for sale. Founded with a mission to make property search transparent and hassle-free, we serve <strong>200+ happy families</strong> across <strong>10+ prime locations</strong> in Bangalore including <strong>Murgeshpalya, CV Raman Nagar, GM Palya, Bommasandra, Yelahanka, Whitefield, Sarjapur Road,</strong> and <strong>Bannerghatta Road</strong>.
+              <strong>EHT Trishna Property Management</strong> (also known as Trishna Properties, Prishna Properties) is a leading real estate agency based in <strong>Bengaluru, Karnataka</strong>, specializing in premium verified rental homes and properties for sale. Founded with a mission to make property search transparent and hassle-free, we serve <strong>200+ happy families</strong> across <strong>10+ prime locations</strong> in Bangalore including <strong>Murgeshpalya, CV Raman Nagar, GM Palya, Bommasandra, Yelahanka, Whitefield, Sarjapur Road,</strong> and <strong>Bannerghatta Road</strong>.
             </p>
             <p className="text-neutral-500 text-xs sm:text-sm leading-relaxed max-w-3xl mx-auto mt-3">
-              Whether you're looking to <strong>rent a 2BHK or 3BHK apartment near IT parks</strong>, <strong>buy premium apartments from Brigade Group, Godrej Properties, or Mahindra Lifespaces</strong>, or need expert <strong>property management services</strong> — Trishna Properties is your one-stop solution. Every property is personally inspected and verified before listing.
+              Whether you're looking to <strong>rent a 2BHK or 3BHK apartment near IT parks</strong>, <strong>buy premium apartments from Brigade Group, Godrej Properties, or Mahindra Lifespaces</strong>, or need expert <strong>property management services</strong> — EHT Trishna Property Management is your one-stop solution. Every property is personally inspected and verified before listing.
             </p>
           </div>
         </div>
@@ -236,11 +236,11 @@ export default function Home() {
       </section>
 
       {/* ─── WHY CHOOSE US ─────────────────────── */}
-      <section className="py-10 sm:py-16 lg:py-20 bg-white" aria-label="Why choose Trishna Properties">
+      <section className="py-10 sm:py-16 lg:py-20 bg-white" aria-label="Why choose EHT Trishna Property Management">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div ref={whyHeaderRef} className="text-center mb-8 sm:mb-12">
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-display font-bold text-navy-900 mb-2 sm:mb-3">
-              Why Families Trust Trishna Properties
+              Why Families Trust EHT Trishna Property Management
             </h2>
             <p className="text-neutral-500 max-w-2xl mx-auto text-sm">
               We go beyond listings — we help you find a home you'll love
@@ -329,7 +329,7 @@ export default function Home() {
               Frequently Asked Questions
             </h2>
             <p className="text-neutral-500 max-w-2xl mx-auto text-sm">
-              Answers to common questions about finding and renting properties in Bangalore with Trishna Properties
+              Answers to common questions about finding and renting properties in Bangalore with EHT Trishna Property Management
             </p>
           </div>
           
@@ -369,7 +369,7 @@ export default function Home() {
       </section>
 
       {/* ─── CTA BANNER ────────────────────────── */}
-      <section className="py-12 sm:py-16 lg:py-20 bg-gradient-to-br from-navy-900 to-navy-950 relative overflow-hidden" aria-label="Contact Trishna Properties">
+      <section className="py-12 sm:py-16 lg:py-20 bg-gradient-to-br from-navy-900 to-navy-950 relative overflow-hidden" aria-label="Contact EHT Trishna Property Management">
         <div className="absolute inset-0 opacity-5">
           <div className="absolute top-0 right-0 w-96 h-96 bg-brand-500 rounded-full blur-3xl" />
           <div className="absolute bottom-0 left-0 w-64 h-64 bg-brand-400 rounded-full blur-3xl" />
@@ -379,7 +379,7 @@ export default function Home() {
             Ready to Find Your Dream Home in Bangalore?
           </h2>
           <p className="text-sm sm:text-lg text-neutral-300 mb-6 sm:mb-8 max-w-2xl mx-auto">
-            Get in touch with Trishna Properties today. Our expert team will help you find the perfect verified property that fits your needs and budget — whether you want to rent, buy, or sell.
+            Get in touch with EHT Trishna Property Management today. Our expert team will help you find the perfect verified property that fits your needs and budget — whether you want to rent, buy, or sell.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
             <Link
