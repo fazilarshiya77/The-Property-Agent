@@ -86,7 +86,7 @@ export default function Listings() {
   const locationLabel = selectedLocation !== 'all' ? selectedLocation : 'Bangalore';
   const typeLabel = propertyType === 'rent' ? 'for Rent' : propertyType === 'sale' ? 'for Sale' : 'for Rent & Sale';
   const pageTitle = `Properties ${typeLabel} in ${locationLabel}`;
-  const pageDescription = `Browse ${filteredProperties.length}+ verified properties ${typeLabel.toLowerCase()} in ${locationLabel}, Bangalore. Filter by location, price, bedrooms, and type. Find your perfect home with EHT Trishna Property Management. 2BHK, 3BHK, 4BHK apartments and houses available. Every listing personally verified.`;
+  const pageDescription = `Browse ${filteredProperties.length}+ verified properties ${typeLabel.toLowerCase()} in ${locationLabel}, Bangalore. Filter by location, price, bedrooms, and type. Find your perfect home with Trishna Property Management. 2BHK, 3BHK, 4BHK apartments and houses available. Every listing personally verified.`;
 
   const itemListSchema = generateItemListSchema(pageTitle, pageDescription);
 
@@ -95,7 +95,7 @@ export default function Listings() {
       <SEO
         title={pageTitle}
         description={pageDescription}
-        keywords={`properties ${typeLabel.toLowerCase()} ${locationLabel}, ${locationLabel} real estate listings, ${locationLabel} apartments, ${locationLabel} houses, 2BHK ${locationLabel}, 3BHK ${locationLabel}, verified properties ${locationLabel}, EHT Trishna Property Management ${locationLabel}, Trishna Properties ${locationLabel}, rental homes ${locationLabel} Bangalore, buy property ${locationLabel}`}
+        keywords={`properties ${typeLabel.toLowerCase()} ${locationLabel}, ${locationLabel} real estate listings, ${locationLabel} apartments, ${locationLabel} houses, 2BHK ${locationLabel}, 3BHK ${locationLabel}, verified properties ${locationLabel}, Trishna Property Management ${locationLabel}, Trishna Properties ${locationLabel}, rental homes ${locationLabel} Bangalore, buy property ${locationLabel}`}
         type="website"
         canonicalPath="/listings"
         location={`${locationLabel}, Karnataka, India`}
@@ -143,7 +143,7 @@ export default function Listings() {
           {/* SEO Intro Paragraph */}
           <p className="text-neutral-500 text-xs sm:text-sm mt-2 leading-relaxed max-w-3xl">
             {selectedLocation !== 'all'
-              ? `Explore verified properties ${typeLabel.toLowerCase()} in ${selectedLocation}, Bangalore. All listings are personally inspected by the EHT Trishna Property Management team. Find 2BHK, 3BHK, and 4BHK homes in ${selectedLocation} with transparent pricing and no hidden charges.`
+              ? `Explore verified properties ${typeLabel.toLowerCase()} in ${selectedLocation}, Bangalore. All listings are personally inspected by the Trishna Property Management team. Find 2BHK, 3BHK, and 4BHK homes in ${selectedLocation} with transparent pricing and no hidden charges.`
               : `Browse our curated collection of premium verified properties across Bangalore. From affordable 2BHK rentals in Murgeshpalya to luxury 4BHK apartments from Brigade, Godrej, and Mahindra. Every property is personally inspected and verified by our team.`
             }
           </p>

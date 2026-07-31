@@ -9,16 +9,16 @@ import type { BreadcrumbItem, FAQItem } from '../components/SEO';
 // About page FAQ data for AEO
 const aboutFaqData: FAQItem[] = [
   {
-    question: "How can I contact EHT Trishna Property Management?",
-    answer: "You can reach EHT Trishna Property Management by phone at +91 98861 04532, email at trishnaproperties78@gmail.com, or visit our office at 31, GM Palya Main Rd, KG Colony, GM Palya, C V Raman Nagar, Bengaluru, Karnataka 560075. We are open Monday to Saturday, 9 AM to 7 PM."
+    question: "How can I contact Trishna Property Management?",
+    answer: "You can reach Trishna Property Management by phone at +91 98861 04532, email at trishnaproperties78@gmail.com, or visit our office at 31, GM Palya Main Rd, KG Colony, GM Palya, C V Raman Nagar, Bengaluru, Karnataka 560075. We are open Monday to Saturday, 9 AM to 7 PM."
   },
   {
-    question: "What services does EHT Trishna Property Management offer?",
-    answer: "EHT Trishna Property Management offers comprehensive real estate services in Bangalore including: rental property search and placement, property buying and selling assistance for premium projects (Brigade, Godrej, Mahindra), property management, tenant verification, rental agreement preparation, and end-to-end move-in support."
+    question: "What services does Trishna Property Management offer?",
+    answer: "Trishna Property Management offers comprehensive real estate services in Bangalore including: rental property search and placement, property buying and selling assistance for premium projects (Brigade, Godrej, Mahindra), property management, tenant verification, rental agreement preparation, and end-to-end move-in support."
   },
   {
-    question: "How many properties does EHT Trishna Property Management have listed?",
-    answer: "EHT Trishna Property Management currently has 50+ verified property listings across 10+ prime locations in Bangalore. Our portfolio includes rental apartments in Murgeshpalya, CV Raman Nagar, and GM Palya, as well as premium sale properties from Brigade Group, Godrej Properties, and Mahindra Lifespaces."
+    question: "How many properties does Trishna Property Management have listed?",
+    answer: "Trishna Property Management currently has 50+ verified property listings across 10+ prime locations in Bangalore. Our portfolio includes rental apartments in Murgeshpalya, CV Raman Nagar, and GM Palya, as well as premium sale properties from Brigade Group, Godrej Properties, and Mahindra Lifespaces."
   }
 ];
 
@@ -45,9 +45,9 @@ export default function About() {
   return (
     <div className="min-h-screen" itemScope itemType="https://schema.org/AboutPage">
       <SEO
-        title="About EHT Trishna Property Management — Trusted Real Estate Agent in Bangalore"
-        description="Learn about EHT Trishna Property Management (Trishna Properties, Prishna Properties), Bangalore's trusted real estate agency. 50+ verified properties, 200+ happy families, 5+ years of experience. Specializing in premium rental homes and properties for sale in Murgeshpalya, CV Raman Nagar, GM Palya, Whitefield, Sarjapur Road & more."
-        keywords="about EHT Trishna Property Management, Trishna Properties, Prishna Properties Bangalore, real estate agent Bangalore, property management Bangalore, trusted realtor Bangalore, GM Palya real estate, Bengaluru property consultant, verified properties agent, East Bangalore realtor, property dealer Murgeshpalya"
+        title="About Trishna Property Management — Trusted Real Estate Agent in Bangalore"
+        description="Learn about Trishna Property Management (Trishna Properties, Prishna Properties), Bangalore's trusted real estate agency. 50+ verified properties, 200+ happy families, 5+ years of experience. Specializing in premium rental homes and properties for sale in Murgeshpalya, CV Raman Nagar, GM Palya, Whitefield, Sarjapur Road & more."
+        keywords="about Trishna Property Management, Trishna Properties, Prishna Properties Bangalore, real estate agent Bangalore, property management Bangalore, trusted realtor Bangalore, GM Palya real estate, Bengaluru property consultant, verified properties agent, East Bangalore realtor, property dealer Murgeshpalya"
         type="website"
         canonicalPath="/about"
         location="Bengaluru, Karnataka, India"
@@ -78,13 +78,13 @@ export default function About() {
       </nav>
 
       {/* Hero */}
-      <section className="relative py-8 sm:py-12 lg:py-16 bg-gradient-to-br from-navy-900 to-navy-950 overflow-hidden" aria-label="About EHT Trishna Property Management">
+      <section className="relative py-8 sm:py-12 lg:py-16 bg-gradient-to-br from-navy-900 to-navy-950 overflow-hidden" aria-label="About Trishna Property Management">
         <div className="absolute inset-0 opacity-5">
           <div className="absolute top-10 right-10 w-96 h-96 bg-brand-500 rounded-full blur-3xl" />
         </div>
         <div className="relative max-w-4xl mx-auto px-3 sm:px-6 lg:px-8 text-center">
           <span className="inline-block px-3 py-1 bg-brand-500/20 text-brand-300 text-sm font-medium rounded-full mb-6">
-            About EHT Trishna
+            About Trishna
           </span>
           <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-display font-bold text-white mb-4 sm:mb-6 leading-tight">
             Your Trusted Partner for<br className="hidden sm:block" />
@@ -116,7 +116,7 @@ export default function About() {
               <h2 className="text-2xl sm:text-3xl font-display font-bold text-navy-900 mb-5 sm:mb-6">Our Story</h2>
               <div className="space-y-4 text-neutral-600 text-sm sm:text-base leading-relaxed">
                 <p>
-                  <strong>EHT Trishna Property Management</strong> (also known as <strong>Trishna Properties</strong>, <strong>Prishna Properties</strong>) was founded with a simple mission — to make finding a quality home in <strong>Bangalore</strong> hassle-free and transparent. Whether you want to <strong>Buy, Rent, or Sell</strong>, we're here to help with our deep expertise in the Bangalore real estate market.
+                  <strong>Trishna Property Management</strong> (also known as <strong>Trishna Properties</strong>, <strong>Prishna Properties</strong>) was founded with a simple mission — to make finding a quality home in <strong>Bangalore</strong> hassle-free and transparent. Whether you want to <strong>Buy, Rent, or Sell</strong>, we're here to help with our deep expertise in the Bangalore real estate market.
                 </p>
                 <p>
                   We understand that finding the right home is more than just a transaction. It's about finding a space where memories are made, where families grow, and where every day feels comfortable and secure. That's why we personally inspect every property and maintain strict quality standards.
@@ -129,7 +129,7 @@ export default function About() {
             <div className="rounded-2xl overflow-hidden shadow-card-hover">
               <img
                 src="/properties/brigade-insignia/our-story.jpg"
-                alt="Premium apartment interior showcasing quality properties managed by EHT Trishna Property Management in Bangalore"
+                alt="Premium apartment interior showcasing quality properties managed by Trishna Property Management in Bangalore"
                 className="w-full h-64 sm:h-80 object-cover"
                 loading="lazy"
                 width="640"
@@ -141,10 +141,10 @@ export default function About() {
       </section>
 
       {/* What Makes Us Different */}
-      <section className="py-12 sm:py-16 lg:py-20 bg-white" aria-label="What makes EHT Trishna Property Management different">
+      <section className="py-12 sm:py-16 lg:py-20 bg-white" aria-label="What makes Trishna Property Management different">
         <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
           <div ref={diffHeaderRef} className="text-center mb-8 sm:mb-12">
-            <h2 className="text-2xl sm:text-3xl font-display font-bold text-navy-900 mb-3">What Makes EHT Trishna Property Management Different</h2>
+            <h2 className="text-2xl sm:text-3xl font-display font-bold text-navy-900 mb-3">What Makes Trishna Property Management Different</h2>
             <p className="text-neutral-500 max-w-2xl mx-auto text-sm sm:text-base">
               We go above and beyond to ensure every family finds the perfect home in Bangalore
             </p>
@@ -173,7 +173,7 @@ export default function About() {
 
       {/* Office & Map Section */}
       <section className="py-12 sm:py-16 lg:py-20 bg-neutral-50" aria-label="Visit our office in Bangalore" itemScope itemType="https://schema.org/LocalBusiness">
-        <meta itemProp="name" content="EHT Trishna Property Management" />
+        <meta itemProp="name" content="Trishna Property Management" />
         <meta itemProp="telephone" content="+91 98861 04532" />
         <meta itemProp="email" content="trishnaproperties78@gmail.com" />
         <meta itemProp="priceRange" content="₹35,000 - ₹3.2 Cr" />
@@ -189,22 +189,22 @@ export default function About() {
             <div className="lg:col-span-3 rounded-2xl overflow-hidden shadow-card border border-neutral-100 bg-white">
               <iframe
                 src={mapsEmbed}
-                title="EHT Trishna Property Management office location — GM Palya, CV Raman Nagar, Bengaluru"
+                title="Trishna Property Management office location — GM Palya, CV Raman Nagar, Bengaluru"
                 className="w-full h-64 sm:h-80 lg:h-96"
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
                 style={{ border: 0 }}
                 allowFullScreen
-                aria-label="Google Maps showing EHT Trishna Property Management office at GM Palya, Bengaluru"
+                aria-label="Google Maps showing Trishna Property Management office at GM Palya, Bengaluru"
               />
             </div>
 
             {/* Office Info */}
             <div className="lg:col-span-2 bg-white rounded-2xl shadow-card p-6 sm:p-8 flex flex-col justify-center">
               <div className="flex items-center space-x-3 mb-6">
-                <img src="/logo.jpeg" alt="EHT Trishna Property Management logo" className="h-12 w-12 rounded-xl object-contain bg-white shadow-sm border border-neutral-100" width="48" height="48" />
+                <img src="/logo.jpeg" alt="Trishna Property Management logo" className="h-12 w-12 rounded-xl object-contain bg-white shadow-sm border border-neutral-100" width="48" height="48" />
                 <div>
-                  <h3 className="font-display font-bold text-navy-900 tracking-wide" itemProp="legalName">EHT Trishna Property Management</h3>
+                  <h3 className="font-display font-bold text-navy-900 tracking-wide" itemProp="legalName">Trishna Property Management</h3>
                   <p className="text-[10px] font-semibold text-brand-500 uppercase tracking-widest">Buy · Rent · Sell</p>
                 </div>
               </div>
@@ -230,7 +230,7 @@ export default function About() {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center justify-center space-x-2 w-full py-3 bg-brand-500 hover:bg-brand-600 text-white text-sm font-semibold rounded-xl transition-all hover:shadow-lg hover:shadow-brand-500/25"
-                  aria-label="Open EHT Trishna Property Management office location in Google Maps"
+                  aria-label="Open Trishna Property Management office location in Google Maps"
                 >
                   <MapPin className="h-4 w-4" aria-hidden="true" />
                   <span>Open in Google Maps</span>
@@ -243,13 +243,13 @@ export default function About() {
       </section>
 
       {/* Contact Section */}
-      <section id="contact" className="py-12 sm:py-16 lg:py-20 bg-white" aria-label="Contact EHT Trishna Property Management">
+      <section id="contact" className="py-12 sm:py-16 lg:py-20 bg-white" aria-label="Contact Trishna Property Management">
         <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
           <div ref={contactRef} className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
             <div>
               <h2 className="text-2xl sm:text-3xl font-display font-bold text-navy-900 mb-4">Get in Touch</h2>
               <p className="text-neutral-600 mb-6 sm:mb-8 leading-relaxed text-sm sm:text-base">
-                Whether you're looking for a <strong>rental home in East Bangalore</strong>, want to <strong>buy a premium apartment from Brigade, Godrej, or Mahindra</strong>, or list your property with us, we'd love to hear from you. Contact EHT Trishna Property Management today for expert real estate guidance.
+                Whether you're looking for a <strong>rental home in East Bangalore</strong>, want to <strong>buy a premium apartment from Brigade, Godrej, or Mahindra</strong>, or list your property with us, we'd love to hear from you. Contact Trishna Property Management today for expert real estate guidance.
               </p>
 
               <div className="space-y-5">

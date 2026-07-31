@@ -38,7 +38,7 @@ export default function ContactForm({ propertyTitle, contactEmail }: ContactForm
       form.append('phone', formData.phone);
       form.append('email', formData.email);
       form.append('message', formData.message);
-      form.append('subject', propertyTitle ? `Inquiry: ${propertyTitle}` : "Inquiry - EHT Trishna Property Management");
+      form.append('subject', propertyTitle ? `Inquiry: ${propertyTitle}` : "Inquiry - Trishna Property Management");
       form.append('to', contactEmail || 'trishnaproperties78@gmail.com');
       
       const response = await fetch('https://api.web3forms.com/submit', {

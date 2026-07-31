@@ -7,7 +7,7 @@ export default function Footer() {
   const mapsEmbed = `https://www.google.com/maps?q=${encodeURIComponent(address)}&output=embed`;
 
   return (
-    <footer className="bg-navy-950 text-white" role="contentinfo" aria-label="EHT Trishna Property Management footer">
+    <footer className="bg-navy-950 text-white" role="contentinfo" aria-label="Trishna Property Management footer">
       <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-10 sm:py-12 lg:py-16">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 lg:gap-10">
           {/* Brand */}
@@ -15,13 +15,13 @@ export default function Footer() {
             <Link to="/" className="flex items-center space-x-2.5 sm:space-x-3 mb-4 sm:mb-5 group">
               <img
                 src="/logo.jpeg"
-                alt="EHT Trishna Property Management — Bangalore Real Estate Agency"
+                alt="Trishna Property Management — Bangalore Real Estate Agency"
                 className="h-10 w-10 sm:h-11 sm:w-11 rounded-xl object-contain border border-white/10 shadow-md group-hover:scale-105 transition-transform bg-white"
                 width="44"
                 height="44"
               />
               <div>
-                <span className="text-base sm:text-lg font-display font-bold leading-tight block tracking-wider">EHT Trishna</span>
+                <span className="text-lg sm:text-xl font-display font-bold leading-tight block tracking-wider">Trishna</span>
                 <span className="text-[8px] sm:text-[9px] font-semibold text-brand-500 uppercase tracking-widest">
                   Property Management
                 </span>
@@ -92,20 +92,20 @@ export default function Footer() {
         <div className="mt-8 sm:mt-10 lg:mt-12 rounded-2xl overflow-hidden border border-white/5 shadow-glass transition-all duration-300 hover:border-brand-500/30">
           <iframe
             src={mapsEmbed}
-            title="EHT Trishna Property Management Office Location"
+            title="Trishna Property Management Office Location"
             className="w-full h-44 sm:h-48 lg:h-64"
             loading="lazy"
             referrerPolicy="no-referrer-when-downgrade"
             style={{ border: 0, filter: 'grayscale(0.4) invert(0.02) contrast(1.1)' }}
             allowFullScreen
-            aria-label="Google Maps showing EHT Trishna Property Management office location at GM Palya, Bengaluru"
+            aria-label="Google Maps showing Trishna Property Management office location at GM Palya, Bengaluru"
           />
         </div>
 
         {/* Bottom bar */}
         <div className="border-t border-white/5 mt-6 sm:mt-8 pt-5 sm:pt-6 flex flex-col sm:flex-row justify-between items-center gap-2.5 sm:gap-3">
           <p className="text-neutral-500 text-sm text-center sm:text-left font-light">
-            © {new Date().getFullYear()} EHT Trishna Property Management. All rights reserved.
+            © {new Date().getFullYear()} Trishna Property Management. All rights reserved.
           </p>
           <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4">
             <p className="text-neutral-600 text-xs font-light">

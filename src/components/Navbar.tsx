@@ -50,17 +50,17 @@ export default function Navbar() {
         <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16 lg:h-20">
             {/* Logo */}
-            <Link to="/" className="flex items-center space-x-3 group flex-shrink-0" aria-label="EHT Trishna Property Management - Home">
+            <Link to="/" className="flex items-center space-x-3 group flex-shrink-0" aria-label="Trishna Property Management - Home">
               <img
                 src="/logo.jpeg"
-                alt="EHT Trishna Property Management — Premium Real Estate in Bangalore"
+                alt="Trishna Property Management — Premium Real Estate in Bangalore"
                 className="h-10 w-10 sm:h-12 sm:w-12 rounded-xl object-contain border border-neutral-100 shadow-sm group-hover:shadow-md transition-all duration-300 group-hover:scale-105 bg-white"
                 width="48"
                 height="48"
               />
               <div className="flex flex-col">
-                <span className="text-lg sm:text-xl font-display font-bold text-navy-900 leading-tight tracking-wider transition-colors duration-300 group-hover:text-brand-500">
-                  EHT Trishna
+                <span className="text-xl sm:text-2xl font-display font-bold text-navy-900 leading-tight tracking-wider transition-colors duration-300 group-hover:text-brand-500">
+                  Trishna
                 </span>
                 <span className="text-[8px] sm:text-[9px] font-semibold text-brand-500 uppercase tracking-widest -mt-0.5">
                   Property Management
@@ -144,9 +144,9 @@ export default function Navbar() {
         }`}>
           {/* Mobile menu header with logo */}
           <div className="p-5 border-b border-neutral-100 flex items-center space-x-3">
-            <img src="/logo.jpeg" alt="EHT Trishna Property Management" className="h-10 w-10 rounded-lg object-contain bg-white" />
+            <img src="/logo.jpeg" alt="Trishna Property Management" className="h-10 w-10 rounded-lg object-contain bg-white" />
             <div>
-              <div className="text-sm font-bold text-navy-900">EHT Trishna</div>
+              <div className="text-sm font-bold text-navy-900">Trishna</div>
               <div className="text-[9px] text-neutral-500 uppercase tracking-wider">Property Management</div>
             </div>
           </div>
