@@ -46,8 +46,8 @@ export default function About() {
     <div className="min-h-screen" itemScope itemType="https://schema.org/AboutPage">
       <SEO
         title="About Trishna Property Management — Trusted Real Estate Agent in Bangalore"
-        description="Learn about Trishna Property Management (Trishna Properties, Prishna Properties), Bangalore's trusted real estate agency. 50+ verified properties, 200+ happy families, 5+ years of experience. Specializing in premium rental homes and properties for sale in Murgeshpalya, CV Raman Nagar, GM Palya, Whitefield, Sarjapur Road & more."
-        keywords="about Trishna Property Management, Trishna Properties, Prishna Properties Bangalore, real estate agent Bangalore, property management Bangalore, trusted realtor Bangalore, GM Palya real estate, Bengaluru property consultant, verified properties agent, East Bangalore realtor, property dealer Murgeshpalya"
+        description="Learn about Trishna Property Management (Trishna Properties), Bangalore's trusted real estate agency. 50+ verified properties, 200+ happy families, 5+ years of experience. Specializing in premium rental homes and properties for sale in Murgeshpalya, CV Raman Nagar, GM Palya, Whitefield, Sarjapur Road & more."
+        keywords="about Trishna Property Management, Trishna Properties, real estate agent Bangalore, property management Bangalore, trusted realtor Bangalore, GM Palya real estate, Bengaluru property consultant, verified properties agent, East Bangalore realtor, property dealer Murgeshpalya"
         type="website"
         canonicalPath="/about"
         location="Bengaluru, Karnataka, India"
@@ -116,7 +116,7 @@ export default function About() {
               <h2 className="text-2xl sm:text-3xl font-display font-bold text-navy-900 mb-5 sm:mb-6">Our Story</h2>
               <div className="space-y-4 text-neutral-600 text-sm sm:text-base leading-relaxed">
                 <p>
-                  <strong>Trishna Property Management</strong> (also known as <strong>Trishna Properties</strong>, <strong>Prishna Properties</strong>) was founded with a simple mission — to make finding a quality home in <strong>Bangalore</strong> hassle-free and transparent. Whether you want to <strong>Buy, Rent, or Sell</strong>, we're here to help with our deep expertise in the Bangalore real estate market.
+                  <strong>Trishna Property Management</strong> (also known as <strong>Trishna Properties</strong>) was founded with a simple mission — to make finding a quality home in <strong>Bangalore</strong> hassle-free and transparent. Whether you want to <strong>Buy, Rent, or Sell</strong>, we're here to help with our deep expertise in the Bangalore real estate market.
                 </p>
                 <p>
                   We understand that finding the right home is more than just a transaction. It's about finding a space where memories are made, where families grow, and where every day feels comfortable and secure. That's why we personally inspect every property and maintain strict quality standards.

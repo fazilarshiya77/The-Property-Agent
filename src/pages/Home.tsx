@@ -92,7 +92,7 @@ export default function Home() {
       <SEO
         title="Premium Rental Homes & Properties for Sale in Bangalore"
         description="Trishna Property Management offers 50+ verified rental homes and premium properties for sale in Bangalore. Browse apartments in Murgeshpalya, CV Raman Nagar, GM Palya, Whitefield, Sarjapur Road & more. 200+ happy families. Trusted by Bangalore residents since 5+ years."
-        keywords="Trishna Property Management, Trishna Properties, Prishna Properties, rental homes Bangalore, properties for sale Bangalore, 2BHK Murgeshpalya rent, 3BHK CV Raman Nagar, apartments GM Palya, Brigade Valencia Bommasandra, Godrej Lakeside Sarjapur, Mahindra Blossom Whitefield, verified properties Bangalore, premium rentals East Bangalore, furnished apartments near IT parks Bangalore, best real estate agent Bangalore"
+        keywords="Trishna Property Management, Trishna Properties, rental homes Bangalore, properties for sale Bangalore, 2BHK Murgeshpalya rent, 3BHK CV Raman Nagar, apartments GM Palya, Brigade Valencia Bommasandra, Godrej Lakeside Sarjapur, Mahindra Blossom Whitefield, verified properties Bangalore, premium rentals East Bangalore, furnished apartments near IT parks Bangalore, best real estate agent Bangalore"
         type="website"
         canonicalPath="/"
         location="Bangalore, Karnataka, India"
@@ -178,7 +178,7 @@ export default function Home() {
               Bangalore's Trusted Real Estate Partner
             </h2>
             <p className="text-neutral-600 text-sm sm:text-base leading-relaxed max-w-3xl mx-auto">
-              <strong>Trishna Property Management</strong> (also known as Trishna Properties, Prishna Properties) is a leading real estate agency based in <strong>Bengaluru, Karnataka</strong>, specializing in premium verified rental homes and properties for sale. Founded with a mission to make property search transparent and hassle-free, we serve <strong>200+ happy families</strong> across <strong>10+ prime locations</strong> in Bangalore including <strong>Murgeshpalya, CV Raman Nagar, GM Palya, Bommasandra, Yelahanka, Whitefield, Sarjapur Road,</strong> and <strong>Bannerghatta Road</strong>.
+              <strong>Trishna Property Management</strong> (also known as Trishna Properties) is a leading real estate agency based in <strong>Bengaluru, Karnataka</strong>, specializing in premium verified rental homes and properties for sale. Founded with a mission to make property search transparent and hassle-free, we serve <strong>200+ happy families</strong> across <strong>10+ prime locations</strong> in Bangalore including <strong>Murgeshpalya, CV Raman Nagar, GM Palya, Bommasandra, Yelahanka, Whitefield, Sarjapur Road,</strong> and <strong>Bannerghatta Road</strong>.
             </p>
             <p className="text-neutral-500 text-xs sm:text-sm leading-relaxed max-w-3xl mx-auto mt-3">
               Whether you're looking to <strong>rent a 2BHK or 3BHK apartment near IT parks</strong>, <strong>buy premium apartments from Brigade Group, Godrej Properties, or Mahindra Lifespaces</strong>, or need expert <strong>property management services</strong> — Trishna Property Management is your one-stop solution. Every property is personally inspected and verified before listing.

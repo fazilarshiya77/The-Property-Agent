@@ -40,8 +40,8 @@ export default function AdminLogin() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-navy-900 to-navy-950 px-4">
       <SEO
-        title="Admin Login - Prishna Properties"
-        description="Admin login for Prishna Properties management dashboard"
+        title="Admin Login - Trishna Property Management"
+        description="Admin login for Trishna Property Management dashboard"
         type="website"
       />
       <div className="w-full max-w-md">
@@ -71,7 +71,7 @@ export default function AdminLogin() {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="admin@prishnaproperties.com"
+                placeholder="admin@trishnapropertymanagement.in"
                 className="w-full px-4 py-3 pl-10 bg-neutral-50 border border-neutral-200 rounded-xl focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 outline-none text-sm"
                 autoComplete="email"
               />
