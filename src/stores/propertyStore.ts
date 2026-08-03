@@ -111,8 +111,19 @@ export const usePropertyStore = create<PropertyStore>((set, get) => ({
   fetchProperties: async () => {
     set({ loading: true, error: null });
     try {
-      // Use default properties directly
-      set({ properties: defaultProperties, loading: false });
+      const { data, error } = await supabase
+        .from('properties')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+
+      if (data && data.length > 0) {
+        const camelData = toCamelCase(data);
+        set({ properties: camelData, loading: false });
+      } else {
+        set({ properties: defaultProperties, loading: false });
+      }
     } catch (err) {
       console.error('Error fetching properties:', err);
       set({ properties: defaultProperties, loading: false, error: 'Failed to fetch properties' });

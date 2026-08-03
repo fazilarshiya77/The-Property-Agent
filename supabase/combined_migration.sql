@@ -25,9 +25,12 @@ CREATE TABLE IF NOT EXISTS public.properties (
   description TEXT,
   contact_email TEXT,
   map_query TEXT,
+  reviews JSONB DEFAULT '[]'::jsonb,
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
+
+ALTER TABLE public.properties ADD COLUMN IF NOT EXISTS reviews JSONB DEFAULT '[]'::jsonb;
 
 ALTER TABLE public.properties ENABLE ROW LEVEL SECURITY;
 
