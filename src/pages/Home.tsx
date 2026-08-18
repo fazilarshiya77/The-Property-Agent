@@ -161,7 +161,7 @@ export default function Home() {
             {/* Filter Tabs & Search Box */}
             <div className="max-w-xl">
               {/* Type Tabs */}
-              <div className="flex items-center gap-1.5 sm:gap-2 mb-2.5 overflow-x-auto pb-1 scrollbar-none" role="tablist" aria-label="Filter by property category">
+              <div className="flex items-center flex-wrap gap-1.5 sm:gap-2 mb-3" role="tablist" aria-label="Filter by property category">
                 {[
                   { id: 'all', label: 'All' },
                   { id: 'sale', label: 'For Sale' },
