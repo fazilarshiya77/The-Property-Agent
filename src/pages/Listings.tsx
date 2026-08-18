@@ -11,10 +11,10 @@ import { Helmet } from 'react-helmet-async';
 type SortOption = 'default' | 'price-asc' | 'price-desc' | 'area-desc';
 
 export default function Listings() {
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [searchTerm, setSearchTerm] = useState(searchParams.get('search') || '');
-  const [propertyType, setPropertyType] = useState<'all' | 'rent' | 'sale'>(
-    (searchParams.get('type') as 'rent' | 'sale') || 'all'
+  const [propertyType, setPropertyType] = useState<'all' | 'rent' | 'sale' | 'lease' | 'commercial'>(
+    (searchParams.get('type') as 'rent' | 'sale' | 'lease' | 'commercial') || 'all'
   );
   const [selectedLocation, setSelectedLocation] = useState(
     searchParams.get('location') || 'all'
@@ -27,7 +27,7 @@ export default function Listings() {
   useEffect(() => {
     setSearchTerm(searchParams.get('search') || '');
     setSelectedLocation(searchParams.get('location') || 'all');
-    setPropertyType((searchParams.get('type') as 'rent' | 'sale') || 'all');
+    setPropertyType((searchParams.get('type') as 'rent' | 'sale' | 'lease' | 'commercial') || 'all');
   }, [searchParams]);
 
   const { properties, fetchProperties, loading } = usePropertyStore();
@@ -50,7 +50,9 @@ export default function Listings() {
       const matchesLocation = selectedLocation === 'all' || 
         (property.areaName && property.areaName.toLowerCase() === selectedLocation.toLowerCase()) ||
         (property.location && property.location.toLowerCase().includes(selectedLocation.toLowerCase()));
-      const matchesBedrooms = bedrooms === 'all' || property.bedrooms >= Number(bedrooms);
+      const matchesBedrooms = bedrooms === 'all' || 
+        property.bedrooms >= Number(bedrooms) ||
+        (property.type === 'commercial' && bedrooms === 'all');
       return matchesSearch && matchesType && matchesLocation && matchesBedrooms;
     });
 
@@ -84,9 +86,17 @@ export default function Listings() {
 
   // Dynamic title and description based on filters
   const locationLabel = selectedLocation !== 'all' ? selectedLocation : 'Bangalore';
-  const typeLabel = propertyType === 'rent' ? 'for Rent' : propertyType === 'sale' ? 'for Sale' : 'for Rent & Sale';
+  const typeLabel = propertyType === 'rent'
+    ? 'for Rent'
+    : propertyType === 'sale'
+    ? 'for Sale'
+    : propertyType === 'lease'
+    ? 'for Lease'
+    : propertyType === 'commercial'
+    ? 'Commercial'
+    : 'for Rent, Sale & Lease';
   const pageTitle = `Properties ${typeLabel} in ${locationLabel}`;
-  const pageDescription = `Browse ${filteredProperties.length}+ verified properties ${typeLabel.toLowerCase()} in ${locationLabel}, Bangalore. Filter by location, price, bedrooms, and type. Find your perfect home with Trishna Property Management. 2BHK, 3BHK, 4BHK apartments and houses available. Every listing personally verified.`;
+  const pageDescription = `Browse ${filteredProperties.length}+ verified properties ${typeLabel.toLowerCase()} in ${locationLabel}, Bangalore. Filter by location, price, bedrooms, and property type (Sale, Rent, Lease, Commercial). Find your perfect space with Trishna Property Management. Every listing personally inspected.`;
 
   const itemListSchema = generateItemListSchema(pageTitle, pageDescription);
 
@@ -192,19 +202,25 @@ export default function Listings() {
 
           {/* Type pills */}
           <div className="flex items-center gap-1.5 sm:gap-2 mt-3 sm:mt-4 overflow-x-auto pb-1" role="group" aria-label="Filter by property type">
-            {(['all', 'rent', 'sale'] as const).map(type => (
+            {[
+              { id: 'all', label: 'All' },
+              { id: 'rent', label: 'For Rent' },
+              { id: 'sale', label: 'For Sale' },
+              { id: 'lease', label: 'For Lease' },
+              { id: 'commercial', label: 'Commercial' },
+            ].map(({ id, label }) => (
               <button
-                key={type}
-                id={`filter-type-${type}`}
-                onClick={() => setPropertyType(type)}
+                key={id}
+                id={`filter-type-${id}`}
+                onClick={() => setPropertyType(id as typeof propertyType)}
                 className={`px-3 sm:px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all duration-300 flex-shrink-0 ${
-                  propertyType === type
+                  propertyType === id
                     ? 'bg-navy-950 text-brand-400 border border-brand-500/20 shadow-md'
                     : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200 border border-transparent'
                 }`}
-                aria-pressed={propertyType === type}
+                aria-pressed={propertyType === id}
               >
-                {type === 'all' ? 'All' : type === 'rent' ? 'For Rent' : 'For Sale'}
+                {label}
               </button>
             ))}
 
@@ -265,6 +281,12 @@ export default function Listings() {
           {/* Active filter chips */}
           {activeFilterCount > 0 && (
             <div className="flex flex-wrap gap-1.5 sm:gap-2 mt-2.5 sm:mt-3" role="list" aria-label="Active filters">
+              {propertyType !== 'all' && (
+                <span className="flex items-center gap-1 px-3 py-1 bg-navy-900 text-white text-xs font-medium rounded-full" role="listitem">
+                  {propertyType === 'rent' ? 'For Rent' : propertyType === 'sale' ? 'For Sale' : propertyType === 'lease' ? 'For Lease' : 'Commercial'}
+                  <button onClick={() => setPropertyType('all')} aria-label={`Remove ${propertyType} filter`}><X className="h-3 w-3" /></button>
+                </span>
+              )}
               {selectedLocation !== 'all' && (
                 <span className="flex items-center gap-1 px-3 py-1 bg-brand-50 text-brand-600 text-xs font-medium rounded-full" role="listitem">
                   {selectedLocation}

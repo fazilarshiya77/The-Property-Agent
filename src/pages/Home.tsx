@@ -83,6 +83,7 @@ export default function Home() {
     .map(id => allProperties.find(p => p.id === id))
     .filter(Boolean) as typeof allProperties;
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedType, setSelectedType] = useState<'all' | 'sale' | 'rent' | 'lease' | 'commercial'>('all');
   const navigate = useNavigate();
 
   // FAQ accordion state
@@ -103,19 +104,23 @@ export default function Home() {
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (searchQuery.trim()) {
-      navigate(`/listings?search=${encodeURIComponent(searchQuery.trim())}`);
-    } else {
-      navigate('/listings');
+    const params = new URLSearchParams();
+    if (selectedType !== 'all') {
+      params.append('type', selectedType);
     }
+    if (searchQuery.trim()) {
+      params.append('search', searchQuery.trim());
+    }
+    const queryString = params.toString();
+    navigate(queryString ? `/listings?${queryString}` : '/listings');
   };
 
   return (
     <div className="min-h-screen bg-neutral-50/50">
       <SEO
         title="Premium Rental Homes, Properties for Sale & Home Services in Bangalore"
-        description="Trishna Property Management offers 50+ verified rental homes, premium properties for sale, and end-to-end home services (E-Stamp agreements, Electrical, Plumbing, Carpentry, Painting & Packers Movers) in Bangalore. 200+ happy families."
-        keywords="Trishna Property Management, Trishna Properties, rental homes Bangalore, properties for sale Bangalore, E-stamp Bangalore, rental agreement Bangalore, electrician CV Raman Nagar, plumber GM Palya, carpentry works Bangalore, house painting Bangalore, packers and movers Bangalore, Brigade Valencia, Godrej Lakeside, verified properties Bangalore"
+        description="Trishna Property Management offers 50+ verified rental homes, premium properties for sale, long-term lease properties, commercial spaces, and end-to-end home services (E-Stamp agreements, Electrical, Plumbing, Carpentry, Painting & Packers Movers) in Bangalore. 200+ happy families."
+        keywords="Trishna Property Management, Trishna Properties, rental homes Bangalore, properties for sale Bangalore, lease properties Bangalore, commercial office space Bangalore, E-stamp Bangalore, rental agreement Bangalore, electrician CV Raman Nagar, plumber GM Palya, carpentry works Bangalore, house painting Bangalore, packers and movers Bangalore, Brigade Valencia, Godrej Lakeside, verified properties Bangalore"
         type="website"
         canonicalPath="/"
         location="Bangalore, Karnataka, India"
@@ -147,36 +152,104 @@ export default function Home() {
             <h1 className="text-2xl sm:text-4xl lg:text-6xl font-display font-bold text-white leading-[1.1] mb-4 sm:mb-6 tracking-wide">
               Find Your
               <br />
-              <span className="gradient-text">Perfect Home</span>
+              <span className="gradient-text">Perfect Space</span>
             </h1>
             <p className="text-sm sm:text-lg text-neutral-300 mb-6 sm:mb-8 max-w-lg leading-relaxed font-light">
-              Discover handpicked luxury homes and premium residential properties in Bangalore's most sought-after neighborhoods. 50+ verified listings across 10+ prime locations.
+              Discover handpicked luxury homes, rentals, long-term lease properties, and premium commercial spaces in Bangalore. 50+ verified listings across 10+ prime locations.
             </p>
 
-            {/* Search Bar */}
-            <form onSubmit={handleSearchSubmit} className="bg-white rounded-2xl shadow-glass p-2 max-w-xl border border-white/10" role="search" aria-label="Search properties">
-              <div className="flex items-center flex-col sm:flex-row gap-2">
-                <div className="flex-1 flex items-center px-4 py-2 w-full">
-                  <Search className="h-4 sm:h-5 w-4 sm:w-5 text-neutral-400 mr-2 sm:mr-3 flex-shrink-0" aria-hidden="true" />
-                  <input
-                    type="text"
-                    id="hero-search"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder="Search by location, property name, or area..."
-                    className="flex-1 bg-transparent outline-none text-navy-900 placeholder-neutral-400 text-xs sm:text-sm w-full"
-                    aria-label="Search properties by location or type"
-                  />
-                </div>
-                <button
-                  type="submit"
-                  id="hero-search-btn"
-                  className="bg-brand-500 hover:bg-brand-600 text-white font-semibold px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-brand-500/25 text-xs sm:text-sm flex-shrink-0 active:scale-[0.98] w-full sm:w-auto"
-                >
-                  Search Properties
-                </button>
+            {/* Filter Tabs & Search Box */}
+            <div className="max-w-xl">
+              {/* Type Tabs */}
+              <div className="flex items-center gap-1.5 sm:gap-2 mb-2.5 overflow-x-auto pb-1 scrollbar-none" role="tablist" aria-label="Filter by property category">
+                {[
+                  { id: 'all', label: 'All' },
+                  { id: 'sale', label: 'For Sale' },
+                  { id: 'rent', label: 'For Rent' },
+                  { id: 'lease', label: 'For Lease' },
+                  { id: 'commercial', label: 'Commercial' },
+                ].map((tab) => (
+                  <button
+                    key={tab.id}
+                    type="button"
+                    role="tab"
+                    aria-selected={selectedType === tab.id}
+                    onClick={() => setSelectedType(tab.id as typeof selectedType)}
+                    className={`px-3.5 sm:px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all duration-300 flex-shrink-0 backdrop-blur-md ${
+                      selectedType === tab.id
+                        ? 'bg-brand-500 text-white shadow-lg shadow-brand-500/30 scale-105'
+                        : 'bg-navy-900/60 text-neutral-300 hover:text-white hover:bg-navy-900/80 border border-white/10'
+                    }`}
+                  >
+                    {tab.label}
+                  </button>
+                ))}
               </div>
-            </form>
+
+              {/* Search Bar */}
+              <form onSubmit={handleSearchSubmit} className="bg-white rounded-2xl shadow-glass p-2 border border-white/10" role="search" aria-label="Search properties">
+                <div className="flex items-center flex-col sm:flex-row gap-2">
+                  <div className="flex-1 flex items-center px-4 py-2 w-full">
+                    <Search className="h-4 sm:h-5 w-4 sm:w-5 text-neutral-400 mr-2 sm:mr-3 flex-shrink-0" aria-hidden="true" />
+                    <input
+                      type="text"
+                      id="hero-search"
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      placeholder={
+                        selectedType === 'sale'
+                          ? 'Search properties for sale...'
+                          : selectedType === 'rent'
+                          ? 'Search homes for rent...'
+                          : selectedType === 'lease'
+                          ? 'Search lease properties...'
+                          : selectedType === 'commercial'
+                          ? 'Search commercial spaces, offices...'
+                          : 'Search by location, property name, or area...'
+                      }
+                      className="flex-1 bg-transparent outline-none text-navy-900 placeholder-neutral-400 text-xs sm:text-sm w-full"
+                      aria-label="Search properties by location or type"
+                    />
+                  </div>
+                  <button
+                    type="submit"
+                    id="hero-search-btn"
+                    className="bg-brand-500 hover:bg-brand-600 text-white font-semibold px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-brand-500/25 text-xs sm:text-sm flex-shrink-0 active:scale-[0.98] w-full sm:w-auto"
+                  >
+                    Search Properties
+                  </button>
+                </div>
+              </form>
+
+              {/* Quick Category Badges */}
+              <div className="flex items-center flex-wrap gap-2 mt-3.5 text-xs text-neutral-300">
+                <span className="text-neutral-400 font-medium hidden sm:inline">Quick links:</span>
+                <Link
+                  to="/listings?type=sale"
+                  className="px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-white backdrop-blur-sm transition-all border border-white/10 hover:border-white/25"
+                >
+                  🏡 Buy Homes
+                </Link>
+                <Link
+                  to="/listings?type=rent"
+                  className="px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-white backdrop-blur-sm transition-all border border-white/10 hover:border-white/25"
+                >
+                  🔑 Rent Homes
+                </Link>
+                <Link
+                  to="/listings?type=lease"
+                  className="px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-white backdrop-blur-sm transition-all border border-white/10 hover:border-white/25"
+                >
+                  📜 Long-Term Lease
+                </Link>
+                <Link
+                  to="/listings?type=commercial"
+                  className="px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-white backdrop-blur-sm transition-all border border-white/10 hover:border-white/25"
+                >
+                  🏢 Commercial Space
+                </Link>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -395,7 +468,7 @@ export default function Home() {
 
       {/* ─── NEIGHBORHOOD GUIDES (AIEO/GEO Content) ─── */}
       <section className="py-10 sm:py-16 lg:py-20 bg-neutral-50" aria-label="Bangalore neighborhood rental guides">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-8 sm:mb-12">
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-display font-bold text-navy-900 mb-2 sm:mb-3">
               Bangalore Neighborhood Guides
@@ -405,33 +478,39 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-            <article className="bg-white rounded-2xl p-5 sm:p-6 shadow-sm border border-neutral-100">
-              <h3 className="text-base sm:text-lg font-semibold text-navy-900 mb-2">Murgeshpalya — East Bangalore's Premium Rental Hub</h3>
-              <p className="text-neutral-600 text-xs sm:text-sm leading-relaxed">
-                Murgeshpalya is one of the most sought-after residential areas in East Bangalore for working professionals and families. Located near Old Airport Road and HAL, it offers excellent connectivity to major IT parks, shopping centers, and hospitals. Average rental prices for 2BHK apartments range from ₹46,000 to ₹65,000/month, with options for fully furnished and semi-furnished homes in gated communities.
-              </p>
-              <Link to="/listings?location=Murgeshpalya" className="inline-flex items-center text-brand-500 text-xs sm:text-sm font-semibold mt-3 hover:text-brand-600 transition-colors">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
+            <article className="bg-white rounded-2xl p-5 sm:p-6 shadow-sm border border-neutral-100 flex flex-col justify-between hover:shadow-card-hover hover:border-brand-500/30 transition-all duration-300">
+              <div>
+                <h3 className="text-base sm:text-lg font-semibold text-navy-900 mb-2">Murgeshpalya — East Bangalore's Premium Rental Hub</h3>
+                <p className="text-neutral-600 text-xs sm:text-sm leading-relaxed">
+                  Murgeshpalya is one of the most sought-after residential areas in East Bangalore for working professionals and families. Located near Old Airport Road and HAL, it offers excellent connectivity to major IT parks, shopping centers, and hospitals. Average rental prices for 2BHK apartments range from ₹46,000 to ₹65,000/month, with options for fully furnished and semi-furnished homes in gated communities.
+                </p>
+              </div>
+              <Link to="/listings?location=Murgeshpalya" className="inline-flex items-center text-brand-500 text-xs sm:text-sm font-semibold mt-4 hover:text-brand-600 transition-colors">
                 View Murgeshpalya properties <ArrowRight className="h-3.5 w-3.5 ml-1" aria-hidden="true" />
               </Link>
             </article>
 
-            <article className="bg-white rounded-2xl p-5 sm:p-6 shadow-sm border border-neutral-100">
-              <h3 className="text-base sm:text-lg font-semibold text-navy-900 mb-2">CV Raman Nagar — Peaceful Living Near DRDO & ISRO</h3>
-              <p className="text-neutral-600 text-xs sm:text-sm leading-relaxed">
-                CV Raman Nagar is a well-established residential area known for its peaceful atmosphere and proximity to defense establishments like DRDO and ISRO. It offers easy metro access and connectivity to Old Airport Road. Rental prices for 2BHK apartments start from ₹40,000/month, making it an affordable yet premium choice for professionals and families seeking a quiet neighborhood.
-              </p>
-              <Link to="/listings?location=CV+Raman+Nagar" className="inline-flex items-center text-brand-500 text-xs sm:text-sm font-semibold mt-3 hover:text-brand-600 transition-colors">
+            <article className="bg-white rounded-2xl p-5 sm:p-6 shadow-sm border border-neutral-100 flex flex-col justify-between hover:shadow-card-hover hover:border-brand-500/30 transition-all duration-300">
+              <div>
+                <h3 className="text-base sm:text-lg font-semibold text-navy-900 mb-2">CV Raman Nagar — Peaceful Living Near DRDO & ISRO</h3>
+                <p className="text-neutral-600 text-xs sm:text-sm leading-relaxed">
+                  CV Raman Nagar is a well-established residential area known for its peaceful atmosphere and proximity to defense establishments like DRDO and ISRO. It offers easy metro access and connectivity to Old Airport Road. Rental prices for 2BHK apartments start from ₹40,000/month, making it an affordable yet premium choice for professionals and families seeking a quiet neighborhood.
+                </p>
+              </div>
+              <Link to="/listings?location=CV+Raman+Nagar" className="inline-flex items-center text-brand-500 text-xs sm:text-sm font-semibold mt-4 hover:text-brand-600 transition-colors">
                 View CV Raman Nagar properties <ArrowRight className="h-3.5 w-3.5 ml-1" aria-hidden="true" />
               </Link>
             </article>
 
-            <article className="bg-white rounded-2xl p-5 sm:p-6 shadow-sm border border-neutral-100">
-              <h3 className="text-base sm:text-lg font-semibold text-navy-900 mb-2">Whitefield — IT Hub with Premium Developments</h3>
-              <p className="text-neutral-600 text-xs sm:text-sm leading-relaxed">
-                Whitefield is Bangalore's premier IT corridor with world-class residential developments from top builders like Mahindra Lifespaces. Home to ITPL and numerous tech parks, it offers excellent social infrastructure including international schools, hospitals, and malls. Premium apartments start from ₹2.0 Cr with projects like Mahindra Blossom featuring a 97,000 sqft clubhouse and metro connectivity.
-              </p>
-              <Link to="/listings?location=Whitefield" className="inline-flex items-center text-brand-500 text-xs sm:text-sm font-semibold mt-3 hover:text-brand-600 transition-colors">
+            <article className="bg-white rounded-2xl p-5 sm:p-6 shadow-sm border border-neutral-100 flex flex-col justify-between hover:shadow-card-hover hover:border-brand-500/30 transition-all duration-300">
+              <div>
+                <h3 className="text-base sm:text-lg font-semibold text-navy-900 mb-2">Whitefield — IT Hub with Premium Developments</h3>
+                <p className="text-neutral-600 text-xs sm:text-sm leading-relaxed">
+                  Whitefield is Bangalore's premier IT corridor with world-class residential developments from top builders like Mahindra Lifespaces. Home to ITPL and numerous tech parks, it offers excellent social infrastructure including international schools, hospitals, and malls. Premium apartments start from ₹2.0 Cr with projects like Mahindra Blossom featuring a 97,000 sqft clubhouse and metro connectivity.
+                </p>
+              </div>
+              <Link to="/listings?location=Whitefield" className="inline-flex items-center text-brand-500 text-xs sm:text-sm font-semibold mt-4 hover:text-brand-600 transition-colors">
                 View Whitefield properties <ArrowRight className="h-3.5 w-3.5 ml-1" aria-hidden="true" />
               </Link>
             </article>

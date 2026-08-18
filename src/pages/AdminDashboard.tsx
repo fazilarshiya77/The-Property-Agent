@@ -6,6 +6,7 @@ import { usePropertyStore, isAdminAuthenticated, setAdminAuthenticated } from '.
 export default function AdminDashboard() {
   const navigate = useNavigate();
   const [search, setSearch] = useState('');
+  const [typeFilter, setTypeFilter] = useState<'all' | 'rent' | 'sale' | 'lease' | 'commercial'>('all');
   const { properties, fetchProperties, deleteProperty } = usePropertyStore();
 
   useEffect(() => {
@@ -17,12 +18,15 @@ export default function AdminDashboard() {
   }, [navigate]);
 
   const filtered = useMemo(() => {
-    if (!search) return properties;
-    const q = search.toLowerCase();
-    return properties.filter(p =>
-      p.title.toLowerCase().includes(q) || p.location.toLowerCase().includes(q)
-    );
-  }, [properties, search]);
+    return properties.filter(p => {
+      const matchesSearch = !search ||
+        p.title.toLowerCase().includes(search.toLowerCase()) ||
+        p.location.toLowerCase().includes(search.toLowerCase()) ||
+        p.areaName.toLowerCase().includes(search.toLowerCase());
+      const matchesType = typeFilter === 'all' || p.type === typeFilter;
+      return matchesSearch && matchesType;
+    });
+  }, [properties, search, typeFilter]);
 
   const handleDelete = async (id: string, title: string) => {
     if (window.confirm(`Delete "${title}"? This action cannot be undone.`)) {
@@ -42,8 +46,28 @@ export default function AdminDashboard() {
 
   const formatPrice = (price: number, type: string) => {
     if (type === 'rent') return `₹${price.toLocaleString('en-IN')}/mo`;
+    if (type === 'lease') {
+      if (price >= 10000000) return `₹${(price / 10000000).toFixed(2)} Cr (Lease)`;
+      return `₹${(price / 100000).toFixed(1)} L (Lease)`;
+    }
+    if (type === 'commercial' && price < 1000000) return `₹${price.toLocaleString('en-IN')}/mo`;
     if (price >= 10000000) return `₹${(price / 10000000).toFixed(1)} Cr`;
     return `₹${(price / 100000).toFixed(1)} L`;
+  };
+
+  const getTypeBadge = (type: string) => {
+    switch (type) {
+      case 'rent':
+        return { label: 'Rent', className: 'bg-brand-50 text-brand-600 border border-brand-200' };
+      case 'sale':
+        return { label: 'Sale', className: 'bg-amber-50 text-amber-700 border border-amber-200' };
+      case 'lease':
+        return { label: 'Lease', className: 'bg-indigo-50 text-indigo-700 border border-indigo-200' };
+      case 'commercial':
+        return { label: 'Commercial', className: 'bg-emerald-50 text-emerald-700 border border-emerald-200' };
+      default:
+        return { label: type, className: 'bg-neutral-100 text-neutral-800' };
+    }
   };
 
   if (!isAdminAuthenticated()) return null;
@@ -59,7 +83,7 @@ export default function AdminDashboard() {
             </Link>
             <div>
               <h1 className="text-lg font-display font-bold text-navy-900 tracking-wide">Property Manager</h1>
-              <p className="text-xs text-neutral-500">{properties.length} properties</p>
+              <p className="text-xs text-neutral-500">{properties.length} total properties ({filtered.length} shown)</p>
             </div>
           </div>
           <div className="flex items-center gap-3">
@@ -78,16 +102,49 @@ export default function AdminDashboard() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        {/* Search */}
-        <div className="relative mb-6">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-neutral-400" />
-          <input
-            type="text"
-            placeholder="Search properties..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-11 pr-4 py-3 bg-white border border-neutral-200 rounded-xl focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 outline-none text-sm"
-          />
+        {/* Search & Filter Bar */}
+        <div className="flex flex-col sm:flex-row gap-3 mb-6">
+          <div className="relative flex-1">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-neutral-400" />
+            <input
+              type="text"
+              placeholder="Search properties by title, location or area..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="w-full pl-11 pr-4 py-2.5 bg-white border border-neutral-200 rounded-xl focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 outline-none text-sm"
+            />
+          </div>
+
+          {/* Type Filter Pills */}
+          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0">
+            {[
+              { id: 'all', label: 'All' },
+              { id: 'rent', label: 'Rent' },
+              { id: 'sale', label: 'Sale' },
+              { id: 'lease', label: 'Lease' },
+              { id: 'commercial', label: 'Commercial' },
+            ].map(({ id, label }) => {
+              const count = id === 'all' ? properties.length : properties.filter(p => p.type === id).length;
+              return (
+                <button
+                  key={id}
+                  onClick={() => setTypeFilter(id as typeof typeFilter)}
+                  className={`px-3 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-1.5 ${
+                    typeFilter === id
+                      ? 'bg-navy-900 text-white shadow-sm'
+                      : 'bg-white border border-neutral-200 text-neutral-600 hover:bg-neutral-50'
+                  }`}
+                >
+                  <span>{label}</span>
+                  <span className={`text-[10px] px-1.5 py-0.2 rounded-full ${
+                    typeFilter === id ? 'bg-white/20 text-white' : 'bg-neutral-100 text-neutral-600'
+                  }`}>
+                    {count}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
         </div>
 
         {/* Table */}
@@ -104,64 +161,67 @@ export default function AdminDashboard() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-neutral-50">
-                {filtered.map((p) => (
-                  <tr key={p.id} className="hover:bg-neutral-50/50 transition-colors">
-                    <td className="px-4 py-3">
-                      <div className="flex items-center gap-3">
-                        <div className="w-12 h-12 rounded-lg overflow-hidden bg-neutral-100 flex-shrink-0 relative">
-                          {p.images[0] ? (
-                            <img src={p.images[0]} alt="" className="w-full h-full object-cover" />
-                          ) : (
-                            <Building className="w-full h-full p-2.5 text-neutral-300" />
-                          )}
-                          {p.videos && p.videos.length > 0 && (
-                            <div className="absolute bottom-0 right-0 bg-navy-950/80 text-white p-0.5 rounded-tl shadow-sm" title={`${p.videos.length} video(s)`}>
-                              <Video className="h-3 w-3 text-brand-300" />
-                            </div>
-                          )}
-                        </div>
-                        <div className="min-w-0">
-                          <div className="flex items-center gap-1.5">
-                            <Link to={`/listings/${p.id}`} className="text-sm font-semibold text-navy-900 hover:text-brand-500 transition-colors truncate block">
-                              {p.title}
-                            </Link>
+                {filtered.map((p) => {
+                  const badge = getTypeBadge(p.type);
+                  return (
+                    <tr key={p.id} className="hover:bg-neutral-50/50 transition-colors">
+                      <td className="px-4 py-3">
+                        <div className="flex items-center gap-3">
+                          <div className="w-12 h-12 rounded-lg overflow-hidden bg-neutral-100 flex-shrink-0 relative">
+                            {p.images[0] ? (
+                              <img src={p.images[0]} alt="" className="w-full h-full object-cover" />
+                            ) : (
+                              <Building className="w-full h-full p-2.5 text-neutral-300" />
+                            )}
                             {p.videos && p.videos.length > 0 && (
-                              <span className="text-[10px] font-bold px-1.5 py-0.2 bg-brand-50 text-brand-700 rounded flex-shrink-0">
-                                Video
-                              </span>
+                              <div className="absolute bottom-0 right-0 bg-navy-950/80 text-white p-0.5 rounded-tl shadow-sm" title={`${p.videos.length} video(s)`}>
+                                <Video className="h-3 w-3 text-brand-300" />
+                              </div>
                             )}
                           </div>
-                          <p className="text-xs text-neutral-500 md:hidden">{p.areaName}</p>
+                          <div className="min-w-0">
+                            <div className="flex items-center gap-1.5">
+                              <Link to={`/listings/${p.id}`} className="text-sm font-semibold text-navy-900 hover:text-brand-500 transition-colors truncate block">
+                                {p.title}
+                              </Link>
+                              {p.videos && p.videos.length > 0 && (
+                                <span className="text-[10px] font-bold px-1.5 py-0.2 bg-brand-50 text-brand-700 rounded flex-shrink-0">
+                                  Video
+                                </span>
+                              )}
+                            </div>
+                            <p className="text-xs text-neutral-500 md:hidden">{p.areaName}</p>
+                          </div>
                         </div>
-                      </div>
-                    </td>
-                    <td className="px-4 py-3 text-sm text-neutral-600 hidden md:table-cell">{p.areaName}</td>
-                    <td className="px-4 py-3 text-sm font-semibold text-navy-900">{formatPrice(p.price, p.type)}</td>
-                    <td className="px-4 py-3 hidden sm:table-cell">
-                      <span className={`px-2.5 py-1 rounded-full text-xs font-semibold ${p.type === 'rent' ? 'bg-brand-50 text-brand-600' : 'bg-navy-950/5 text-navy-900'}`}>
-                        {p.type === 'rent' ? 'Rent' : 'Sale'}
-                      </span>
-                    </td>
-                    <td className="px-4 py-3">
-                      <div className="flex items-center justify-end gap-1">
-                        <Link
-                          to={`/admin/edit/${p.id}`}
-                          className="p-2 rounded-lg hover:bg-brand-50 text-neutral-400 hover:text-brand-500 transition-colors"
-                          title="Edit"
-                        >
-                          <Pencil className="h-4 w-4" />
-                        </Link>
-                        <button
-                          onClick={() => handleDelete(p.id, p.title)}
-                          className="p-2 rounded-lg hover:bg-red-50 text-neutral-400 hover:text-red-500 transition-colors"
-                          title="Delete"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
+                      </td>
+                      <td className="px-4 py-3 text-sm text-neutral-600 hidden md:table-cell">{p.areaName}</td>
+                      <td className="px-4 py-3 text-sm font-semibold text-navy-900">{formatPrice(p.price, p.type)}</td>
+                      <td className="px-4 py-3 hidden sm:table-cell">
+                        <span className={`px-2.5 py-1 rounded-full text-xs font-semibold ${badge.className}`}>
+                          {badge.label}
+                        </span>
+                      </td>
+                      <td className="px-4 py-3">
+                        <div className="flex items-center justify-end gap-1">
+                          <Link
+                            to={`/admin/edit/${p.id}`}
+                            className="p-2 rounded-lg hover:bg-brand-50 text-neutral-400 hover:text-brand-500 transition-colors"
+                            title="Edit"
+                          >
+                            <Pencil className="h-4 w-4" />
+                          </Link>
+                          <button
+                            onClick={() => handleDelete(p.id, p.title)}
+                            className="p-2 rounded-lg hover:bg-red-50 text-neutral-400 hover:text-red-500 transition-colors"
+                            title="Delete"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>

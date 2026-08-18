@@ -132,6 +132,8 @@ export default function Services() {
     setSubmitError(false);
 
     const serviceTitle = currentServiceItem ? currentServiceItem.title : 'General Home Service';
+    const whatsappMsg = `*New Service Booking — Trishna Property Management*\n\n*Service:* ${serviceTitle}\n*Sub-service:* ${formData.subService || 'General Inquiry'}\n*Name:* ${formData.name}\n*Phone:* ${formData.phone}\n*Email:* ${formData.email || 'N/A'}\n*Locality:* ${formData.locality}\n*Preferred Date/Time:* ${formData.preferredDate || 'Flexible'} (${formData.preferredTime})\n*Message/Notes:* ${formData.message || 'None'}`;
+    const whatsappUrl = `https://wa.me/919886104532?text=${encodeURIComponent(whatsappMsg)}`;
 
     try {
       const formPayload = new FormData();
@@ -172,6 +174,9 @@ export default function Services() {
           },
         });
 
+        // Redirect / Open WhatsApp
+        window.open(whatsappUrl, '_blank');
+
         setIsSubmitting(false);
         setSubmitSuccess(true);
         setFormData({
@@ -186,6 +191,7 @@ export default function Services() {
         });
         setTimeout(() => setSubmitSuccess(false), 8000);
       } else {
+        window.open(whatsappUrl, '_blank');
         throw new Error(result.message);
       }
     } catch (error) {

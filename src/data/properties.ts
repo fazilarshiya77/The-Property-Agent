@@ -7,13 +7,15 @@ export interface Review {
   text: string;
 }
 
+export type PropertyType = 'rent' | 'sale' | 'lease' | 'commercial';
+
 export interface Property {
   id: string;
   title: string;
   location: string;
   areaName: string;
   price: number;
-  type: 'rent' | 'sale';
+  type: PropertyType;
   bedrooms: number;
   bathrooms: number;
   area: number;
@@ -479,6 +481,100 @@ export const defaultProperties: Property[] = [
     contactEmail: 'trishnaproperties78@gmail.com',
     mapQuery: 'Mahindra Zen, Singasandra, Hosur Road, Bangalore',
     reviews: generateReviews(5),
+  },
+  // ─── COMMERCIAL PROPERTIES ────────────────────
+  {
+    id: '550e8400-e29b-41d4-a716-446655440018',
+    title: 'Premium Commercial Office Space — Tech Hub',
+    location: 'Whitefield Main Road, Bangalore',
+    areaName: 'Whitefield',
+    price: 125000,
+    type: 'commercial',
+    bedrooms: 0,
+    bathrooms: 4,
+    area: 3200,
+    furnished: 'fully',
+    deposit: '10 Lakhs',
+    availability: 'Immediate',
+    floor: '3rd Floor',
+    facing: 'East',
+    amenities: ['Central AC', 'High-Speed Elevators', '100% Power Backup', 'Reserved Parking', '24/7 Security & CCTV', 'Conference Rooms', 'Cafeteria', 'Fire Fighting System'],
+    highlights: ['Furnished with 45+ workstations', '3 private cabins & 1 board room', 'Prime commercial building on main road', 'Walking distance to Metro'],
+    images: imgListMixed('mahindra-blossom', ['jpg','jpg','png','png','jpg']),
+    description: 'Grade A commercial office space in prime Whitefield IT hub. Fully furnished with 45 plug-and-play workstations, 3 executive cabins, conference hall, reception area, pantry, and dedicated restrooms. High footfall and excellent metro connectivity.',
+    contactEmail: 'trishnaproperties78@gmail.com',
+    mapQuery: 'Whitefield Main Road, Bangalore',
+    reviews: generateReviews(4),
+  },
+  {
+    id: '550e8400-e29b-41d4-a716-446655440019',
+    title: 'Prime Retail & Commercial Showroom',
+    location: 'CV Raman Nagar, Bangalore',
+    areaName: 'CV Raman Nagar',
+    price: 95000,
+    type: 'commercial',
+    bedrooms: 0,
+    bathrooms: 2,
+    area: 1850,
+    furnished: 'semi',
+    deposit: '8 Lakhs',
+    availability: 'Immediate',
+    floor: 'Ground Floor',
+    facing: 'North',
+    amenities: ['Main Road Frontage', 'Glass Facade', 'Car Parking', 'Power Backup', '24/7 Water Supply', 'Security'],
+    highlights: ['High visibility ground floor showroom', 'Large 40ft glass frontage', 'Ideal for clinic, boutique, or corporate office', 'Ample customer parking'],
+    images: imgList('cv-raman-nagar', 5),
+    description: 'High-visibility ground floor commercial space in CV Raman Nagar. Excellent frontage with 40ft glass display, high ceiling, separate washrooms, and dedicated parking. Ideal for retail showrooms, clinics, banks, or corporate offices.',
+    contactEmail: 'trishnaproperties78@gmail.com',
+    mapQuery: 'CV Raman Nagar, Bangalore',
+    reviews: generateReviews(3),
+  },
+  // ─── LEASE PROPERTIES ─────────────────────────
+  {
+    id: '550e8400-e29b-41d4-a716-446655440020',
+    title: 'Spacious 3BHK Luxury Residence — Long Term Lease',
+    location: 'GM Palya, CV Raman Nagar, Bangalore',
+    areaName: 'GM Palya',
+    price: 2500000,
+    type: 'lease',
+    bedrooms: 3,
+    bathrooms: 3,
+    area: 1750,
+    furnished: 'fully',
+    deposit: '25 Lakhs (Full Lease)',
+    availability: 'Immediate',
+    floor: '2nd Floor',
+    facing: 'East',
+    amenities: ['Covered Parking', 'Lift', 'Power Backup', '24/7 Security', 'Modular Kitchen', 'Balcony', 'Intercom'],
+    highlights: ['3-Year full lease option (Zero monthly rent)', 'Fully furnished luxury interiors', 'Quiet residential neighborhood', 'Full deposit refundable on exit'],
+    images: imgList('gm-palya', 5),
+    description: 'Premium 3BHK apartment available on a hassle-free 3-year lease in GM Palya. Enjoy zero monthly rent with a fully refundable lease amount of ₹25 Lakhs. Elegantly furnished with woodwork, modular kitchen, and modern bath fittings.',
+    contactEmail: 'trishnaproperties78@gmail.com',
+    mapQuery: 'GM Palya, Bangalore',
+    reviews: generateReviews(5),
+  },
+  {
+    id: '550e8400-e29b-41d4-a716-446655440021',
+    title: 'Elegant 2BHK Home on 2-Year Lease',
+    location: 'Kaggadasapura, Bangalore',
+    areaName: 'Kaggadasapura',
+    price: 1800000,
+    type: 'lease',
+    bedrooms: 2,
+    bathrooms: 2,
+    area: 1250,
+    furnished: 'semi',
+    deposit: '18 Lakhs (Full Lease)',
+    availability: 'Immediate',
+    floor: '4th Floor',
+    facing: 'North-East',
+    amenities: ['Power Backup', 'Lift', 'Car Parking', 'CCTV', 'Water Supply', 'Rainwater Harvesting'],
+    highlights: ['2-Year lease with zero monthly rent', 'Semi-furnished with custom wardrobes', 'Close to Bagmane Tech Park', 'Safe gated community'],
+    images: imgList('kaggadasapura', 5),
+    description: 'Semi-furnished 2BHK on 2-year lease agreement in Kaggadasapura. 100% refundable lease deposit of ₹18 Lakhs with zero monthly rent. Prime location near Bagmane Tech Park, schools, and hospitals.',
+    contactEmail: 'trishnaproperties78@gmail.com',
+    mapQuery: 'Kaggadasapura, Bangalore',
+    reviews: generateReviews(4),
   },
 ];
 

@@ -124,7 +124,9 @@ export const usePropertyStore = create<PropertyStore>((set, get) => ({
 
       if (data && data.length > 0) {
         const camelData = toCamelCase(data);
-        set({ properties: camelData, loading: false });
+        const remoteIds = new Set(camelData.map((p: Property) => p.id));
+        const missingDefaults = defaultProperties.filter(p => !remoteIds.has(p.id));
+        set({ properties: [...camelData, ...missingDefaults], loading: false });
       } else {
         set({ properties: defaultProperties, loading: false });
       }

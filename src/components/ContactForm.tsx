@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Send, CheckCircle, Loader2 } from 'lucide-react';
+import { Send, CheckCircle, Loader2, MessageCircle } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -35,8 +35,12 @@ export default function ContactForm({ propertyTitle, serviceTitle, contactEmail 
     setIsSubmitting(true);
     setSubmitError(false);
     
+    // Prepare WhatsApp Message
+    const whatsappText = `*New Inquiry — Trishna Property Management*\n\n*Name:* ${formData.name}\n*Phone:* ${formData.phone}\n*Email:* ${formData.email || 'N/A'}\n${propertyTitle ? `*Property:* ${propertyTitle}\n` : ''}${serviceTitle ? `*Service:* ${serviceTitle}\n` : ''}*Message:* ${formData.message}`;
+    const whatsappUrl = `https://wa.me/919886104532?text=${encodeURIComponent(whatsappText)}`;
+
     try {
-      // Send email using web3forms
+      // 1. Send email using web3forms
       const form = new FormData();
       form.append('access_key', import.meta.env.VITE_WEB3FORMS_ACCESS_KEY || '0469cb33-7c50-44d8-b019-c70583307942');
       form.append('name', formData.name);
@@ -54,7 +58,7 @@ export default function ContactForm({ propertyTitle, serviceTitle, contactEmail 
       const result = await response.json();
       
       if (result.success) {
-        // Log lead to Google Sheet
+        // 2. Log lead to Google Sheet
         logToGoogleSheet({
           logType: 'CONTACT_FORM',
           message: `New Lead: ${formData.name}`,
@@ -67,11 +71,16 @@ export default function ContactForm({ propertyTitle, serviceTitle, contactEmail 
           },
         });
 
+        // 3. Open WhatsApp redirect
+        window.open(whatsappUrl, '_blank');
+
         setIsSubmitting(false);
         setSubmitSuccess(true);
         setFormData({ name: '', phone: '', email: '', message: '' });
         setTimeout(() => setSubmitSuccess(false), 6000);
       } else {
+        // Even if web3forms had an issue, forward to WhatsApp
+        window.open(whatsappUrl, '_blank');
         throw new Error(result.message);
       }
     } catch (error) {
@@ -94,6 +103,12 @@ export default function ContactForm({ propertyTitle, serviceTitle, contactEmail 
     }
   };
 
+  const defaultWhatsappMessage = propertyTitle
+    ? `Hi Trishna Property Management, I am interested in "${propertyTitle}". Please share more details.`
+    : serviceTitle
+    ? `Hi Trishna Property Management, I would like to inquire about "${serviceTitle}".`
+    : `Hi Trishna Property Management, I would like to make an inquiry.`;
+
   return (
     <Card className="border border-neutral-100 bg-white shadow-card p-6 lg:p-8 rounded-2xl">
       <CardHeader className="p-0 mb-6">
@@ -101,7 +116,7 @@ export default function ContactForm({ propertyTitle, serviceTitle, contactEmail 
           {propertyTitle ? 'Schedule a Visit' : serviceTitle ? `Request ${serviceTitle}` : 'Get in Touch'}
         </CardTitle>
         <CardDescription className="text-sm text-neutral-500 mt-1 font-light">
-          {propertyTitle ? "Fill in your details and we'll arrange a viewing" : serviceTitle ? "Fill in your details for quick doorstep service" : "We'd love to hear from you"}
+          {propertyTitle ? "Fill in your details — forwarded instantly to Email & WhatsApp" : serviceTitle ? "Fill in your details for quick doorstep service" : "We'd love to hear from you"}
         </CardDescription>
       </CardHeader>
 
@@ -111,21 +126,21 @@ export default function ContactForm({ propertyTitle, serviceTitle, contactEmail 
             <div className="w-16 h-16 bg-brand-50 rounded-full flex items-center justify-center mx-auto mb-4">
               <CheckCircle className="h-8 w-8 text-brand-500" />
             </div>
-            <h4 className="text-lg font-semibold text-navy-900">Message Sent!</h4>
-            <p className="text-sm text-neutral-500 mt-2">Thank you for your inquiry. We will get back to you soon.</p>
+            <h4 className="text-lg font-semibold text-navy-900">Message Sent & WhatsApp Opened!</h4>
+            <p className="text-sm text-neutral-500 mt-2">Thank you for your inquiry. Our team will get back to you immediately.</p>
           </div>
         ) : submitError ? (
           <div className="text-center py-8 animate-scale-in">
             <div className="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-4">
               <CheckCircle className="h-8 w-8 text-red-500" />
             </div>
-            <h4 className="text-lg font-semibold text-navy-900">Error!</h4>
-            <p className="text-sm text-neutral-500 mt-2">Something went wrong. Please try again later.</p>
+            <h4 className="text-lg font-semibold text-navy-900">Notice</h4>
+            <p className="text-sm text-neutral-500 mt-2">Connecting you directly to our WhatsApp support team...</p>
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-xs font-semibold text-neutral-700 uppercase tracking-wider mb-1.5">Full Name</label>
+              <label className="block text-xs font-semibold text-neutral-700 uppercase tracking-wider mb-1.5">Full Name *</label>
               <Input
                 type="text"
                 name="name"
@@ -137,7 +152,7 @@ export default function ContactForm({ propertyTitle, serviceTitle, contactEmail 
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-neutral-700 uppercase tracking-wider mb-1.5">Phone Number</label>
+              <label className="block text-xs font-semibold text-neutral-700 uppercase tracking-wider mb-1.5">Phone Number *</label>
               <Input
                 type="tel"
                 name="phone"
@@ -155,7 +170,6 @@ export default function ContactForm({ propertyTitle, serviceTitle, contactEmail 
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                required
                 className="h-11 px-4 bg-neutral-50 border border-neutral-200 rounded-xl focus-visible:ring-brand-500/20 focus-visible:border-brand-500 text-sm"
                 placeholder="you@example.com"
               />
@@ -180,15 +194,32 @@ export default function ContactForm({ propertyTitle, serviceTitle, contactEmail 
               {isSubmitting ? (
                 <>
                   <Loader2 className="h-4 w-4 animate-spin text-white" />
-                  <span>Sending...</span>
+                  <span>Sending & Opening WhatsApp...</span>
                 </>
               ) : (
                 <>
-                  <span>{propertyTitle ? 'Request a Visit' : 'Send Message'}</span>
+                  <span>{propertyTitle ? 'Request Visit via Email & WhatsApp' : 'Send Message & WhatsApp'}</span>
                   <Send className="h-4 w-4 text-white" />
                 </>
               )}
             </Button>
+
+            {/* Direct WhatsApp Option */}
+            <div className="relative flex py-1 items-center">
+              <div className="flex-grow border-t border-neutral-200"></div>
+              <span className="flex-shrink mx-2 text-[10px] text-neutral-400 uppercase font-bold tracking-wider">Or</span>
+              <div className="flex-grow border-t border-neutral-200"></div>
+            </div>
+
+            <a
+              href={`https://wa.me/919886104532?text=${encodeURIComponent(defaultWhatsappMessage)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full h-11 bg-[#25D366] hover:bg-[#20bd5a] text-white font-semibold rounded-xl transition-all duration-300 hover:shadow-md flex items-center justify-center space-x-2 active:scale-[0.98] text-sm"
+            >
+              <MessageCircle className="h-4 w-4" />
+              <span>Direct WhatsApp Chat</span>
+            </a>
           </form>
         )}
       </CardContent>

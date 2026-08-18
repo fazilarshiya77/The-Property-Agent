@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { Home, Building, Info, Menu, X, Phone, Lock, Sparkles } from 'lucide-react';
+import { Home, Building, Info, Menu, X, Phone, Lock, Sparkles, MessageCircle } from 'lucide-react';
 import { useState, useEffect } from 'react';
 
 export default function Navbar() {
@@ -95,26 +95,41 @@ export default function Navbar() {
             </div>
 
             {/* Desktop CTA */}
-            <div className="hidden md:flex items-center space-x-5">
+            <div className="hidden md:flex items-center space-x-3 lg:space-x-4">
               <a
                 href="tel:+919886104532"
-                className="flex items-center space-x-2 text-sm font-semibold text-neutral-600 hover:text-brand-500 transition-colors duration-300"
+                className="flex items-center space-x-1.5 text-xs lg:text-sm font-semibold text-neutral-600 hover:text-brand-500 transition-colors duration-300"
+                title="Call +91 98861 04532"
               >
-                <Phone className="h-4 w-4 text-brand-500" />
-                <span className="hidden lg:inline">+91 98861 04532</span>
+                <Phone className="h-4 w-4 text-brand-500 flex-shrink-0" />
+                <span className="hidden xl:inline">+91 98861 04532</span>
               </a>
+
+              {/* WhatsApp Redirect Button */}
+              <a
+                href="https://wa.me/919886104532?text=Hi%20Trishna%20Property%20Management%2C%20I%20would%20like%20to%20inquire%20about%20your%20properties%20and%20services."
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center space-x-1.5 px-3 py-2 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-semibold text-xs transition-all duration-300 border border-emerald-200/60 shadow-sm active:scale-95"
+                aria-label="Chat on WhatsApp"
+                title="Chat on WhatsApp"
+              >
+                <MessageCircle className="h-3.5 w-3.5 fill-emerald-600 text-emerald-600" />
+                <span>WhatsApp</span>
+              </a>
+
               <Link
                 to="/about#contact"
-                className="bg-brand-500 hover:bg-brand-600 text-white text-sm font-bold px-6 py-2.5 rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-brand-500/20 active:scale-95"
+                className="bg-brand-500 hover:bg-brand-600 text-white text-xs lg:text-sm font-bold px-4 lg:px-5 py-2.5 rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-brand-500/20 active:scale-95 whitespace-nowrap"
               >
                 Contact Us
               </Link>
               <Link
                 to="/admin"
-                className="flex items-center space-x-2 bg-neutral-100 hover:bg-neutral-200 text-neutral-700 text-sm font-semibold px-4 py-2.5 rounded-xl transition-all duration-300"
+                className="flex items-center space-x-1.5 bg-neutral-100 hover:bg-neutral-200 text-neutral-700 text-xs lg:text-sm font-semibold px-3 py-2.5 rounded-xl transition-all duration-300"
               >
-                <Lock className="h-4 w-4" />
-                <span>Admin Login</span>
+                <Lock className="h-3.5 w-3.5" />
+                <span className="hidden lg:inline">Admin</span>
               </Link>
             </div>
 
@@ -174,13 +189,22 @@ export default function Navbar() {
                 );
               })}
             </div>
-            <div className="mt-8 pt-6 border-t border-neutral-100">
+            <div className="mt-8 pt-6 border-t border-neutral-100 space-y-2">
               <a
                 href="tel:+919886104532"
-                className="flex items-center space-x-3 px-4 py-3 text-neutral-600 hover:text-brand-500 transition-colors"
+                className="flex items-center space-x-3 px-4 py-3 text-neutral-700 hover:text-brand-500 hover:bg-neutral-50 rounded-xl transition-colors"
               >
-                <Phone className="h-5 w-5" />
+                <Phone className="h-5 w-5 text-brand-500" />
                 <span className="text-sm font-medium">+91 98861 04532</span>
+              </a>
+              <a
+                href="https://wa.me/919886104532?text=Hi%20Trishna%20Property%20Management%2C%20I%20would%20like%20to%20inquire%20about%20your%20properties%20and%20services."
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center space-x-3 px-4 py-3 text-emerald-700 bg-emerald-50 hover:bg-emerald-100 rounded-xl transition-colors font-medium text-sm"
+              >
+                <MessageCircle className="h-5 w-5 fill-emerald-600 text-emerald-600" />
+                <span>Chat on WhatsApp</span>
               </a>
               <Link
                 to="/about#contact"

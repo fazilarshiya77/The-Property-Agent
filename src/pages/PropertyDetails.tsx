@@ -3,13 +3,14 @@ import { usePropertyStore } from '../stores/propertyStore';
 import ImageCarousel from '../components/ImageCarousel';
 import ContactForm from '../components/ContactForm';
 import PropertyCard from '../components/PropertyCard';
-import { Bed, Bath, Maximize, MapPin, CheckCircle, ArrowLeft, Mail, Phone, Share2, Heart, Building, Layers, Compass, Home, ChevronRight, Video, Play } from 'lucide-react';
+import { Bed, Bath, Maximize, MapPin, CheckCircle, ArrowLeft, Mail, Phone, Share2, MessageCircle, Building, Layers, Compass, Home, ChevronRight, Video, Play } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useScrollReveal } from '../hooks/useScrollReveal';
 import { getAmenityIcon } from '../lib/amenityIcons';
 import { parseVideoUrl } from '../lib/videoUtils';
 import { SEO } from '../components/SEO';
 import type { BreadcrumbItem, PropertySchemaData } from '../components/SEO';
+import ShareModal from '../components/ShareModal';
 
 export default function PropertyDetails() {
   const { id } = useParams<{ id: string }>();
@@ -21,7 +22,7 @@ export default function PropertyDetails() {
   }, [fetchProperties])
   
   const property = getPropertyById(id || '');
-  const [isLiked, setIsLiked] = useState(false);
+  const [isShareOpen, setIsShareOpen] = useState(false);
   const [activeVideoIndex, setActiveVideoIndex] = useState(0);
 
   // Scroll reveal refs
@@ -57,11 +58,25 @@ export default function PropertyDetails() {
       </div>
     );
   }
-
   const formatPrice = (price: number, type: string) => {
     if (type === 'rent') return `₹${price.toLocaleString('en-IN')}`;
+    if (type === 'lease') {
+      if (price >= 10000000) return `₹${(price / 10000000).toFixed(2)} Cr`;
+      return `₹${(price / 100000).toFixed(1)} L`;
+    }
+    if (type === 'commercial' && price < 1000000) return `₹${price.toLocaleString('en-IN')}`;
     if (price >= 10000000) return `₹${(price / 10000000).toFixed(2)} Cr`;
     return `₹${(price / 100000).toFixed(2)} L`;
+  };
+
+  const getBadgeInfo = (type: string) => {
+    switch (type) {
+      case 'rent': return { label: 'For Rent', className: 'bg-brand-500' };
+      case 'sale': return { label: 'For Sale', className: 'bg-gold-400' };
+      case 'lease': return { label: 'For Lease', className: 'bg-indigo-600' };
+      case 'commercial': return { label: 'Commercial', className: 'bg-emerald-600' };
+      default: return { label: type, className: 'bg-navy-900' };
+    }
   };
 
   // Calculate average rating
@@ -77,7 +92,7 @@ export default function PropertyDetails() {
   })();
 
   const specs = [
-    { icon: Bed, label: 'Bedrooms', value: property.bedrooms },
+    { icon: Bed, label: 'Bedrooms', value: property.bedrooms > 0 ? property.bedrooms : 'Commercial' },
     { icon: Bath, label: 'Bathrooms', value: property.bathrooms },
     { icon: Maximize, label: 'Area', value: `${property.area} sqft` },
     ...(property.floor ? [{ icon: Layers, label: 'Floor', value: property.floor }] : []),
@@ -117,15 +132,17 @@ export default function PropertyDetails() {
     })),
   };
 
+  const badgeInfo = getBadgeInfo(property.type);
+
   // Build a rich, unique meta description for this property
-  const metaDescription = `${property.title} in ${property.location}. ${property.type === 'rent' ? `For Rent at ₹${property.price.toLocaleString('en-IN')}/month` : `For Sale at ${formatPrice(property.price, property.type)}`}. ${property.bedrooms} bedrooms, ${property.bathrooms} bathrooms, ${property.area} sqft. ${property.furnished === 'fully' ? 'Fully furnished.' : property.furnished === 'semi' ? 'Semi-furnished.' : ''} ${property.availability === 'Immediate' || property.availability === 'Ready to Move' ? 'Ready to move in.' : `Possession: ${property.availability}.`} Contact Trishna Property Management: +91 98861 04532.`;
+  const metaDescription = `${property.title} in ${property.location}. ${badgeInfo.label} at ${formatPrice(property.price, property.type)}${property.type === 'rent' ? '/month' : ''}. ${property.bedrooms > 0 ? `${property.bedrooms} bedrooms, ` : ''}${property.bathrooms} bathrooms, ${property.area} sqft. ${property.furnished === 'fully' ? 'Fully furnished.' : property.furnished === 'semi' ? 'Semi-furnished.' : ''} ${property.availability === 'Immediate' || property.availability === 'Ready to Move' ? 'Ready to move in.' : `Possession: ${property.availability}.`} Contact Trishna Property Management: +91 98861 04532.`;
 
   return (
-    <div className="min-h-screen bg-neutral-50">
+    <div className="min-h-screen bg-neutral-50 pb-24 lg:pb-8">
       <SEO
         title={`${property.title} — ${property.areaName}, Bangalore`}
         description={metaDescription}
-        keywords={`${property.title}, ${property.areaName} ${property.type === 'rent' ? 'rent' : 'sale'}, ${property.bedrooms}BHK ${property.areaName}, ${property.location}, properties ${property.type === 'rent' ? 'for rent' : 'for sale'} ${property.areaName} Bangalore, ${property.furnished === 'fully' ? 'furnished apartments' : 'apartments'} ${property.areaName}, Trishna Property Management ${property.areaName}, Trishna Properties ${property.areaName}, real estate ${property.areaName} Bangalore`}
+        keywords={`${property.title}, ${property.areaName} ${property.type}, ${property.bedrooms > 0 ? `${property.bedrooms}BHK ` : ''}${property.areaName}, ${property.location}, properties ${badgeInfo.label.toLowerCase()} ${property.areaName} Bangalore, ${property.furnished === 'fully' ? 'furnished apartments' : 'apartments'} ${property.areaName}, Trishna Property Management ${property.areaName}, Trishna Properties ${property.areaName}, real estate ${property.areaName} Bangalore`}
         type="product"
         image={property.images[0]}
         canonicalPath={`/listings/${property.id}`}
@@ -136,20 +153,21 @@ export default function PropertyDetails() {
         propertyData={propertySchemaData}
       />
 
-      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4">
-        {/* ─── BREADCRUMB NAVIGATION ─── */}
+      {/* Hero / Details container */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        {/* Breadcrumbs */}
         <nav aria-label="Breadcrumb" className="mb-4">
-          <ol className="flex items-center flex-wrap gap-1 text-sm" itemScope itemType="https://schema.org/BreadcrumbList">
+          <ol className="flex items-center space-x-1 text-sm text-neutral-500" itemScope itemType="https://schema.org/BreadcrumbList">
             <li className="flex items-center" itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
-              <Link to="/" className="text-neutral-500 hover:text-brand-500 transition-colors flex items-center" itemProp="item">
-                <Home className="h-3.5 w-3.5 mr-1" aria-hidden="true" />
+              <Link to="/" className="hover:text-brand-500 transition-colors flex items-center" itemProp="item">
+                <Home className="h-4 w-4 mr-1" aria-hidden="true" />
                 <span itemProp="name">Home</span>
               </Link>
               <meta itemProp="position" content="1" />
             </li>
             <ChevronRight className="h-3 w-3 text-neutral-400 mx-1" aria-hidden="true" />
             <li className="flex items-center" itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
-              <Link to="/listings" className="text-neutral-500 hover:text-brand-500 transition-colors" itemProp="item">
+              <Link to="/listings" className="hover:text-brand-500 transition-colors" itemProp="item">
                 <span itemProp="name">Properties</span>
               </Link>
               <meta itemProp="position" content="2" />
@@ -172,14 +190,13 @@ export default function PropertyDetails() {
             <span>Back</span>
           </button>
           <div className="flex items-center space-x-2">
-            <button className="p-2 rounded-lg hover:bg-neutral-100 text-neutral-500 transition-colors" aria-label="Share property">
-              <Share2 className="h-5 w-5" />
-            </button>
-            <button onClick={() => setIsLiked(!isLiked)}
-              className="p-2 rounded-lg hover:bg-neutral-100 transition-colors"
-              aria-label={isLiked ? "Remove from favorites" : "Add to favorites"}
+            <button
+              onClick={() => setIsShareOpen(true)}
+              className="p-2 rounded-lg hover:bg-neutral-100 text-neutral-500 hover:text-brand-500 transition-colors"
+              aria-label="Share property"
+              title="Share property"
             >
-              <Heart className={`h-5 w-5 ${isLiked ? 'fill-red-500 text-red-500' : 'text-neutral-500'}`} />
+              <Share2 className="h-5 w-5" />
             </button>
           </div>
         </div>
@@ -194,10 +211,8 @@ export default function PropertyDetails() {
             {/* Header */}
             <div ref={headerRef} className="bg-white rounded-2xl shadow-card p-4 sm:p-6 lg:p-8">
               <div className="flex flex-wrap items-center gap-2 mb-3">
-                <span className={`px-3 py-1 rounded-full text-xs font-semibold text-white ${
-                  property.type === 'rent' ? 'bg-brand-500' : 'bg-navy-900'
-                }`}>
-                  For {property.type === 'rent' ? 'Rent' : 'Sale'}
+                <span className={`px-3 py-1 rounded-full text-xs font-semibold text-white ${badgeInfo.className}`}>
+                  {badgeInfo.label}
                 </span>
                 {property.furnished === 'fully' && (
                   <span className="px-3 py-1 rounded-full text-xs font-semibold bg-green-50 text-green-700">Fully Furnished</span>
@@ -218,9 +233,11 @@ export default function PropertyDetails() {
                   <span className="text-2xl sm:text-3xl font-bold text-navy-900" itemProp="price">
                     {formatPrice(property.price, property.type)}
                   </span>
-                  {property.type === 'rent' && <span className="text-neutral-500 text-sm">/month</span>}
+                  {property.type === 'rent' && <span className="text-neutral-500 text-sm ml-1">/month</span>}
+                  {property.type === 'lease' && <span className="text-indigo-600 text-sm font-semibold ml-1.5">(Full Lease)</span>}
+                  {property.type === 'commercial' && property.price < 1000000 && <span className="text-neutral-500 text-sm ml-1">/month</span>}
                 </div>
-                {property.type === 'rent' && (
+                {property.deposit && property.deposit !== 'N/A' && (
                   <div className="text-sm text-neutral-500">
                     Deposit: <span className="font-semibold text-navy-800">{property.deposit}</span>
                   </div>
@@ -454,6 +471,35 @@ export default function PropertyDetails() {
             </div>
           </section>
         )}
+      </div>
+
+      {/* Share Modal */}
+      <ShareModal
+        isOpen={isShareOpen}
+        onClose={() => setIsShareOpen(false)}
+        property={property}
+      />
+
+      {/* Mobile Sticky CTA Bar */}
+      <div className="fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-neutral-200 p-3 flex items-center gap-2 lg:hidden shadow-xl">
+        <a
+          href="tel:+919886104532"
+          className="flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-navy-900 text-white font-semibold text-xs sm:text-sm hover:bg-navy-950 transition-all active:scale-[0.98] shadow-sm"
+        >
+          <Phone className="h-4 w-4 text-brand-400" />
+          <span>Call Now</span>
+        </a>
+        <a
+          href={`https://wa.me/919886104532?text=${encodeURIComponent(
+            `Hi Trishna Property Management, I am interested in "${property.title}" in ${property.location}. Please share more details.`
+          )}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-[#25D366] hover:bg-[#20bd5a] text-white font-semibold text-xs sm:text-sm transition-all active:scale-[0.98] shadow-sm"
+        >
+          <MessageCircle className="h-4 w-4 fill-current" />
+          <span>WhatsApp</span>
+        </a>
       </div>
     </div>
   );

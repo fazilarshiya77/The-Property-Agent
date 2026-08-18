@@ -26,7 +26,7 @@ interface PropertySchemaData {
   description: string;
   price: number;
   priceCurrency?: string;
-  type: 'rent' | 'sale';
+  type: 'rent' | 'sale' | 'lease' | 'commercial';
   bedrooms: number;
   bathrooms: number;
   area: number;

@@ -7,7 +7,7 @@ import { supabase } from '../lib/supabase';
 import { parseVideoUrl } from '../lib/videoUtils';
 
 const FURNISHED_OPTIONS = ['fully', 'semi', 'unfurnished'] as const;
-const TYPE_OPTIONS = ['rent', 'sale'] as const;
+const TYPE_OPTIONS = ['rent', 'sale', 'lease', 'commercial'] as const;
 
 const emptyForm: Omit<Property, 'id'> = {
   title: '', location: '', areaName: '', price: 0, type: 'rent',
@@ -291,9 +291,13 @@ export default function AdminPropertyForm() {
             </div>
             <div>
               <label className="block text-xs font-medium text-neutral-500 mb-1">Type</label>
-              <select value={form.type} onChange={e => update('type', e.target.value as 'rent' | 'sale')}
+              <select value={form.type} onChange={e => update('type', e.target.value as typeof form.type)}
                 className="w-full px-4 py-2.5 bg-neutral-50 border border-neutral-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500">
-                {TYPE_OPTIONS.map(t => <option key={t} value={t}>{t === 'rent' ? 'For Rent' : 'For Sale'}</option>)}
+                {TYPE_OPTIONS.map(t => (
+                  <option key={t} value={t}>
+                    {t === 'rent' ? 'For Rent' : t === 'sale' ? 'For Sale' : t === 'lease' ? 'For Lease' : 'Commercial Property'}
+                  </option>
+                ))}
               </select>
             </div>
             <div>
