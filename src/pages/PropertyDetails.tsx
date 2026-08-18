@@ -3,10 +3,11 @@ import { usePropertyStore } from '../stores/propertyStore';
 import ImageCarousel from '../components/ImageCarousel';
 import ContactForm from '../components/ContactForm';
 import PropertyCard from '../components/PropertyCard';
-import { Bed, Bath, Maximize, MapPin, CheckCircle, ArrowLeft, Mail, Phone, Share2, Heart, Building, Layers, Compass, Home, ChevronRight } from 'lucide-react';
+import { Bed, Bath, Maximize, MapPin, CheckCircle, ArrowLeft, Mail, Phone, Share2, Heart, Building, Layers, Compass, Home, ChevronRight, Video, Play } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useScrollReveal } from '../hooks/useScrollReveal';
 import { getAmenityIcon } from '../lib/amenityIcons';
+import { parseVideoUrl } from '../lib/videoUtils';
 import { SEO } from '../components/SEO';
 import type { BreadcrumbItem, PropertySchemaData } from '../components/SEO';
 
@@ -21,6 +22,7 @@ export default function PropertyDetails() {
   
   const property = getPropertyById(id || '');
   const [isLiked, setIsLiked] = useState(false);
+  const [activeVideoIndex, setActiveVideoIndex] = useState(0);
 
   // Scroll reveal refs
   const headerRef = useScrollReveal({ direction: 'up', distance: 30, stagger: 0.1 });
@@ -254,6 +256,82 @@ export default function PropertyDetails() {
                     </div>
                   ))}
                 </div>
+              </div>
+            )}
+
+            {/* Video Walkthrough Section */}
+            {property.videos && property.videos.length > 0 && (
+              <div className="bg-white rounded-2xl shadow-card p-4 sm:p-6 lg:p-8">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center space-x-2.5">
+                    <div className="w-9 h-9 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center">
+                      <Video className="h-5 w-5" />
+                    </div>
+                    <div>
+                      <h2 className="text-base sm:text-lg font-display font-bold text-navy-900 tracking-wide">
+                        Property Video Tour
+                      </h2>
+                      <p className="text-xs text-neutral-500">Virtual walkthrough & property video</p>
+                    </div>
+                  </div>
+                  {property.videos.length > 1 && (
+                    <span className="text-xs font-semibold px-2.5 py-1 bg-neutral-100 text-neutral-700 rounded-full">
+                      {activeVideoIndex + 1} of {property.videos.length} Videos
+                    </span>
+                  )}
+                </div>
+
+                {/* Main Video Player */}
+                {(() => {
+                  const currentVideoUrl = property.videos[activeVideoIndex] || property.videos[0];
+                  const parsed = parseVideoUrl(currentVideoUrl);
+                  return (
+                    <div className="relative aspect-video w-full rounded-2xl overflow-hidden bg-black shadow-md border border-neutral-200/80">
+                      {parsed.type === 'youtube' || parsed.type === 'vimeo' ? (
+                        <iframe
+                          src={parsed.embedUrl}
+                          title={`${property.title} - Video Tour`}
+                          className="w-full h-full border-0"
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                          allowFullScreen
+                        />
+                      ) : (
+                        <video
+                          src={parsed.embedUrl}
+                          controls
+                          className="w-full h-full object-contain"
+                          preload="metadata"
+                        />
+                      )}
+                    </div>
+                  );
+                })()}
+
+                {/* Multiple Videos Selector Strip */}
+                {property.videos.length > 1 && (
+                  <div className="flex items-center gap-2.5 mt-4 overflow-x-auto pb-1">
+                    {property.videos.map((vid, idx) => {
+                      const parsed = parseVideoUrl(vid);
+                      const isCurrent = idx === activeVideoIndex;
+                      return (
+                        <button
+                          key={idx}
+                          type="button"
+                          onClick={() => setActiveVideoIndex(idx)}
+                          className={`flex items-center space-x-2 px-3 py-2 rounded-xl text-xs font-semibold border transition-all ${
+                            isCurrent
+                              ? 'bg-brand-50 border-brand-500 text-brand-700 ring-2 ring-brand-500/20'
+                              : 'bg-neutral-50 border-neutral-200 text-neutral-600 hover:bg-neutral-100'
+                          }`}
+                        >
+                          <Play className={`h-3.5 w-3.5 ${isCurrent ? 'text-brand-600' : 'text-neutral-400'}`} />
+                          <span>Video {idx + 1}</span>
+                          <span className="text-[10px] uppercase font-bold text-neutral-400">({parsed.type})</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
               </div>
             )}
 

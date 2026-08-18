@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Bed, Bath, Maximize, MapPin, Heart, Camera } from 'lucide-react';
+import { Bed, Bath, Maximize, MapPin, Heart, Camera, Video } from 'lucide-react';
 import { useState } from 'react';
 import type { Property } from '../data/properties';
 import { Card } from '@/components/ui/card';
@@ -59,6 +59,16 @@ export default function PropertyCard({ property }: PropertyCardProps) {
                 className="px-2.5 py-1 font-medium text-xs rounded-xl bg-white/95 backdrop-blur-md text-navy-800 border-none shadow-sm"
               >
                 Furnished
+              </Badge>
+            )}
+
+            {property.videos && property.videos.length > 0 && (
+              <Badge
+                variant="secondary"
+                className="px-2.5 py-1 font-semibold text-xs rounded-xl bg-navy-950/80 backdrop-blur-md text-white border border-white/20 shadow-sm flex items-center gap-1"
+              >
+                <Video className="h-3 w-3 text-brand-300" />
+                <span>Video Tour</span>
               </Badge>
             )}
           </div>

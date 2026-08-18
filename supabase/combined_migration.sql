@@ -22,6 +22,7 @@ CREATE TABLE IF NOT EXISTS public.properties (
   amenities TEXT[] DEFAULT '{}',
   highlights TEXT[] DEFAULT '{}',
   images TEXT[] DEFAULT '{}',
+  videos TEXT[] DEFAULT '{}',
   description TEXT,
   contact_email TEXT,
   map_query TEXT,
@@ -31,6 +32,7 @@ CREATE TABLE IF NOT EXISTS public.properties (
 );
 
 ALTER TABLE public.properties ADD COLUMN IF NOT EXISTS reviews JSONB DEFAULT '[]'::jsonb;
+ALTER TABLE public.properties ADD COLUMN IF NOT EXISTS videos TEXT[] DEFAULT '{}';
 
 ALTER TABLE public.properties ENABLE ROW LEVEL SECURITY;
 

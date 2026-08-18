@@ -9,7 +9,7 @@ export default function Footer() {
   return (
     <footer className="bg-navy-950 text-white" role="contentinfo" aria-label="Trishna Property Management footer">
       <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-10 sm:py-12 lg:py-16">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 lg:gap-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 sm:gap-8 lg:gap-8">
           {/* Brand */}
           <div className="sm:col-span-2 lg:col-span-1">
             <Link to="/" className="flex items-center space-x-2.5 sm:space-x-3 mb-4 sm:mb-5 group">
@@ -28,19 +28,32 @@ export default function Footer() {
               </div>
             </Link>
             <p className="text-neutral-400 text-sm leading-relaxed font-light">
-              Your trusted partner for premium luxury homes and properties in Bangalore. Buy, Rent, or Sell — we help you find the perfect space.
+              Your trusted partner for premium homes and complete property services in Bangalore. Buy, Rent, Sell & Maintain — we help you manage every aspect of your home.
             </p>
+          </div>
+
+          {/* Home Services */}
+          <div>
+            <h4 className="text-sm font-semibold text-neutral-200 uppercase tracking-wider mb-3 sm:mb-4">Our Services</h4>
+            <ul className="space-y-2 sm:space-y-2.5 text-sm" aria-label="Home and property services">
+              <li><Link to="/services#e-stamp" className="text-neutral-400 hover:text-brand-400 transition-colors">E-Stamp & Agreements</Link></li>
+              <li><Link to="/services#electrical-works" className="text-neutral-400 hover:text-brand-400 transition-colors">Electrical Works</Link></li>
+              <li><Link to="/services#plumbing-works" className="text-neutral-400 hover:text-brand-400 transition-colors">Plumbing & Sanitary</Link></li>
+              <li><Link to="/services#carpentry-works" className="text-neutral-400 hover:text-brand-400 transition-colors">Carpentry & Woodwork</Link></li>
+              <li><Link to="/services#building-works" className="text-neutral-400 hover:text-brand-400 transition-colors">Building & Renovation</Link></li>
+              <li><Link to="/services#packers-movers" className="text-neutral-400 hover:text-brand-400 transition-colors">Packers & Movers</Link></li>
+            </ul>
           </div>
 
           {/* Properties */}
           <div>
-            <h4 className="text-sm font-semibold text-neutral-200 uppercase tracking-wider mb-3 sm:mb-4">Properties by Location</h4>
+            <h4 className="text-sm font-semibold text-neutral-200 uppercase tracking-wider mb-3 sm:mb-4">Properties</h4>
             <ul className="space-y-2 sm:space-y-2.5 text-sm" aria-label="Browse properties by location">
               <li><Link to="/listings?location=Murgeshpalya" className="text-neutral-400 hover:text-brand-400 transition-colors">Murgeshpalya</Link></li>
               <li><Link to="/listings?location=CV+Raman+Nagar" className="text-neutral-400 hover:text-brand-400 transition-colors">CV Raman Nagar</Link></li>
               <li><Link to="/listings?location=GM+Palya" className="text-neutral-400 hover:text-brand-400 transition-colors">GM Palya</Link></li>
               <li><Link to="/listings?location=Bommasandra" className="text-neutral-400 hover:text-brand-400 transition-colors">Bommasandra</Link></li>
-              <li><Link to="/listings?location=Yelahanka" className="text-neutral-400 hover:text-brand-400 transition-colors">Yelahanka</Link></li>
+              <li><Link to="/listings?location=Whitefield" className="text-neutral-400 hover:text-brand-400 transition-colors">Whitefield</Link></li>
               <li><Link to="/listings?type=rent" className="text-neutral-400 hover:text-brand-400 transition-colors">For Rent</Link></li>
               <li><Link to="/listings?type=sale" className="text-neutral-400 hover:text-brand-400 transition-colors">For Sale</Link></li>
             </ul>
@@ -51,8 +64,10 @@ export default function Footer() {
             <h4 className="text-sm font-semibold text-neutral-200 uppercase tracking-wider mb-3 sm:mb-4">Company</h4>
             <ul className="space-y-2 sm:space-y-2.5 text-sm" aria-label="Company links">
               <li><Link to="/" className="text-neutral-400 hover:text-brand-400 transition-colors">Home</Link></li>
+              <li><Link to="/services" className="text-neutral-400 hover:text-brand-400 transition-colors">All Services</Link></li>
               <li><Link to="/about" className="text-neutral-400 hover:text-brand-400 transition-colors">About Us</Link></li>
               <li><Link to="/listings" className="text-neutral-400 hover:text-brand-400 transition-colors">All Properties</Link></li>
+              <li><Link to="/about#contact" className="text-neutral-400 hover:text-brand-400 transition-colors">Contact</Link></li>
             </ul>
           </div>
 

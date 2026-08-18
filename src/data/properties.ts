@@ -25,6 +25,7 @@ export interface Property {
   amenities: string[];
   highlights: string[];
   images: string[];
+  videos?: string[];
   description: string;
   contactEmail: string;
   mapQuery: string;

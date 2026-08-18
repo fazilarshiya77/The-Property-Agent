@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { ArrowLeft, Plus, X, Save, Image, Upload, Star } from 'lucide-react';
+import { ArrowLeft, Plus, X, Save, Image, Upload, Star, Video, Play } from 'lucide-react';
 import { usePropertyStore, isAdminAuthenticated } from '../stores/propertyStore';
 import type { Property, Review } from '../data/properties';
 import { supabase } from '../lib/supabase';
+import { parseVideoUrl } from '../lib/videoUtils';
 
 const FURNISHED_OPTIONS = ['fully', 'semi', 'unfurnished'] as const;
 const TYPE_OPTIONS = ['rent', 'sale'] as const;
@@ -12,6 +13,7 @@ const emptyForm: Omit<Property, 'id'> = {
   title: '', location: '', areaName: '', price: 0, type: 'rent',
   bedrooms: 2, bathrooms: 2, area: 0, furnished: 'semi', deposit: '',
   availability: 'Immediate', amenities: [], highlights: [], images: [],
+  videos: [],
   description: '', contactEmail: 'trishnaproperties78@gmail.com', mapQuery: '',
   reviews: [],
 };
@@ -29,6 +31,11 @@ export default function AdminPropertyForm() {
   const [uploading, setUploading] = useState(false);
   const [pendingImagePreviews, setPendingImagePreviews] = useState<string[]>([]);
   
+  // Video state
+  const [videoInput, setVideoInput] = useState('');
+  const [videoUploading, setVideoUploading] = useState(false);
+  const [pendingVideoCount, setPendingVideoCount] = useState(0);
+
   // New review form state
   const [newReviewName, setNewReviewName] = useState('');
   const [newReviewRating, setNewReviewRating] = useState(5);
@@ -40,7 +47,10 @@ export default function AdminPropertyForm() {
       const p = properties.find(p => p.id === id);
       if (p) {
         const { id: _id, ...rest } = p;
-        setForm(rest);
+        setForm({
+          ...rest,
+          videos: rest.videos || []
+        });
       } else navigate('/admin/dashboard');
     }
   }, [id, isEdit, navigate, properties]);
@@ -49,13 +59,13 @@ export default function AdminPropertyForm() {
     setForm(prev => ({ ...prev, [key]: value }));
   };
 
-  const addToList = (key: 'amenities' | 'highlights' | 'images', value: string) => {
+  const addToList = (key: 'amenities' | 'highlights' | 'images' | 'videos', value: string) => {
     if (!value.trim()) return;
-    setForm(prev => ({ ...prev, [key]: [...prev[key], value.trim()] }));
+    setForm(prev => ({ ...prev, [key]: [...(prev[key] || []), value.trim()] }));
   };
 
-  const removeFromList = (key: 'amenities' | 'highlights' | 'images', index: number) => {
-    setForm(prev => ({ ...prev, [key]: prev[key].filter((_, i) => i !== index) }));
+  const removeFromList = (key: 'amenities' | 'highlights' | 'images' | 'videos', index: number) => {
+    setForm(prev => ({ ...prev, [key]: (prev[key] || []).filter((_, i) => i !== index) }));
   };
 
   const addReview = () => {
@@ -143,6 +153,56 @@ export default function AdminPropertyForm() {
       setPendingImagePreviews([])
     } finally {
       setUploading(false)
+      e.target.value = ''
+    }
+  };
+
+  const handleVideoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || [])
+    if (files.length === 0) return
+
+    setPendingVideoCount(files.length)
+    setVideoUploading(true)
+    const newVideoUrls: string[] = []
+
+    try {
+      console.log('Uploading videos to Supabase Storage...')
+      for (const file of files) {
+        console.log('Uploading video:', file.name, file.size)
+        const fileExt = file.name.split('.').pop() || 'mp4'
+        const fileName = `${crypto.randomUUID()}.${fileExt}`
+        const filePath = `videos/${fileName}`
+
+        const { error: uploadError, data } = await supabase.storage
+          .from('properties')
+          .upload(filePath, file, {
+            cacheControl: '3600',
+            upsert: false,
+          })
+
+        if (uploadError) {
+          console.error('Video upload error:', uploadError)
+          throw new Error(`Video upload failed: ${uploadError.message}`)
+        }
+
+        const { data: urlData } = supabase.storage
+          .from('properties')
+          .getPublicUrl(filePath)
+
+        newVideoUrls.push(urlData.publicUrl)
+      }
+
+      setForm(prev => ({
+        ...prev,
+        videos: [...(prev.videos || []), ...newVideoUrls]
+      }))
+      console.log('Successfully uploaded videos:', newVideoUrls)
+    } catch (err) {
+      console.error('Error uploading video:', err)
+      alert('Failed to upload video to Supabase. You can also paste a YouTube or Vimeo URL.')
+    } finally {
+      setVideoUploading(false)
+      setPendingVideoCount(0)
       e.target.value = ''
     }
   };
@@ -345,6 +405,116 @@ export default function AdminPropertyForm() {
               </div>
             ))}
           </div>
+        </section>
+
+        {/* Videos Section */}
+        <section className="bg-white rounded-2xl shadow-sm border border-neutral-100 p-6">
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <h2 className="text-sm font-semibold text-navy-900 uppercase tracking-wider">Property Videos & Walkthroughs</h2>
+              <p className="text-xs text-neutral-500 mt-0.5">Upload property video files (.mp4, .webm, .mov) directly to Supabase storage or paste YouTube/Vimeo links</p>
+            </div>
+            <span className="text-xs font-semibold px-2.5 py-1 bg-brand-50 text-brand-700 rounded-full">
+              {(form.videos || []).length} {(form.videos || []).length === 1 ? 'Video' : 'Videos'}
+            </span>
+          </div>
+          
+          {/* Upload Button */}
+          <div className="mb-4">
+            <label className="flex items-center justify-center gap-2 px-4 py-3 bg-brand-50 border-2 border-dashed border-brand-200 rounded-xl text-brand-600 cursor-pointer hover:bg-brand-100 transition-colors">
+              <Video className="h-5 w-5" />
+              <span className="font-semibold text-sm">
+                {videoUploading ? `Uploading ${pendingVideoCount} video(s) to Supabase...` : 'Upload Video Files (.mp4, .webm, .mov)'}
+              </span>
+              <input
+                type="file"
+                accept="video/mp4,video/webm,video/ogg,video/quicktime,video/*"
+                multiple
+                onChange={handleVideoUpload}
+                disabled={videoUploading}
+                className="hidden"
+              />
+            </label>
+          </div>
+
+          <div className="flex gap-2 mb-4">
+            <input
+              value={videoInput}
+              onChange={e => setVideoInput(e.target.value)}
+              placeholder="Or paste YouTube, Vimeo, or Video URL (e.g. https://youtu.be/...)"
+              onKeyDown={e => {
+                if (e.key === 'Enter') {
+                  e.preventDefault();
+                  addToList('videos', videoInput);
+                  setVideoInput('');
+                }
+              }}
+              className="flex-1 px-4 py-2.5 bg-neutral-50 border border-neutral-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500"
+            />
+            <button
+              type="button"
+              onClick={() => { addToList('videos', videoInput); setVideoInput(''); }}
+              className="px-4 py-2.5 bg-brand-500 text-white rounded-xl text-sm font-semibold hover:bg-brand-600 transition-colors flex items-center gap-1.5"
+            >
+              <Plus className="h-4 w-4" />
+              <span>Add</span>
+            </button>
+          </div>
+
+          {/* Videos Grid */}
+          {(form.videos || []).length > 0 ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {(form.videos || []).map((videoUrl, i) => {
+                const parsed = parseVideoUrl(videoUrl);
+                return (
+                  <div key={i} className="relative bg-neutral-900 rounded-xl overflow-hidden border border-neutral-200 shadow-sm group">
+                    <div className="aspect-video w-full bg-black flex items-center justify-center">
+                      {parsed.type === 'youtube' || parsed.type === 'vimeo' ? (
+                        <iframe
+                          src={parsed.embedUrl}
+                          title={`Property Video ${i + 1}`}
+                          className="w-full h-full border-0"
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                          allowFullScreen
+                        />
+                      ) : (
+                        <video
+                          src={parsed.embedUrl}
+                          controls
+                          className="w-full h-full object-contain"
+                          preload="metadata"
+                        />
+                      )}
+                    </div>
+                    
+                    <div className="p-3 bg-white flex items-center justify-between border-t border-neutral-100">
+                      <div className="flex items-center space-x-2 truncate">
+                        <span className="text-[10px] font-bold uppercase px-2 py-0.5 rounded bg-brand-50 text-brand-700">
+                          {parsed.type}
+                        </span>
+                        <span className="text-xs text-neutral-600 truncate max-w-[200px]">
+                          {videoUrl}
+                        </span>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => removeFromList('videos', i)}
+                        className="p-1.5 rounded-lg bg-red-50 text-red-500 hover:bg-red-100 transition-colors"
+                        title="Remove Video"
+                      >
+                        <X className="h-4 w-4" />
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          ) : (
+            <div className="text-center py-6 border border-dashed border-neutral-200 rounded-xl bg-neutral-50/50">
+              <Video className="h-8 w-8 text-neutral-300 mx-auto mb-2" />
+              <p className="text-xs text-neutral-500">No videos added yet. Upload a video walkthrough or paste a YouTube/Vimeo link.</p>
+            </div>
+          )}
         </section>
 
         {/* Amenities & Highlights */}

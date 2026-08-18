@@ -13,12 +13,12 @@ const aboutFaqData: FAQItem[] = [
     answer: "You can reach Trishna Property Management by phone at +91 98861 04532, email at trishnaproperties78@gmail.com, or visit our office at 31, GM Palya Main Rd, KG Colony, GM Palya, C V Raman Nagar, Bengaluru, Karnataka 560075. We are open Monday to Saturday, 9 AM to 7 PM."
   },
   {
-    question: "What services does Trishna Property Management offer?",
-    answer: "Trishna Property Management offers comprehensive real estate services in Bangalore including: rental property search and placement, property buying and selling assistance for premium projects (Brigade, Godrej, Mahindra), property management, tenant verification, rental agreement preparation, and end-to-end move-in support."
+    question: "What services does Trishna Property Management offer in Bangalore?",
+    answer: "Trishna Property Management offers comprehensive real estate and property care services in Bangalore including: 1) Rental and purchase of verified premium homes, 2) Official Government E-Stamping & rental agreement drafting, 3) Electrical works and diagnostics, 4) Plumbing & sanitary solutions, 5) Carpentry & modular woodwork repairs, 6) Civil building works, painting & waterproofing, and 7) Local & intercity Packers & Movers shifting."
   },
   {
-    question: "How many properties does Trishna Property Management have listed?",
-    answer: "Trishna Property Management currently has 50+ verified property listings across 10+ prime locations in Bangalore. Our portfolio includes rental apartments in Murgeshpalya, CV Raman Nagar, and GM Palya, as well as premium sale properties from Brigade Group, Godrej Properties, and Mahindra Lifespaces."
+    question: "How many properties and service technicians does Trishna Property Management have?",
+    answer: "Trishna Property Management currently has 50+ verified property listings and a dedicated team of verified electricians, plumbers, carpenters, civil contractors, and packers & movers across Bangalore serving 200+ happy families."
   }
 ];
 
@@ -45,9 +45,9 @@ export default function About() {
   return (
     <div className="min-h-screen" itemScope itemType="https://schema.org/AboutPage">
       <SEO
-        title="About Trishna Property Management — Trusted Real Estate Agent in Bangalore"
-        description="Learn about Trishna Property Management (Trishna Properties), Bangalore's trusted real estate agency. 50+ verified properties, 200+ happy families, 5+ years of experience. Specializing in premium rental homes and properties for sale in Murgeshpalya, CV Raman Nagar, GM Palya, Whitefield, Sarjapur Road & more."
-        keywords="about Trishna Property Management, Trishna Properties, real estate agent Bangalore, property management Bangalore, trusted realtor Bangalore, GM Palya real estate, Bengaluru property consultant, verified properties agent, East Bangalore realtor, property dealer Murgeshpalya"
+        title="About Trishna Property Management — Real Estate & Home Services in Bangalore"
+        description="Learn about Trishna Property Management, Bangalore's trusted property & home care partner. 50+ verified properties, 200+ happy families, 5+ years experience. Expert E-Stamping, Electrical, Plumbing, Carpentry, Building Works & Movers across Bangalore."
+        keywords="about Trishna Property Management, Trishna Properties, real estate agent Bangalore, property management Bangalore, home services Bangalore, E-stamp Bangalore, electrician CV Raman Nagar, plumber GM Palya, carpentry Murgeshpalya, packers and movers Bangalore"
         type="website"
         canonicalPath="/about"
         location="Bengaluru, Karnataka, India"

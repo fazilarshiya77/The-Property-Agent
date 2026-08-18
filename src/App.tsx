@@ -7,6 +7,7 @@ import Home from "./pages/Home";
 import Listings from "./pages/Listings";
 import PropertyDetails from "./pages/PropertyDetails";
 import About from "./pages/About";
+import Services from "./pages/Services";
 import AdminLogin from "./pages/AdminLogin";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminPropertyForm from "./pages/AdminPropertyForm";
@@ -36,6 +37,7 @@ function AppLayout() {
             <Route path="/" element={<Home />} />
             <Route path="/listings" element={<Listings />} />
             <Route path="/listings/:id" element={<PropertyDetails />} />
+            <Route path="/services" element={<Services />} />
             <Route path="/about" element={<About />} />
           </Routes>
         </main>

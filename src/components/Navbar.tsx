@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { Home, Building, Info, Menu, X, Phone, Lock } from 'lucide-react';
+import { Home, Building, Info, Menu, X, Phone, Lock, Sparkles } from 'lucide-react';
 import { useState, useEffect } from 'react';
 
 export default function Navbar() {
@@ -33,6 +33,7 @@ export default function Navbar() {
   const navLinks = [
     { name: 'Home', path: '/', icon: Home },
     { name: 'Properties', path: '/listings', icon: Building },
+    { name: 'Services', path: '/services', icon: Sparkles },
     { name: 'About', path: '/about', icon: Info }
   ];
 
@@ -72,7 +73,8 @@ export default function Navbar() {
             <div className="hidden md:flex items-center space-x-1">
               {navLinks.map((link) => {
                 const isActive = location.pathname === link.path ||
-                  (link.path === '/listings' && location.pathname.startsWith('/listings'));
+                  (link.path === '/listings' && location.pathname.startsWith('/listings')) ||
+                  (link.path === '/services' && location.pathname.startsWith('/services'));
                 return (
                   <Link
                     key={link.path}

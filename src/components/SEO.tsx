@@ -158,10 +158,16 @@ function generateBusinessSchema(): object {
     ],
     hasOfferCatalog: {
       '@type': 'OfferCatalog',
-      name: 'Properties in Bangalore',
+      name: 'Real Estate & Home Services in Bangalore',
       itemListElement: [
         { '@type': 'OfferCatalog', name: 'Properties for Rent' },
         { '@type': 'OfferCatalog', name: 'Properties for Sale' },
+        { '@type': 'OfferCatalog', name: 'E-Stamp Paper & Rental Agreements' },
+        { '@type': 'OfferCatalog', name: 'Electrical Works & Repairs' },
+        { '@type': 'OfferCatalog', name: 'Plumbing & Sanitary Solutions' },
+        { '@type': 'OfferCatalog', name: 'Carpentry & Woodwork Services' },
+        { '@type': 'OfferCatalog', name: 'Building Works & Renovation' },
+        { '@type': 'OfferCatalog', name: 'Packers & Movers Shifting Services' },
       ],
     },
     sameAs: [

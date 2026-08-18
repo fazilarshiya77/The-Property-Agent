@@ -1,6 +1,6 @@
 import { useState, useMemo, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Plus, Pencil, Trash2, Search, LogOut, Home, Building } from 'lucide-react';
+import { Plus, Pencil, Trash2, Search, LogOut, Home, Building, Video } from 'lucide-react';
 import { usePropertyStore, isAdminAuthenticated, setAdminAuthenticated } from '../stores/propertyStore';
 
 export default function AdminDashboard() {
@@ -108,17 +108,29 @@ export default function AdminDashboard() {
                   <tr key={p.id} className="hover:bg-neutral-50/50 transition-colors">
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-3">
-                        <div className="w-12 h-12 rounded-lg overflow-hidden bg-neutral-100 flex-shrink-0">
+                        <div className="w-12 h-12 rounded-lg overflow-hidden bg-neutral-100 flex-shrink-0 relative">
                           {p.images[0] ? (
                             <img src={p.images[0]} alt="" className="w-full h-full object-cover" />
                           ) : (
                             <Building className="w-full h-full p-2.5 text-neutral-300" />
                           )}
+                          {p.videos && p.videos.length > 0 && (
+                            <div className="absolute bottom-0 right-0 bg-navy-950/80 text-white p-0.5 rounded-tl shadow-sm" title={`${p.videos.length} video(s)`}>
+                              <Video className="h-3 w-3 text-brand-300" />
+                            </div>
+                          )}
                         </div>
                         <div className="min-w-0">
-                          <Link to={`/listings/${p.id}`} className="text-sm font-semibold text-navy-900 hover:text-brand-500 transition-colors truncate block">
-                            {p.title}
-                          </Link>
+                          <div className="flex items-center gap-1.5">
+                            <Link to={`/listings/${p.id}`} className="text-sm font-semibold text-navy-900 hover:text-brand-500 transition-colors truncate block">
+                              {p.title}
+                            </Link>
+                            {p.videos && p.videos.length > 0 && (
+                              <span className="text-[10px] font-bold px-1.5 py-0.2 bg-brand-50 text-brand-700 rounded flex-shrink-0">
+                                Video
+                              </span>
+                            )}
+                          </div>
                           <p className="text-xs text-neutral-500 md:hidden">{p.areaName}</p>
                         </div>
                       </div>

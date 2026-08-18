@@ -7,15 +7,20 @@ import { logToGoogleSheet } from '@/lib/logger';
 
 interface ContactFormProps {
   propertyTitle?: string;
+  serviceTitle?: string;
   contactEmail: string;
 }
 
-export default function ContactForm({ propertyTitle, contactEmail }: ContactFormProps) {
+export default function ContactForm({ propertyTitle, serviceTitle, contactEmail }: ContactFormProps) {
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
     email: '',
-    message: propertyTitle ? `I'm interested in "${propertyTitle}"` : ''
+    message: propertyTitle
+      ? `I'm interested in "${propertyTitle}"`
+      : serviceTitle
+      ? `I would like to inquire about "${serviceTitle}"`
+      : ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
@@ -93,10 +98,10 @@ export default function ContactForm({ propertyTitle, contactEmail }: ContactForm
     <Card className="border border-neutral-100 bg-white shadow-card p-6 lg:p-8 rounded-2xl">
       <CardHeader className="p-0 mb-6">
         <CardTitle className="text-2xl font-display font-bold text-navy-900 tracking-wide">
-          {propertyTitle ? 'Schedule a Visit' : 'Get in Touch'}
+          {propertyTitle ? 'Schedule a Visit' : serviceTitle ? `Request ${serviceTitle}` : 'Get in Touch'}
         </CardTitle>
         <CardDescription className="text-sm text-neutral-500 mt-1 font-light">
-          {propertyTitle ? "Fill in your details and we'll arrange a viewing" : "We'd love to hear from you"}
+          {propertyTitle ? "Fill in your details and we'll arrange a viewing" : serviceTitle ? "Fill in your details for quick doorstep service" : "We'd love to hear from you"}
         </CardDescription>
       </CardHeader>
 

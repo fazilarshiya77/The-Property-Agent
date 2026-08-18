@@ -1,20 +1,45 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Search, Shield, Clock, Star, ArrowRight, ChevronDown, ChevronUp } from 'lucide-react';
+import { Search, Shield, Clock, Star, ArrowRight, ChevronDown, ChevronUp, FileCheck, Zap, Droplets, Hammer, Building2, Truck, Sparkles, Check, Phone } from 'lucide-react';
 import PropertyCard from '../components/PropertyCard';
 import LocationCard from '../components/LocationCard';
 import StatsCounter from '../components/StatsCounter';
 import { locations } from '../data/properties';
+import { servicesData } from '../data/services';
 import { usePropertyStore } from '../stores/propertyStore';
 import { useScrollReveal, useSectionReveal, useParallax } from '../hooks/useScrollReveal';
 import { SEO } from '../components/SEO';
 import type { FAQItem, BreadcrumbItem } from '../components/SEO';
+
+// Helper for service icons
+function getHomeServiceIcon(iconName: string) {
+  switch (iconName) {
+    case 'FileCheck':
+      return <FileCheck className="h-6 w-6" />;
+    case 'Zap':
+      return <Zap className="h-6 w-6" />;
+    case 'Droplets':
+      return <Droplets className="h-6 w-6" />;
+    case 'Hammer':
+      return <Hammer className="h-6 w-6" />;
+    case 'Building2':
+      return <Building2 className="h-6 w-6" />;
+    case 'Truck':
+      return <Truck className="h-6 w-6" />;
+    default:
+      return <Sparkles className="h-6 w-6" />;
+  }
+}
 
 // ─── FAQ DATA (used by both UI and schema) ──────────────
 const faqData: FAQItem[] = [
   {
     question: "What areas in Bangalore does Trishna Property Management cover?",
     answer: "Trishna Property Management covers 10+ prime locations across Bangalore including Murgeshpalya, CV Raman Nagar, GM Palya, Kaggadasapura, Bommasandra, Yelahanka, Devinagar, Sarjapur Road, Bannerghatta Road, Whitefield, and Singasandra. Our focus is on well-connected residential neighborhoods with good access to IT parks, schools, hospitals, and public transport including metro stations."
+  },
+  {
+    question: "What home and property services does Trishna Property Management offer?",
+    answer: "Beyond property sales and rentals, Trishna Property Management provides 6 essential home services: 1) Official Government E-Stamp paper procurement and legal rental agreement drafting, 2) Electrical works & rewiring by certified electricians, 3) Plumbing repairs, sanitary fittings & drain clearing, 4) Carpentry, modular kitchen & wardrobe repairs, 5) Civil building works, painting & waterproofing, and 6) Packers & movers for local shifting and pan-India relocation."
   },
   {
     question: "Are all properties on Trishna Property Management verified?",
@@ -33,16 +58,12 @@ const faqData: FAQItem[] = [
     answer: "Trishna Property Management maintains a transparent fee structure that is clearly communicated upfront before you commit. Our service charges vary by property type and value. We believe in honest, upfront pricing with absolutely no hidden costs. Contact our team at +91 98861 04532 for specific details about any property."
   },
   {
-    question: "What is the average rent for a 2BHK apartment in Murgeshpalya, Bangalore?",
-    answer: "The average rent for a 2BHK apartment in Murgeshpalya, Bangalore ranges from ₹46,000 to ₹60,000 per month depending on furnishing level, floor, and amenities. Fully furnished apartments with maintenance included are priced around ₹50,000-60,000, while semi-furnished options start from ₹46,000. Security deposits typically range from ₹1.5 Lakhs to ₹2 Lakhs."
-  },
-  {
     question: "Does Trishna Property Management help with buying apartments from Brigade, Godrej, and Mahindra?",
     answer: "Yes, Trishna Property Management is an authorized channel partner for premium developers including Brigade Group (Brigade Valencia, Brigade Eternia, Brigade Insignia), Godrej Properties (Godrej Lakeside Orchard, Godrej Vanantara), and Mahindra Lifespaces (Mahindra Blossom, Mahindra Zen). We offer expert guidance on new launch projects, pricing, payment plans, and possession timelines across Bangalore."
   },
   {
-    question: "Which areas in East Bangalore are best for renting a family home?",
-    answer: "For family homes in East Bangalore, Murgeshpalya, CV Raman Nagar, and Kaggadasapura are excellent choices. Murgeshpalya offers proximity to IT parks along Old Airport Road with rents from ₹46,000-65,000. CV Raman Nagar is peaceful and close to DRDO/ISRO with rents around ₹40,000. GM Palya offers affordable options starting at ₹35,000. All areas have good schools, hospitals, and metro connectivity."
+    question: "How quickly can I get an e-stamp rental agreement or home repair service booked?",
+    answer: "You can book e-stamping and home services (electrical, plumbing, carpentry, painting, packers & movers) directly through our website or via WhatsApp (+91 98861 04532). E-stamp drafts are ready within 2 hours, and technicians can arrive within 60 to 90 minutes for urgent repair needs."
   }
 ];
 
@@ -71,6 +92,8 @@ export default function Home() {
   const statsRef = useScrollReveal({ direction: 'up', stagger: 0.12 });
   const locationsHeaderRef = useSectionReveal();
   const locationsGridRef = useScrollReveal({ direction: 'up', stagger: 0.1 });
+  const servicesHeaderRef = useSectionReveal();
+  const servicesGridRef = useScrollReveal({ direction: 'up', stagger: 0.1 });
   const featuredHeaderRef = useSectionReveal();
   const featuredGridRef = useScrollReveal({ direction: 'up', stagger: 0.1 });
   const whyHeaderRef = useSectionReveal();
@@ -90,9 +113,9 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-neutral-50/50">
       <SEO
-        title="Premium Rental Homes & Properties for Sale in Bangalore"
-        description="Trishna Property Management offers 50+ verified rental homes and premium properties for sale in Bangalore. Browse apartments in Murgeshpalya, CV Raman Nagar, GM Palya, Whitefield, Sarjapur Road & more. 200+ happy families. Trusted by Bangalore residents since 5+ years."
-        keywords="Trishna Property Management, Trishna Properties, rental homes Bangalore, properties for sale Bangalore, 2BHK Murgeshpalya rent, 3BHK CV Raman Nagar, apartments GM Palya, Brigade Valencia Bommasandra, Godrej Lakeside Sarjapur, Mahindra Blossom Whitefield, verified properties Bangalore, premium rentals East Bangalore, furnished apartments near IT parks Bangalore, best real estate agent Bangalore"
+        title="Premium Rental Homes, Properties for Sale & Home Services in Bangalore"
+        description="Trishna Property Management offers 50+ verified rental homes, premium properties for sale, and end-to-end home services (E-Stamp agreements, Electrical, Plumbing, Carpentry, Painting & Packers Movers) in Bangalore. 200+ happy families."
+        keywords="Trishna Property Management, Trishna Properties, rental homes Bangalore, properties for sale Bangalore, E-stamp Bangalore, rental agreement Bangalore, electrician CV Raman Nagar, plumber GM Palya, carpentry works Bangalore, house painting Bangalore, packers and movers Bangalore, Brigade Valencia, Godrej Lakeside, verified properties Bangalore"
         type="website"
         canonicalPath="/"
         location="Bangalore, Karnataka, India"
@@ -235,8 +258,113 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ─── PROPERTY & HOME SERVICES (NEW) ────── */}
+      <section className="py-12 sm:py-16 lg:py-20 bg-white" aria-label="Our Property and Home Services">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div ref={servicesHeaderRef} className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-8 sm:mb-12 gap-4">
+            <div>
+              <div className="inline-flex items-center space-x-2 px-3 py-1 bg-brand-50 border border-brand-200 text-brand-700 rounded-full text-xs font-bold uppercase tracking-wider mb-3">
+                <Sparkles className="h-3.5 w-3.5" />
+                <span>Complete Home Care</span>
+              </div>
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-display font-bold text-navy-900 mb-2">
+                Our Property & Home Services
+              </h2>
+              <p className="text-neutral-500 text-sm sm:text-base max-w-2xl">
+                One-stop reliable doorstep assistance for tenants, homeowners, and landlords in Bangalore
+              </p>
+            </div>
+            <Link
+              to="/services"
+              className="inline-flex items-center space-x-2 text-brand-600 hover:text-brand-700 font-bold text-sm group"
+            >
+              <span>Explore All 6 Services</span>
+              <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+            </Link>
+          </div>
+
+          <div ref={servicesGridRef} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
+            {servicesData.map((service) => (
+              <article
+                key={service.id}
+                className="p-6 rounded-2xl bg-neutral-50 border border-neutral-200/80 hover:bg-white hover:shadow-card-hover hover:border-brand-500/30 transition-all duration-300 flex flex-col justify-between group"
+              >
+                <div>
+                  <div className="flex items-start justify-between mb-4">
+                    <div className="w-12 h-12 rounded-xl bg-brand-50 flex items-center justify-center text-brand-600 group-hover:bg-brand-500 group-hover:text-white transition-all duration-300">
+                      {getHomeServiceIcon(service.iconName)}
+                    </div>
+                    <span className="text-[10px] font-bold px-2.5 py-0.5 bg-brand-50 text-brand-700 rounded-full border border-brand-200 uppercase tracking-wider">
+                      {service.badge}
+                    </span>
+                  </div>
+
+                  <h3 className="text-lg font-display font-bold text-navy-900 group-hover:text-brand-600 transition-colors mb-2">
+                    {service.title}
+                  </h3>
+                  <p className="text-neutral-600 text-xs sm:text-sm leading-relaxed mb-4 font-light">
+                    {service.shortDesc}
+                  </p>
+
+                  <div className="space-y-1.5 mb-5">
+                    {service.features.slice(0, 3).map((feat, idx) => (
+                      <div key={idx} className="flex items-start text-xs text-neutral-600">
+                        <Check className="h-3.5 w-3.5 text-brand-500 mr-2 mt-0.5 flex-shrink-0" />
+                        <span className="line-clamp-1">{feat}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="pt-4 border-t border-neutral-200/60 flex items-center justify-between">
+                  <span className="text-xs font-semibold text-neutral-500 flex items-center">
+                    <Clock className="h-3.5 w-3.5 mr-1 text-brand-500" />
+                    <span>{service.turnaroundTime}</span>
+                  </span>
+                  <Link
+                    to={`/services?service=${service.id}#service-booking-form`}
+                    className="inline-flex items-center space-x-1 text-xs font-bold text-brand-600 hover:text-brand-700 bg-brand-50 hover:bg-brand-100 px-3 py-1.5 rounded-lg transition-colors"
+                  >
+                    <span>Book Service</span>
+                    <ArrowRight className="h-3 w-3" />
+                  </Link>
+                </div>
+              </article>
+            ))}
+          </div>
+
+          {/* Quick Helpline Strip */}
+          <div className="mt-8 sm:mt-10 p-4 sm:p-6 rounded-2xl bg-gradient-to-r from-navy-900 to-navy-950 text-white flex flex-col sm:flex-row items-center justify-between gap-4 shadow-md">
+            <div className="flex items-center space-x-3 text-center sm:text-left">
+              <div className="w-10 h-10 rounded-xl bg-brand-500/20 text-brand-400 flex items-center justify-center flex-shrink-0">
+                <Phone className="h-5 w-5" />
+              </div>
+              <div>
+                <h4 className="text-sm font-bold">Need Immediate Home Assistance or Custom Renovation Quote?</h4>
+                <p className="text-xs text-neutral-300 mt-0.5">Call our service team directly for fast doorstep response in Bangalore.</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3">
+              <a
+                href="tel:+919886104532"
+                className="bg-brand-500 hover:bg-brand-600 text-white font-semibold text-xs sm:text-sm px-5 py-2.5 rounded-xl transition-all shadow-md flex items-center space-x-1.5"
+              >
+                <Phone className="h-3.5 w-3.5" />
+                <span>+91 98861 04532</span>
+              </a>
+              <Link
+                to="/services"
+                className="bg-white/10 hover:bg-white/20 text-white font-semibold text-xs sm:text-sm px-4 py-2.5 rounded-xl transition-all border border-white/10"
+              >
+                View Details
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ─── WHY CHOOSE US ─────────────────────── */}
-      <section className="py-10 sm:py-16 lg:py-20 bg-white" aria-label="Why choose Trishna Property Management">
+      <section className="py-10 sm:py-16 lg:py-20 bg-neutral-50" aria-label="Why choose Trishna Property Management">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div ref={whyHeaderRef} className="text-center mb-8 sm:mb-12">
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-display font-bold text-navy-900 mb-2 sm:mb-3">

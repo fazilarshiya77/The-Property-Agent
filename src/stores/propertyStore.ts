@@ -94,6 +94,10 @@ const toCamelCase = (obj: any): any => {
     if (!result.reviews) {
       result.reviews = []
     }
+    // Ensure videos exists
+    if (!result.videos) {
+      result.videos = []
+    }
     return result
   }
   return obj
@@ -211,6 +215,20 @@ export const usePropertyStore = create<PropertyStore>((set, get) => ({
           }
         } catch (err) {
           console.error('Error deleting image:', err)
+        }
+      }
+
+      // Delete uploaded videos from storage
+      if (property.videos && property.videos.length > 0) {
+        for (const videoUrl of property.videos) {
+          try {
+            const path = videoUrl.split('/properties/')[1]
+            if (path) {
+              await supabase.storage.from('properties').remove([path])
+            }
+          } catch (err) {
+            console.error('Error deleting video:', err)
+          }
         }
       }
     }
