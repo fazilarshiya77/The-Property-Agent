@@ -112,23 +112,19 @@ export default function Footer() {
         </div>
 
         {/* Bottom bar */}
-        <div className="border-t border-white/5 mt-6 sm:mt-8 pt-5 sm:pt-6 flex flex-col sm:flex-row justify-between items-center gap-2.5 sm:gap-3">
-          <p className="text-neutral-500 text-sm text-center sm:text-left font-light">
+        <div className="border-t border-white/5 mt-6 sm:mt-8 pt-5 sm:pt-6 grid grid-cols-1 sm:grid-cols-3 items-center gap-2.5 sm:gap-3 text-center">
+          <p className="text-neutral-500 text-sm sm:text-left font-light">
             © {new Date().getFullYear()} The Property Agent. All rights reserved.
           </p>
-          <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4">
-            <p className="text-neutral-600 text-xs font-light">
-              Made with ❤️ in Bangalore
-            </p>
-            <a
-              href="https://naazailabs.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-neutral-500 hover:text-brand-400 text-xs font-light transition-colors"
-            >
-              Developed by Naazai Labs
-            </a>
-          </div>
+          <a
+            href="https://naazailabs.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-neutral-400 hover:text-brand-400 text-sm font-medium transition-colors"
+          >
+            Designed and Developed by Naaz AI Labs
+          </a>
+          <div className="hidden sm:block" aria-hidden="true" />
         </div>
       </div>
     </footer>
