@@ -138,9 +138,9 @@ export default function Listings() {
       <section className="relative h-[38vh] sm:h-[46vh] min-h-[260px] flex items-end overflow-hidden bg-navy-950" aria-label="Properties hero">
         <div className="absolute inset-0">
           <img
-            src="/propert_background.jfif"
+            src="/properties-hero.jpg"
             alt=""
-            className="absolute inset-0 w-full h-full object-cover"
+            className="absolute -inset-x-[6%] -inset-y-[6%] w-[112%] h-[112%] object-cover"
             aria-hidden="true"
           />
           {/* Gradient overlay for text legibility over the image */}
