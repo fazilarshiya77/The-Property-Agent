@@ -465,7 +465,7 @@ export default function Home() {
       </section>
 
       {/* ─── FAQ SECTION (AEO OPTIMIZED with Schema) ─── */}
-      <section className="py-10 sm:py-16 lg:py-20 bg-white" aria-label="Frequently asked questions about properties in Karnataka">
+      <section className="pb-10 sm:pb-16 lg:pb-20 bg-white" aria-label="Frequently asked questions about properties in Karnataka">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-8 sm:mb-12">
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-display font-bold text-navy-900 mb-2 sm:mb-3">
