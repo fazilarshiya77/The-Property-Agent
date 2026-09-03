@@ -140,7 +140,7 @@ export default function Listings() {
           <img
             src="/properties-hero.jpg"
             alt=""
-            className="absolute -inset-x-[6%] -inset-y-[6%] w-[112%] h-[112%] object-cover"
+            className="absolute -inset-x-[15%] -inset-y-[15%] w-[130%] h-[130%] object-cover"
             aria-hidden="true"
           />
           {/* Gradient overlay for text legibility over the image */}
