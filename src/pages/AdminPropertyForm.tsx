@@ -1,12 +1,16 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { ArrowLeft, Plus, X, Save, Image, Upload, Star, Video, MapPin, Info } from 'lucide-react';
+import {
+  ArrowLeft, Plus, X, Save, Eye, Upload, Star, Video, MapPin, Info,
+  ClipboardList, Ruler, Layers, ListChecks, ShieldCheck, Image as ImageIcon,
+  FileText, UserCircle, CheckCircle2, Circle, Loader2,
+} from 'lucide-react';
 import { usePropertyStore } from '../stores/propertyStore';
 import { useAdminGuard } from '../stores/authStore';
 import type { Property, Review, PropertyType, PropertyCategory, PropertyStatus, PriceType, SourceType, LegalVerificationStatus } from '../data/properties';
 import {
   PROPERTY_TYPE_LABELS, PROPERTY_CATEGORY_LABELS, PROPERTY_STATUS_LABELS, PRICE_TYPE_LABELS,
-  SOURCE_TYPE_LABELS, LEGAL_VERIFICATION_LABELS, DEFAULT_CATEGORY_FOR_TYPE,
+  SOURCE_TYPE_LABELS, LEGAL_VERIFICATION_LABELS, DEFAULT_CATEGORY_FOR_TYPE, PROPERTY_STATUS_TONE,
 } from '../data/properties';
 import { ATTRIBUTE_SCHEMA } from '../data/propertyAttributeSchema';
 import { KARNATAKA_DISTRICTS, getTaluks } from '../data/karnatakaLocations';
@@ -22,17 +26,33 @@ const PRICE_TYPE_OPTIONS: PriceType[] = ['total', 'per_sqft', 'per_acre', 'per_g
 const SOURCE_TYPE_OPTIONS: SourceType[] = ['direct_owner', 'broker', 'referral', 'developer', 'network', 'other'];
 const VERIFICATION_OPTIONS: LegalVerificationStatus[] = ['verified', 'pending', 'not_verified'];
 
-const TABS = [
-  { id: 'basic', label: 'Basic & Location' },
-  { id: 'details', label: 'Property Details' },
-  { id: 'price', label: 'Price' },
-  { id: 'media', label: 'Media' },
-  { id: 'amenities', label: 'Amenities' },
-  { id: 'description', label: 'Description & SEO' },
-  { id: 'legal', label: 'Legal & Source' },
-  { id: 'reviews', label: 'Reviews' },
+const AMENITY_PRESETS = [
+  'Power Backup', '24x7 Security', 'Gated Community', 'Car Parking', "Children's Play Area",
+  'Clubhouse', 'Swimming Pool', 'Gymnasium', 'Lift', 'CCTV Surveillance', 'Water Supply',
+  'Borewell', 'Garden / Landscaping', 'Rain Water Harvesting', 'Compound Wall', 'Street Lighting',
+];
+
+const STATUS_TONE_CLASS: Record<string, string> = {
+  neutral: 'bg-neutral-100 text-neutral-700',
+  info: 'bg-blue-50 text-blue-700',
+  success: 'bg-emerald-50 text-emerald-700',
+  gold: 'bg-brand-50 text-brand-700',
+  critical: 'bg-red-50 text-red-700',
+};
+
+const SECTIONS = [
+  { id: 'basic', label: 'Basic Details', icon: ClipboardList },
+  { id: 'location', label: 'Location', icon: MapPin },
+  { id: 'details', label: 'Property Details', icon: Ruler },
+  { id: 'features', label: 'Land & Features', icon: Layers },
+  { id: 'amenities', label: 'Amenities', icon: ListChecks },
+  { id: 'legal', label: 'Legal & Documents', icon: ShieldCheck },
+  { id: 'media', label: 'Media', icon: ImageIcon },
+  { id: 'description', label: 'Description', icon: FileText },
+  { id: 'owner', label: 'Owner & Source', icon: UserCircle },
+  { id: 'reviews', label: 'Reviews', icon: Star },
 ] as const;
-type TabId = typeof TABS[number]['id'];
+type SectionId = typeof SECTIONS[number]['id'];
 
 const emptyForm: Omit<Property, 'id' | 'propertyCode'> = {
   title: '', location: '', areaName: '', price: 0, type: 'rent', category: 'residential', status: 'draft',
@@ -45,6 +65,33 @@ const emptyForm: Omit<Property, 'id' | 'propertyCode'> = {
   legal: {}, source: {},
 };
 
+function formatINR(n: number): string {
+  if (!n) return '';
+  if (n >= 10000000) return `₹${(n / 10000000).toFixed(2)} Cr`;
+  if (n >= 100000) return `₹${(n / 100000).toFixed(2)} L`;
+  return `₹${n.toLocaleString('en-IN')}`;
+}
+
+function Toggle({ checked, onChange, label, hint }: { checked: boolean; onChange: (v: boolean) => void; label: string; hint?: string }) {
+  return (
+    <div className="flex items-center justify-between gap-3 py-1">
+      <div className="min-w-0">
+        <p className="text-sm text-neutral-700 font-medium">{label}</p>
+        {hint && <p className="text-[11px] text-neutral-400">{hint}</p>}
+      </div>
+      <button type="button" onClick={() => onChange(!checked)} aria-pressed={checked}
+        className={`relative inline-flex h-5 w-9 flex-shrink-0 items-center rounded-full transition-colors ${checked ? 'bg-brand-500' : 'bg-neutral-200'}`}>
+        <span className={`inline-block h-3.5 w-3.5 transform rounded-full bg-white shadow transition-transform ${checked ? 'translate-x-[18px]' : 'translate-x-1'}`} />
+      </button>
+    </div>
+  );
+}
+
+function FieldError({ message }: { message?: string }) {
+  if (!message) return null;
+  return <p className="text-[11px] text-red-500 mt-1">{message}</p>;
+}
+
 export default function AdminPropertyForm() {
   const { id } = useParams<{ id: string }>();
   const isEdit = Boolean(id);
@@ -52,7 +99,7 @@ export default function AdminPropertyForm() {
   const ready = useAdminGuard();
   const { properties, fetchProperties, addProperty, updateProperty } = usePropertyStore();
 
-  const [activeTab, setActiveTab] = useState<TabId>('basic');
+  const [activeSection, setActiveSection] = useState<SectionId>('basic');
   const [form, setForm] = useState<Omit<Property, 'id' | 'propertyCode'>>(emptyForm);
   const [propertyCode, setPropertyCode] = useState<string>('Generated on save');
   const [amenityInput, setAmenityInput] = useState('');
@@ -60,6 +107,9 @@ export default function AdminPropertyForm() {
   const [imageInput, setImageInput] = useState('');
   const [uploading, setUploading] = useState(false);
   const [pendingImagePreviews, setPendingImagePreviews] = useState<string[]>([]);
+  const [dragActive, setDragActive] = useState(false);
+  const [errors, setErrors] = useState<Partial<Record<'title' | 'district' | 'price', string>>>({});
+  const [savingMode, setSavingMode] = useState<'draft' | 'publish' | null>(null);
 
   // Video state
   const [videoInput, setVideoInput] = useState('');
@@ -70,6 +120,8 @@ export default function AdminPropertyForm() {
   const [newReviewName, setNewReviewName] = useState('');
   const [newReviewRating, setNewReviewRating] = useState(5);
   const [newReviewText, setNewReviewText] = useState('');
+
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (ready) fetchProperties();
@@ -119,6 +171,13 @@ export default function AdminPropertyForm() {
   const addToList = (key: 'amenities' | 'highlights' | 'images' | 'videos', value: string) => {
     if (!value.trim()) return;
     setForm(prev => ({ ...prev, [key]: [...(prev[key] || []), value.trim()] }));
+  };
+
+  const toggleAmenity = (value: string) => {
+    setForm(prev => {
+      const has = prev.amenities.includes(value);
+      return { ...prev, amenities: has ? prev.amenities.filter(a => a !== value) : [...prev.amenities, value] };
+    });
   };
 
   const removeFromList = (key: 'amenities' | 'highlights' | 'images' | 'videos', index: number) => {
@@ -179,48 +238,55 @@ export default function AdminPropertyForm() {
     setForm(prev => ({ ...prev, reviews: prev.reviews.filter((_, i) => i !== index) }));
   };
 
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(e.target.files || [])
-    if (files.length === 0) return
-
-    const previews: string[] = []
+  // Shared upload core — used by both the file picker input and drag-and-drop.
+  const uploadImages = async (files: File[]) => {
+    if (files.length === 0) return;
+    const previews: string[] = [];
     for (const file of files) {
-      if (file.type.startsWith('image/')) {
-        previews.push(URL.createObjectURL(file))
-      }
+      if (file.type.startsWith('image/')) previews.push(URL.createObjectURL(file));
     }
-    setPendingImagePreviews(prev => [...prev, ...previews])
-    setUploading(true)
-    const newImageUrls: string[] = []
+    setPendingImagePreviews(prev => [...prev, ...previews]);
+    setUploading(true);
+    const newImageUrls: string[] = [];
 
     try {
       for (const file of files) {
-        const fileExt = file.name.split('.').pop()
-        const fileName = `${crypto.randomUUID()}.${fileExt}`
-        const filePath = `images/${fileName}`
+        const fileExt = file.name.split('.').pop();
+        const fileName = `${crypto.randomUUID()}.${fileExt}`;
+        const filePath = `images/${fileName}`;
 
         const { error: uploadError } = await supabase.storage
           .from('properties')
-          .upload(filePath, file, { cacheControl: '3600', upsert: false })
+          .upload(filePath, file, { cacheControl: '3600', upsert: false });
 
-        if (uploadError) {
-          throw new Error(uploadError.message)
-        }
+        if (uploadError) throw new Error(uploadError.message);
 
-        const { data: urlData } = supabase.storage.from('properties').getPublicUrl(filePath)
-        newImageUrls.push(urlData.publicUrl)
+        const { data: urlData } = supabase.storage.from('properties').getPublicUrl(filePath);
+        newImageUrls.push(urlData.publicUrl);
       }
 
-      setPendingImagePreviews([])
-      setForm(prev => ({ ...prev, images: [...prev.images, ...newImageUrls] }))
+      setPendingImagePreviews([]);
+      setForm(prev => ({ ...prev, images: [...prev.images, ...newImageUrls] }));
     } catch (err) {
-      console.error('Error uploading images:', err)
-      alert('Image storage isn\'t connected yet. Paste an image URL below instead, or connect Supabase Storage to enable direct upload.')
-      setPendingImagePreviews([])
+      console.error('Error uploading images:', err);
+      alert('Image storage isn\'t connected yet. Paste an image URL below instead, or connect Supabase Storage to enable direct upload.');
+      setPendingImagePreviews([]);
     } finally {
-      setUploading(false)
-      e.target.value = ''
+      setUploading(false);
     }
+  };
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    await uploadImages(files);
+    e.target.value = '';
+  };
+
+  const handleDrop = async (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setDragActive(false);
+    const files = Array.from(e.dataTransfer.files || []).filter(f => f.type.startsWith('image/'));
+    await uploadImages(files);
   };
 
   const handleVideoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -260,13 +326,34 @@ export default function AdminPropertyForm() {
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent, publishNow = false) => {
-    e.preventDefault();
-    if (!form.title || !form.district || !form.price) {
-      setActiveTab('basic');
-      alert('Title, District, and Price are required.');
+  // Only Title blocks a draft save (the DB requires it). Publishing additionally
+  // requires District and a real Price, since those drive the public listing.
+  const validate = (forPublish: boolean) => {
+    const errs: typeof errors = {};
+    if (!form.title.trim()) errs.title = 'Title is required';
+    if (forPublish) {
+      if (!form.district) errs.district = 'District is required to publish';
+      if (!form.price || form.price <= 0) errs.price = 'Price is required to publish';
+    }
+    return errs;
+  };
+
+  const missingRequired = useMemo(() => {
+    const labels: string[] = [];
+    if (!form.title.trim()) labels.push('Title');
+    if (!form.district) labels.push('District');
+    if (!form.price || form.price <= 0) labels.push('Price');
+    return labels;
+  }, [form.title, form.district, form.price]);
+
+  const handleSubmit = async (publishNow: boolean) => {
+    const errs = validate(publishNow);
+    if (Object.keys(errs).length > 0) {
+      setErrors(errs);
+      setActiveSection(errs.title ? 'basic' : errs.price ? 'basic' : 'location');
       return;
     }
+    setErrors({});
 
     // Auto-compose the display location/area strings from the structured picker
     // when left blank, so cards & filters keep working without extra typing.
@@ -281,6 +368,7 @@ export default function AdminPropertyForm() {
       status: publishNow ? ('published' as PropertyStatus) : form.status,
     };
 
+    setSavingMode(publishNow ? 'publish' : 'draft');
     try {
       if (isEdit && id) {
         await updateProperty(id, payload);
@@ -291,69 +379,110 @@ export default function AdminPropertyForm() {
     } catch (err) {
       console.error('Error submitting property:', err)
       alert('Ran into an issue, please try again later.')
+    } finally {
+      setSavingMode(null);
     }
+  };
+
+  const handlePreview = () => {
+    if (!id) return;
+    window.open(`/listings/${id}`, '_blank', 'noopener');
+  };
+
+  // Section completion, purely for the sidebar's at-a-glance progress dots.
+  const sectionDone: Record<SectionId, boolean> = {
+    basic: !!form.title.trim() && !!form.price,
+    location: !!form.district,
+    details: !!form.area,
+    features: attrFields.length === 0 || attrFields.some(f => form.attributes?.[f.key] !== undefined && form.attributes?.[f.key] !== ''),
+    amenities: form.amenities.length > 0,
+    legal: !!(form.legal && Object.values(form.legal).some(v => v !== undefined && v !== '' && v !== false)),
+    media: form.images.length > 0,
+    description: !!form.description.trim(),
+    owner: !!(form.source?.ownerName || form.source?.ownerPhone),
+    reviews: form.reviews.length > 0,
   };
 
   if (!ready) return null;
 
   const inputCls = "w-full px-4 py-2.5 bg-neutral-50 border border-neutral-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500";
+  const errorInputCls = "w-full px-4 py-2.5 bg-red-50/50 border border-red-300 rounded-xl text-sm outline-none focus:ring-2 focus:ring-red-500/20 focus:border-red-500";
   const labelCls = "block text-xs font-medium text-neutral-500 mb-1";
+  const sectionHeadingCls = "text-sm font-semibold text-navy-900 mb-4";
+  const subHeadingCls = "text-xs font-semibold text-neutral-500 uppercase tracking-wider mb-3 pt-2 border-t border-neutral-100 first:pt-0 first:border-0";
 
   return (
-    <div className="min-h-screen bg-neutral-50">
+    <div className="min-h-screen bg-neutral-50 pb-24">
       {/* Header */}
       <div className="bg-white border-b border-neutral-100 sticky top-0 z-40">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between gap-3">
-          <div className="flex items-center gap-3 min-w-0">
-            <button onClick={() => navigate('/admin/properties')} className="p-2 rounded-lg hover:bg-neutral-100 text-neutral-500 flex-shrink-0">
-              <ArrowLeft className="h-5 w-5" />
-            </button>
-            <div className="min-w-0">
-              <h1 className="text-lg font-display font-bold text-navy-900 tracking-wide truncate">
-                {isEdit ? 'Edit Property' : 'Add New Property'}
-              </h1>
-              <p className="text-[11px] text-neutral-400 font-mono">{propertyCode}</p>
-            </div>
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center gap-3">
+          <button onClick={() => navigate('/admin/properties')} className="p-2 rounded-lg hover:bg-neutral-100 text-neutral-500 flex-shrink-0">
+            <ArrowLeft className="h-5 w-5" />
+          </button>
+          <div className="min-w-0 flex-1">
+            <h1 className="text-lg font-display font-bold text-navy-900 tracking-wide truncate">
+              {isEdit ? 'Edit Property' : 'Add New Property'}
+            </h1>
+            <p className="text-[11px] text-neutral-400 font-mono">{propertyCode}</p>
           </div>
-          <div className="flex items-center gap-2 flex-shrink-0">
-            <button onClick={(e) => handleSubmit(e as any, false)}
-              className="flex items-center gap-1.5 bg-neutral-100 hover:bg-neutral-200 text-navy-900 font-semibold px-3.5 sm:px-4 py-2.5 rounded-xl text-xs sm:text-sm transition-all">
-              <Save className="h-4 w-4" />
-              <span className="hidden sm:inline">Save Draft</span>
-            </button>
-            <button onClick={(e) => handleSubmit(e as any, true)}
-              className="flex items-center gap-2 bg-brand-500 hover:bg-brand-600 text-white font-semibold px-4 sm:px-5 py-2.5 rounded-xl text-xs sm:text-sm transition-all hover:shadow-lg hover:shadow-brand-500/25">
-              <span>{isEdit ? 'Save & Publish' : 'Publish'}</span>
-            </button>
-          </div>
+          <span className={`hidden sm:inline-flex px-2.5 py-1 rounded-full text-[11px] font-semibold flex-shrink-0 ${STATUS_TONE_CLASS[PROPERTY_STATUS_TONE[form.status]]}`}>
+            {PROPERTY_STATUS_LABELS[form.status]}
+          </span>
         </div>
-        {/* Tabs */}
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 overflow-x-auto no-scrollbar">
+        {/* Mobile section pills */}
+        <div className="lg:hidden max-w-6xl mx-auto px-4 sm:px-6 overflow-x-auto no-scrollbar">
           <div className="flex items-center gap-1.5 pb-3">
-            {TABS.map(tab => (
-              <button key={tab.id} type="button" onClick={() => setActiveTab(tab.id)}
-                className={`px-3.5 py-2 rounded-lg text-xs font-semibold whitespace-nowrap transition-all ${
-                  activeTab === tab.id ? 'bg-navy-900 text-white' : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200'
+            {SECTIONS.map(s => (
+              <button key={s.id} type="button" onClick={() => setActiveSection(s.id)}
+                className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold whitespace-nowrap transition-all ${
+                  activeSection === s.id ? 'bg-navy-900 text-white' : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200'
                 }`}>
-                {tab.label}
+                <s.icon className="h-3.5 w-3.5" />
+                {s.label}
               </button>
             ))}
           </div>
         </div>
       </div>
 
-      <form onSubmit={handleSubmit} className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex gap-6 items-start">
+        {/* Desktop section nav */}
+        <nav className="hidden lg:block w-56 flex-shrink-0 sticky top-24 self-start">
+          <div className="bg-white rounded-2xl border border-neutral-100 shadow-sm p-2 space-y-0.5">
+            {SECTIONS.map(s => {
+              const done = sectionDone[s.id];
+              const active = activeSection === s.id;
+              return (
+                <button key={s.id} type="button" onClick={() => setActiveSection(s.id)}
+                  className={`w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors text-left ${
+                    active ? 'bg-brand-50 text-brand-700' : 'text-neutral-600 hover:bg-neutral-50 hover:text-navy-900'
+                  }`}>
+                  <s.icon className={`h-4 w-4 flex-shrink-0 ${active ? 'text-brand-600' : 'text-neutral-400'}`} />
+                  <span className="flex-1 truncate">{s.label}</span>
+                  {done ? (
+                    <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500 flex-shrink-0" />
+                  ) : (
+                    <Circle className="h-3.5 w-3.5 text-neutral-200 flex-shrink-0" />
+                  )}
+                </button>
+              );
+            })}
+          </div>
+        </nav>
 
-        {/* ── BASIC & LOCATION ── */}
-        {activeTab === 'basic' && (
-          <>
+        {/* Section content */}
+        <div className="flex-1 min-w-0 space-y-6">
+
+          {/* ── BASIC DETAILS ── */}
+          {activeSection === 'basic' && (
             <section className="bg-white rounded-2xl shadow-sm border border-neutral-100 p-6">
-              <h2 className="text-sm font-semibold text-navy-900 uppercase tracking-wider mb-4">Basic Info</h2>
+              <h2 className={sectionHeadingCls}>Basic Details</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="md:col-span-2">
-                  <label className={labelCls}>Title *</label>
-                  <input value={form.title} onChange={e => update('title', e.target.value)} required
-                    placeholder="e.g. 2.5 Acre Farmhouse Plot, Sakleshpur" className={inputCls} />
+                  <label className={labelCls}>Property Title *</label>
+                  <input value={form.title} onChange={e => { update('title', e.target.value); if (errors.title) setErrors(p => ({ ...p, title: undefined })); }}
+                    placeholder="e.g. 2.5 Acre Farmhouse Plot, Sakleshpur" className={errors.title ? errorInputCls : inputCls} />
+                  <FieldError message={errors.title} />
                 </div>
                 <div>
                   <label className={labelCls}>Property Type *</label>
@@ -368,39 +497,81 @@ export default function AdminPropertyForm() {
                   </select>
                 </div>
                 <div>
-                  <label className={labelCls}>Status</label>
+                  <label className={labelCls}>Listing Status</label>
                   <select value={form.status} onChange={e => update('status', e.target.value as PropertyStatus)} className={inputCls}>
                     {STATUS_OPTIONS.map(s => <option key={s} value={s}>{PROPERTY_STATUS_LABELS[s]}</option>)}
                   </select>
                 </div>
-                <div className="flex items-center gap-6 pt-2">
-                  <label className="flex items-center gap-2 text-sm text-neutral-700 cursor-pointer">
-                    <input type="checkbox" checked={!!form.isFeatured} onChange={e => update('isFeatured', e.target.checked)}
-                      className="h-4 w-4 rounded accent-brand-500" />
-                    Featured Property
-                  </label>
-                  <label className="flex items-center gap-2 text-sm text-neutral-700 cursor-pointer">
-                    <input type="checkbox" checked={!!form.isUrgent} onChange={e => update('isUrgent', e.target.checked)}
-                      className="h-4 w-4 rounded accent-brand-500" />
-                    Urgent / Premium Listing
-                  </label>
+                <div>
+                  <label className={labelCls}>Asking Price (₹) *</label>
+                  <input type="number" value={form.price || ''} onChange={e => { update('price', Number(e.target.value)); if (errors.price) setErrors(p => ({ ...p, price: undefined })); }}
+                    className={errors.price ? errorInputCls : inputCls} />
+                  {form.price > 0 && !errors.price && <p className="text-[11px] text-brand-600 font-semibold mt-1">{formatINR(form.price)}</p>}
+                  <FieldError message={errors.price} />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2">
+                <Toggle checked={!!form.isFeatured} onChange={v => update('isFeatured', v)} label="Featured Property" hint="Highlighted across the site" />
+                <Toggle checked={!!form.isUrgent} onChange={v => update('isUrgent', v)} label="Urgent / Premium Listing" hint="Marked for priority visibility" />
+              </div>
+
+              <h3 className={subHeadingCls}>Price & Financials</h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                  <label className={labelCls}>Price Type</label>
+                  <select value={form.priceType} onChange={e => update('priceType', e.target.value as PriceType)} className={inputCls}>
+                    {PRICE_TYPE_OPTIONS.map(p => <option key={p} value={p}>{PRICE_TYPE_LABELS[p]}</option>)}
+                  </select>
+                </div>
+                <div className="flex items-center">
+                  <Toggle checked={!!form.negotiable} onChange={v => update('negotiable', v)} label="Negotiable" />
+                </div>
+                <div>
+                  <label className={labelCls}>Booking / Advance Amount (₹)</label>
+                  <input type="number" value={form.advanceAmount || ''} onChange={e => update('advanceAmount', Number(e.target.value))} className={inputCls} />
+                </div>
+              </div>
+              <div className="mt-4 p-3.5 bg-neutral-50 rounded-xl border border-neutral-100">
+                <div className="flex items-center gap-1.5 text-[11px] font-semibold text-neutral-500 uppercase tracking-wider mb-3">
+                  <Info className="h-3.5 w-3.5" /> Admin only — never shown on the public website
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div>
+                    <label className={labelCls}>Minimum Expected Price (₹)</label>
+                    <input type="number" value={form.minExpectedPrice || ''} onChange={e => update('minExpectedPrice', Number(e.target.value))} className={inputCls} />
+                  </div>
+                  <div>
+                    <label className={labelCls}>Commission Type</label>
+                    <select value={form.commissionType || ''} onChange={e => update('commissionType', e.target.value as 'flat' | 'percentage')} className={inputCls}>
+                      <option value="">Not set</option>
+                      <option value="flat">Flat Amount</option>
+                      <option value="percentage">Percentage</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className={labelCls}>Commission Value</label>
+                    <input type="number" value={form.commissionValue || ''} onChange={e => update('commissionValue', Number(e.target.value))} className={inputCls} />
+                  </div>
                 </div>
               </div>
             </section>
+          )}
 
+          {/* ── LOCATION ── */}
+          {activeSection === 'location' && (
             <section className="bg-white rounded-2xl shadow-sm border border-neutral-100 p-6">
-              <h2 className="text-sm font-semibold text-navy-900 uppercase tracking-wider mb-1 flex items-center gap-2">
-                <MapPin className="h-4 w-4 text-brand-500" /> Location — Karnataka
-              </h2>
-              <p className="text-xs text-neutral-400 mb-4">District and Taluk drive location search & filtering across the site.</p>
+              <h2 className={sectionHeadingCls}>Location — Karnataka</h2>
+              <p className="text-xs text-neutral-400 -mt-3 mb-4">District and Taluk drive location search &amp; filtering across the site.</p>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
                   <label className={labelCls}>District *</label>
-                  <select value={form.district} onChange={e => update('district', e.target.value)} required
-                    className={inputCls}>
+                  <select value={form.district} onChange={e => { update('district', e.target.value); if (errors.district) setErrors(p => ({ ...p, district: undefined })); }}
+                    className={errors.district ? errorInputCls : inputCls}>
                     <option value="">Select district</option>
                     {KARNATAKA_DISTRICTS.map(d => <option key={d} value={d}>{d}</option>)}
                   </select>
+                  <FieldError message={errors.district} />
                 </div>
                 <div>
                   <label className={labelCls}>Taluk</label>
@@ -430,6 +601,10 @@ export default function AdminPropertyForm() {
                   <input value={form.pincode} onChange={e => update('pincode', e.target.value)} maxLength={6} placeholder="6-digit PIN"
                     className={inputCls} />
                 </div>
+              </div>
+
+              <h3 className={subHeadingCls}>Map &amp; Coordinates</h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
                   <label className={labelCls}>Latitude</label>
                   <input value={form.latitude || ''} onChange={e => update('latitude', e.target.value)} placeholder="e.g. 12.9141"
@@ -460,14 +635,12 @@ export default function AdminPropertyForm() {
                 </div>
               </div>
             </section>
-          </>
-        )}
+          )}
 
-        {/* ── PROPERTY DETAILS ── */}
-        {activeTab === 'details' && (
-          <>
+          {/* ── PROPERTY DETAILS ── */}
+          {activeSection === 'details' && (
             <section className="bg-white rounded-2xl shadow-sm border border-neutral-100 p-6">
-              <h2 className="text-sm font-semibold text-navy-900 uppercase tracking-wider mb-4">Core Specs</h2>
+              <h2 className={sectionHeadingCls}>Property Details</h2>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div>
                   <label className={labelCls}>
@@ -482,7 +655,7 @@ export default function AdminPropertyForm() {
                   <input type="number" value={form.bathrooms} onChange={e => update('bathrooms', Number(e.target.value))} className={inputCls} />
                 </div>
                 <div>
-                  <label className={labelCls}>Area (sqft)</label>
+                  <label className={labelCls}>Total Area (sq ft)</label>
                   <input type="number" value={form.area || ''} onChange={e => update('area', Number(e.target.value))} className={inputCls} />
                 </div>
                 <div>
@@ -509,25 +682,24 @@ export default function AdminPropertyForm() {
                 </div>
               </div>
             </section>
+          )}
 
+          {/* ── LAND & FEATURES (conditional by type) ── */}
+          {activeSection === 'features' && (
             <section className="bg-white rounded-2xl shadow-sm border border-neutral-100 p-6">
-              <h2 className="text-sm font-semibold text-navy-900 uppercase tracking-wider mb-1">
-                {PROPERTY_TYPE_LABELS[form.type]} — Type-Specific Details
-              </h2>
-              <p className="text-xs text-neutral-400 mb-4">Only fields relevant to this property type are shown.</p>
+              <h2 className={sectionHeadingCls}>{PROPERTY_TYPE_LABELS[form.type]} — Land &amp; Feature Details</h2>
+              <p className="text-xs text-neutral-400 -mt-3 mb-4">Only fields relevant to this property type are shown here.</p>
               {attrFields.length === 0 ? (
-                <p className="text-sm text-neutral-400">No additional fields for this type.</p>
+                <p className="text-sm text-neutral-400 py-4 text-center">No additional fields for this property type.</p>
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   {attrFields.map(f => {
                     const val = form.attributes?.[f.key];
                     if (f.input === 'boolean') {
                       return (
-                        <label key={f.key} className="flex items-center gap-2 text-sm text-neutral-700 cursor-pointer pt-6">
-                          <input type="checkbox" checked={!!val} onChange={e => updateAttr(f.key, e.target.checked)}
-                            className="h-4 w-4 rounded accent-brand-500" />
-                          {f.label}
-                        </label>
+                        <div key={f.key} className="flex items-center">
+                          <Toggle checked={!!val} onChange={v => updateAttr(f.key, v)} label={f.label} />
+                        </div>
                       );
                     }
                     if (f.input === 'select') {
@@ -557,290 +729,73 @@ export default function AdminPropertyForm() {
                 </div>
               )}
             </section>
-          </>
-        )}
+          )}
 
-        {/* ── PRICE ── */}
-        {activeTab === 'price' && (
-          <section className="bg-white rounded-2xl shadow-sm border border-neutral-100 p-6">
-            <h2 className="text-sm font-semibold text-navy-900 uppercase tracking-wider mb-4">Price &amp; Financials</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div>
-                <label className={labelCls}>Asking Price (₹) *</label>
-                <input type="number" value={form.price || ''} onChange={e => update('price', Number(e.target.value))} required className={inputCls} />
-              </div>
-              <div>
-                <label className={labelCls}>Price Type</label>
-                <select value={form.priceType} onChange={e => update('priceType', e.target.value as PriceType)} className={inputCls}>
-                  {PRICE_TYPE_OPTIONS.map(p => <option key={p} value={p}>{PRICE_TYPE_LABELS[p]}</option>)}
-                </select>
-              </div>
-              <label className="flex items-center gap-2 text-sm text-neutral-700 cursor-pointer pt-6">
-                <input type="checkbox" checked={!!form.negotiable} onChange={e => update('negotiable', e.target.checked)}
-                  className="h-4 w-4 rounded accent-brand-500" />
-                Negotiable
-              </label>
-              <div>
-                <label className={labelCls}>Booking / Advance Amount (₹)</label>
-                <input type="number" value={form.advanceAmount || ''} onChange={e => update('advanceAmount', Number(e.target.value))} className={inputCls} />
-              </div>
-              <div className="md:col-span-2" />
-              <div className="md:col-span-3 pt-4 mt-2 border-t border-neutral-100">
-                <div className="flex items-center gap-1.5 text-xs font-semibold text-red-500 uppercase tracking-wider mb-3">
-                  <Info className="h-3.5 w-3.5" /> Admin Only — never shown on the public website
-                </div>
-              </div>
-              <div>
-                <label className={labelCls}>Minimum Expected Price (₹)</label>
-                <input type="number" value={form.minExpectedPrice || ''} onChange={e => update('minExpectedPrice', Number(e.target.value))} className={inputCls} />
-              </div>
-              <div>
-                <label className={labelCls}>Commission Type</label>
-                <select value={form.commissionType || ''} onChange={e => update('commissionType', e.target.value as 'flat' | 'percentage')} className={inputCls}>
-                  <option value="">Not set</option>
-                  <option value="flat">Flat Amount</option>
-                  <option value="percentage">Percentage</option>
-                </select>
-              </div>
-              <div>
-                <label className={labelCls}>Commission Value</label>
-                <input type="number" value={form.commissionValue || ''} onChange={e => update('commissionValue', Number(e.target.value))} className={inputCls} />
-              </div>
-            </div>
-          </section>
-        )}
-
-        {/* ── MEDIA ── */}
-        {activeTab === 'media' && (
-          <>
+          {/* ── AMENITIES & HIGHLIGHTS ── */}
+          {activeSection === 'amenities' && (
             <section className="bg-white rounded-2xl shadow-sm border border-neutral-100 p-6">
-              <h2 className="text-sm font-semibold text-navy-900 uppercase tracking-wider mb-4">Images</h2>
-              <div className="mb-4">
-                <label className="flex items-center justify-center gap-2 px-4 py-3 bg-brand-50 border-2 border-dashed border-brand-200 rounded-xl text-brand-600 cursor-pointer hover:bg-brand-100 transition-colors">
-                  <Upload className="h-5 w-5" />
-                  <span className="font-semibold text-sm">{uploading ? 'Uploading...' : 'Upload Images'}</span>
-                  <input type="file" accept="image/*" multiple onChange={handleImageUpload} disabled={uploading} className="hidden" />
-                </label>
-                <p className="text-[11px] text-neutral-400 mt-1.5">Requires connected storage (Supabase) — until then, paste an image URL below.</p>
+              <h2 className={sectionHeadingCls}>Amenities</h2>
+              <div className="flex flex-wrap gap-1.5 mb-4">
+                {AMENITY_PRESETS.map(a => {
+                  const selected = form.amenities.includes(a);
+                  return (
+                    <button key={a} type="button" onClick={() => toggleAmenity(a)}
+                      className={`px-2.5 py-1.5 rounded-full text-xs font-medium transition-colors border ${
+                        selected ? 'bg-brand-500 border-brand-500 text-white' : 'bg-white border-neutral-200 text-neutral-600 hover:border-brand-300'
+                      }`}>
+                      {a}
+                    </button>
+                  );
+                })}
               </div>
-
               <div className="flex gap-2 mb-3">
-                <input value={imageInput} onChange={e => setImageInput(e.target.value)} placeholder="Paste image URL"
-                  className="flex-1 px-4 py-2.5 bg-neutral-50 border border-neutral-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500" />
-                <button type="button" onClick={() => { addToList('images', imageInput); setImageInput(''); }}
-                  className="px-4 py-2.5 bg-brand-500 text-white rounded-xl text-sm font-semibold hover:bg-brand-600 transition-colors">
+                <input value={amenityInput} onChange={e => setAmenityInput(e.target.value)} placeholder="Add a custom amenity..."
+                  onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); addToList('amenities', amenityInput); setAmenityInput(''); } }}
+                  className="flex-1 px-3 py-2 bg-neutral-50 border border-neutral-200 rounded-lg text-sm outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500" />
+                <button type="button" onClick={() => { addToList('amenities', amenityInput); setAmenityInput(''); }}
+                  className="px-3 py-2 bg-brand-50 text-brand-500 rounded-lg text-sm font-semibold hover:bg-brand-100 transition-colors">
                   <Plus className="h-4 w-4" />
                 </button>
               </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {pendingImagePreviews.map((preview, i) => (
-                  <div key={`preview-${i}`} className="relative h-32 rounded-xl overflow-hidden bg-neutral-100 border border-brand-200 shadow-sm">
-                    <img src={preview} alt={`Uploading ${i + 1}`} className="w-full h-full object-cover opacity-75" />
-                    <div className="absolute inset-0 flex items-center justify-center bg-black/20">
-                      <div className="animate-spin rounded-full h-8 w-8 border-2 border-white border-t-brand-500"></div>
-                    </div>
-                  </div>
-                ))}
-                {form.images.map((img, i) => (
-                  <div key={i} className="relative group rounded-xl overflow-hidden bg-neutral-100 border border-neutral-200 shadow-sm">
-                    <div className="h-32 relative">
-                      <img src={img} alt={`Property image ${i + 1}`} className="w-full h-full object-cover"
-                        onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
-                      {(form.coverImageIndex ?? 0) === i && (
-                        <span className="absolute top-1.5 left-1.5 text-[9px] font-bold uppercase px-1.5 py-0.5 bg-brand-500 text-white rounded">Cover</span>
-                      )}
-                      <button type="button" onClick={() => removeImage(i)}
-                        className="absolute top-1.5 right-1.5 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-all hover:bg-red-600">
-                        <X className="h-3.5 w-3.5" />
-                      </button>
-                    </div>
-                    <div className="p-2 space-y-1.5">
-                      <input value={form.imageCaptions?.[i] || ''} onChange={e => setImageCaption(i, e.target.value)}
-                        placeholder="Caption (optional)" className="w-full px-2 py-1 text-[11px] bg-white border border-neutral-200 rounded-md outline-none" />
-                      <div className="flex items-center gap-1">
-                        <button type="button" onClick={() => moveImage(i, -1)} disabled={i === 0}
-                          className="flex-1 text-[10px] px-1.5 py-1 bg-neutral-100 rounded disabled:opacity-30 hover:bg-neutral-200">← Move</button>
-                        <button type="button" onClick={() => setCoverImage(i)}
-                          className="flex-1 text-[10px] px-1.5 py-1 bg-neutral-100 rounded hover:bg-neutral-200">Set Cover</button>
-                        <button type="button" onClick={() => moveImage(i, 1)} disabled={i === form.images.length - 1}
-                          className="flex-1 text-[10px] px-1.5 py-1 bg-neutral-100 rounded disabled:opacity-30 hover:bg-neutral-200">Move →</button>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-              {form.images.length === 0 && pendingImagePreviews.length === 0 && (
-                <div className="text-center py-6 border border-dashed border-neutral-200 rounded-xl bg-neutral-50/50">
-                  <Image className="h-8 w-8 text-neutral-300 mx-auto mb-2" />
-                  <p className="text-xs text-neutral-500">No images added yet.</p>
-                </div>
-              )}
-            </section>
-
-            <section className="bg-white rounded-2xl shadow-sm border border-neutral-100 p-6">
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-sm font-semibold text-navy-900 uppercase tracking-wider">Videos &amp; Walkthroughs</h2>
-                <span className="text-xs font-semibold px-2.5 py-1 bg-brand-50 text-brand-700 rounded-full">
-                  {(form.videos || []).length} {(form.videos || []).length === 1 ? 'Video' : 'Videos'}
-                </span>
-              </div>
-
-              <div className="mb-4">
-                <label className="flex items-center justify-center gap-2 px-4 py-3 bg-brand-50 border-2 border-dashed border-brand-200 rounded-xl text-brand-600 cursor-pointer hover:bg-brand-100 transition-colors">
-                  <Video className="h-5 w-5" />
-                  <span className="font-semibold text-sm">
-                    {videoUploading ? `Uploading ${pendingVideoCount} video(s)...` : 'Upload Video Files'}
-                  </span>
-                  <input type="file" accept="video/mp4,video/webm,video/ogg,video/quicktime,video/*" multiple
-                    onChange={handleVideoUpload} disabled={videoUploading} className="hidden" />
-                </label>
-              </div>
-
-              <div className="flex gap-2 mb-4">
-                <input value={videoInput} onChange={e => setVideoInput(e.target.value)} placeholder="Paste YouTube, Vimeo, or video URL"
-                  onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); addToList('videos', videoInput); setVideoInput(''); } }}
-                  className="flex-1 px-4 py-2.5 bg-neutral-50 border border-neutral-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500" />
-                <button type="button" onClick={() => { addToList('videos', videoInput); setVideoInput(''); }}
-                  className="px-4 py-2.5 bg-brand-500 text-white rounded-xl text-sm font-semibold hover:bg-brand-600 transition-colors flex items-center gap-1.5">
-                  <Plus className="h-4 w-4" /><span>Add</span>
-                </button>
-              </div>
-
-              {(form.videos || []).length > 0 ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {(form.videos || []).map((videoUrl, i) => {
-                    const parsed = parseVideoUrl(videoUrl);
-                    return (
-                      <div key={i} className="relative bg-neutral-900 rounded-xl overflow-hidden border border-neutral-200 shadow-sm group">
-                        <div className="aspect-video w-full bg-black flex items-center justify-center">
-                          {parsed.type === 'youtube' || parsed.type === 'vimeo' ? (
-                            <iframe src={parsed.embedUrl} title={`Property Video ${i + 1}`} className="w-full h-full border-0"
-                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen />
-                          ) : (
-                            <video src={parsed.embedUrl} controls className="w-full h-full object-contain" preload="metadata" />
-                          )}
-                        </div>
-                        <div className="p-3 bg-white flex items-center justify-between border-t border-neutral-100">
-                          <div className="flex items-center space-x-2 truncate">
-                            <span className="text-[10px] font-bold uppercase px-2 py-0.5 rounded bg-brand-50 text-brand-700">{parsed.type}</span>
-                            <span className="text-xs text-neutral-600 truncate max-w-[200px]">{videoUrl}</span>
-                          </div>
-                          <button type="button" onClick={() => removeFromList('videos', i)}
-                            className="p-1.5 rounded-lg bg-red-50 text-red-500 hover:bg-red-100 transition-colors" title="Remove Video">
-                            <X className="h-4 w-4" />
-                          </button>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              ) : (
-                <div className="text-center py-6 border border-dashed border-neutral-200 rounded-xl bg-neutral-50/50">
-                  <Video className="h-8 w-8 text-neutral-300 mx-auto mb-2" />
-                  <p className="text-xs text-neutral-500">No videos added yet.</p>
-                </div>
-              )}
-            </section>
-          </>
-        )}
-
-        {/* ── AMENITIES & HIGHLIGHTS ── */}
-        {activeTab === 'amenities' && (
-          <section className="bg-white rounded-2xl shadow-sm border border-neutral-100 p-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <h2 className="text-sm font-semibold text-navy-900 uppercase tracking-wider mb-3">Amenities</h2>
-                <div className="flex gap-2 mb-3">
-                  <input value={amenityInput} onChange={e => setAmenityInput(e.target.value)} placeholder="e.g. Swimming Pool"
-                    onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); addToList('amenities', amenityInput); setAmenityInput(''); } }}
-                    className="flex-1 px-3 py-2 bg-neutral-50 border border-neutral-200 rounded-lg text-sm outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500" />
-                  <button type="button" onClick={() => { addToList('amenities', amenityInput); setAmenityInput(''); }}
-                    className="px-3 py-2 bg-brand-50 text-brand-500 rounded-lg text-sm font-semibold hover:bg-brand-100 transition-colors">
-                    <Plus className="h-4 w-4" />
-                  </button>
-                </div>
-                <div className="flex flex-wrap gap-1.5">
-                  {form.amenities.map((a, i) => (
+              {form.amenities.filter(a => !AMENITY_PRESETS.includes(a)).length > 0 && (
+                <div className="flex flex-wrap gap-1.5 mb-2">
+                  {form.amenities.map((a, i) => !AMENITY_PRESETS.includes(a) && (
                     <span key={i} className="flex items-center gap-1 px-2.5 py-1 bg-neutral-100 text-neutral-700 text-xs font-medium rounded-full">
                       {a}
                       <button type="button" onClick={() => removeFromList('amenities', i)}><X className="h-3 w-3" /></button>
                     </span>
                   ))}
                 </div>
-              </div>
-              <div>
-                <h2 className="text-sm font-semibold text-navy-900 uppercase tracking-wider mb-3">Highlights</h2>
-                <div className="flex gap-2 mb-3">
-                  <input value={highlightInput} onChange={e => setHighlightInput(e.target.value)} placeholder="e.g. Near NH-75"
-                    onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); addToList('highlights', highlightInput); setHighlightInput(''); } }}
-                    className="flex-1 px-3 py-2 bg-neutral-50 border border-neutral-200 rounded-lg text-sm outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500" />
-                  <button type="button" onClick={() => { addToList('highlights', highlightInput); setHighlightInput(''); }}
-                    className="px-3 py-2 bg-brand-50 text-brand-500 rounded-lg text-sm font-semibold hover:bg-brand-100 transition-colors">
-                    <Plus className="h-4 w-4" />
-                  </button>
-                </div>
-                <div className="flex flex-wrap gap-1.5">
-                  {form.highlights.map((h, i) => (
-                    <span key={i} className="flex items-center gap-1 px-2.5 py-1 bg-neutral-100 text-neutral-700 text-xs font-medium rounded-full">
-                      {h}
-                      <button type="button" onClick={() => removeFromList('highlights', i)}><X className="h-3 w-3" /></button>
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </section>
-        )}
+              )}
 
-        {/* ── DESCRIPTION & SEO ── */}
-        {activeTab === 'description' && (
-          <section className="bg-white rounded-2xl shadow-sm border border-neutral-100 p-6 space-y-4">
-            <h2 className="text-sm font-semibold text-navy-900 uppercase tracking-wider mb-1">Description</h2>
-            <div>
-              <label className={labelCls}>Short Description <span className="text-neutral-400 normal-case">(cards &amp; previews, 1–2 lines)</span></label>
-              <textarea value={form.shortDescription} onChange={e => update('shortDescription', e.target.value)} rows={2} className={`${inputCls} resize-none`} />
-            </div>
-            <div>
-              <label className={labelCls}>Detailed Description</label>
-              <textarea value={form.description} onChange={e => update('description', e.target.value)} rows={5} className={`${inputCls} resize-none`} />
-            </div>
-            <div>
-              <label className={labelCls}>Contact Email</label>
-              <input value={form.contactEmail} onChange={e => update('contactEmail', e.target.value)} className={inputCls} />
-            </div>
-            <div className="pt-4 mt-2 border-t border-neutral-100">
-              <h3 className="text-sm font-semibold text-navy-900 uppercase tracking-wider mb-3">SEO</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className={labelCls}>SEO Title</label>
-                  <input value={form.seoTitle || ''} onChange={e => update('seoTitle', e.target.value)} className={inputCls} />
-                </div>
-                <div>
-                  <label className={labelCls}>URL Slug</label>
-                  <input value={form.slug || ''} onChange={e => update('slug', e.target.value)} placeholder="auto-generated if blank" className={inputCls} />
-                </div>
-                <div className="md:col-span-2">
-                  <label className={labelCls}>SEO Description</label>
-                  <textarea value={form.seoDescription || ''} onChange={e => update('seoDescription', e.target.value)} rows={2} className={`${inputCls} resize-none`} />
-                </div>
-                <div className="md:col-span-2">
-                  <label className={labelCls}>Meta Keywords</label>
-                  <input value={form.metaKeywords || ''} onChange={e => update('metaKeywords', e.target.value)} placeholder="comma, separated, keywords" className={inputCls} />
-                </div>
+              <h3 className={subHeadingCls}>Highlights</h3>
+              <div className="flex gap-2 mb-3">
+                <input value={highlightInput} onChange={e => setHighlightInput(e.target.value)} placeholder="e.g. Near NH-75"
+                  onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); addToList('highlights', highlightInput); setHighlightInput(''); } }}
+                  className="flex-1 px-3 py-2 bg-neutral-50 border border-neutral-200 rounded-lg text-sm outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500" />
+                <button type="button" onClick={() => { addToList('highlights', highlightInput); setHighlightInput(''); }}
+                  className="px-3 py-2 bg-brand-50 text-brand-500 rounded-lg text-sm font-semibold hover:bg-brand-100 transition-colors">
+                  <Plus className="h-4 w-4" />
+                </button>
               </div>
-            </div>
-          </section>
-        )}
+              <div className="flex flex-wrap gap-1.5">
+                {form.highlights.map((h, i) => (
+                  <span key={i} className="flex items-center gap-1 px-2.5 py-1 bg-neutral-100 text-neutral-700 text-xs font-medium rounded-full">
+                    {h}
+                    <button type="button" onClick={() => removeFromList('highlights', i)}><X className="h-3 w-3" /></button>
+                  </span>
+                ))}
+              </div>
+            </section>
+          )}
 
-        {/* ── LEGAL & SOURCE (ADMIN ONLY) ── */}
-        {activeTab === 'legal' && (
-          <>
-            <div className="flex items-center gap-1.5 text-xs font-semibold text-red-500 uppercase tracking-wider">
-              <Info className="h-3.5 w-3.5" /> Admin Only — this entire tab is never shown on the public website
-            </div>
+          {/* ── LEGAL & DOCUMENTS (ADMIN ONLY) ── */}
+          {activeSection === 'legal' && (
             <section className="bg-white rounded-2xl shadow-sm border border-neutral-100 p-6">
-              <h2 className="text-sm font-semibold text-navy-900 uppercase tracking-wider mb-4">Legal &amp; Documentation</h2>
+              <div className="flex items-center gap-1.5 text-[11px] font-semibold text-neutral-400 uppercase tracking-wider mb-4">
+                <Info className="h-3.5 w-3.5" /> Admin only — never shown on the public website · all fields optional
+              </div>
+              <h2 className={sectionHeadingCls}>Legal &amp; Documentation</h2>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                 <div>
                   <label className={labelCls}>Ownership Type</label>
@@ -876,13 +831,9 @@ export default function AdminPropertyForm() {
                     placeholder="e.g. BMRDA approved, BBMP khata A" className={inputCls} />
                 </div>
               </div>
-              <div className="flex flex-wrap gap-4 mb-4 p-3.5 bg-neutral-50 rounded-xl border border-neutral-100">
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-1 mb-4 p-3.5 bg-neutral-50 rounded-xl border border-neutral-100">
                 {(['titleDeed', 'saleDeed', 'rtc', 'mutation', 'khata', 'ec'] as const).map(doc => (
-                  <label key={doc} className="flex items-center gap-2 text-sm text-neutral-700 cursor-pointer">
-                    <input type="checkbox" checked={!!form.legal?.[doc]} onChange={e => updateLegal(doc, e.target.checked)}
-                      className="h-4 w-4 rounded accent-brand-500" />
-                    {doc.toUpperCase()}
-                  </label>
+                  <Toggle key={doc} checked={!!form.legal?.[doc]} onChange={v => updateLegal(doc, v)} label={doc.toUpperCase()} />
                 ))}
               </div>
               <div>
@@ -890,9 +841,189 @@ export default function AdminPropertyForm() {
                 <textarea value={form.legal?.notes || ''} onChange={e => updateLegal('notes', e.target.value)} rows={2} className={`${inputCls} resize-none`} />
               </div>
             </section>
+          )}
 
+          {/* ── MEDIA ── */}
+          {activeSection === 'media' && (
+            <>
+              <section className="bg-white rounded-2xl shadow-sm border border-neutral-100 p-6">
+                <h2 className={sectionHeadingCls}>Images</h2>
+
+                <div
+                  onDragOver={e => { e.preventDefault(); setDragActive(true); }}
+                  onDragLeave={() => setDragActive(false)}
+                  onDrop={handleDrop}
+                  onClick={() => fileInputRef.current?.click()}
+                  className={`flex flex-col items-center justify-center gap-2 px-4 py-8 border-2 border-dashed rounded-xl cursor-pointer transition-colors mb-4 ${
+                    dragActive ? 'bg-brand-100 border-brand-400' : 'bg-brand-50 border-brand-200 hover:bg-brand-100'
+                  }`}>
+                  <Upload className="h-6 w-6 text-brand-500" />
+                  <span className="font-semibold text-sm text-brand-700">
+                    {uploading ? 'Uploading...' : 'Drag & drop images here, or click to browse'}
+                  </span>
+                  <span className="text-[11px] text-neutral-400">You can select multiple files at once</span>
+                  <input ref={fileInputRef} type="file" accept="image/*" multiple onChange={handleImageUpload} disabled={uploading} className="hidden" />
+                </div>
+
+                <div className="flex gap-2 mb-4">
+                  <input value={imageInput} onChange={e => setImageInput(e.target.value)} placeholder="...or paste an image URL"
+                    className="flex-1 px-4 py-2.5 bg-neutral-50 border border-neutral-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500" />
+                  <button type="button" onClick={() => { addToList('images', imageInput); setImageInput(''); }}
+                    className="px-4 py-2.5 bg-brand-500 text-white rounded-xl text-sm font-semibold hover:bg-brand-600 transition-colors">
+                    <Plus className="h-4 w-4" />
+                  </button>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  {pendingImagePreviews.map((preview, i) => (
+                    <div key={`preview-${i}`} className="relative h-32 rounded-xl overflow-hidden bg-neutral-100 border border-brand-200 shadow-sm">
+                      <img src={preview} alt={`Uploading ${i + 1}`} className="w-full h-full object-cover opacity-75" />
+                      <div className="absolute inset-0 flex items-center justify-center bg-black/20">
+                        <Loader2 className="h-8 w-8 text-white animate-spin" />
+                      </div>
+                    </div>
+                  ))}
+                  {form.images.map((img, i) => (
+                    <div key={i} className="relative group rounded-xl overflow-hidden bg-neutral-100 border border-neutral-200 shadow-sm">
+                      <div className="h-32 relative">
+                        <img src={img} alt={`Property image ${i + 1}`} className="w-full h-full object-cover"
+                          onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
+                        {(form.coverImageIndex ?? 0) === i && (
+                          <span className="absolute top-1.5 left-1.5 text-[9px] font-bold uppercase px-1.5 py-0.5 bg-brand-500 text-white rounded">Cover</span>
+                        )}
+                        <button type="button" onClick={() => removeImage(i)}
+                          className="absolute top-1.5 right-1.5 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-all hover:bg-red-600">
+                          <X className="h-3.5 w-3.5" />
+                        </button>
+                      </div>
+                      <div className="p-2 space-y-1.5">
+                        <input value={form.imageCaptions?.[i] || ''} onChange={e => setImageCaption(i, e.target.value)}
+                          placeholder="Caption (optional)" className="w-full px-2 py-1 text-[11px] bg-white border border-neutral-200 rounded-md outline-none" />
+                        <div className="flex items-center gap-1">
+                          <button type="button" onClick={() => moveImage(i, -1)} disabled={i === 0}
+                            className="flex-1 text-[10px] px-1.5 py-1 bg-neutral-100 rounded disabled:opacity-30 hover:bg-neutral-200">← Move</button>
+                          <button type="button" onClick={() => setCoverImage(i)}
+                            className="flex-1 text-[10px] px-1.5 py-1 bg-neutral-100 rounded hover:bg-neutral-200">Set Cover</button>
+                          <button type="button" onClick={() => moveImage(i, 1)} disabled={i === form.images.length - 1}
+                            className="flex-1 text-[10px] px-1.5 py-1 bg-neutral-100 rounded disabled:opacity-30 hover:bg-neutral-200">Move →</button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                {form.images.length === 0 && pendingImagePreviews.length === 0 && (
+                  <p className="text-xs text-neutral-400 text-center py-4">No images added yet.</p>
+                )}
+              </section>
+
+              <section className="bg-white rounded-2xl shadow-sm border border-neutral-100 p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <h2 className={`${sectionHeadingCls} !mb-0`}>Videos &amp; Walkthroughs</h2>
+                  <span className="text-xs font-semibold px-2.5 py-1 bg-brand-50 text-brand-700 rounded-full">
+                    {(form.videos || []).length} {(form.videos || []).length === 1 ? 'Video' : 'Videos'}
+                  </span>
+                </div>
+
+                <label className="flex items-center justify-center gap-2 px-4 py-3 bg-brand-50 border-2 border-dashed border-brand-200 rounded-xl text-brand-600 cursor-pointer hover:bg-brand-100 transition-colors mb-4">
+                  <Video className="h-5 w-5" />
+                  <span className="font-semibold text-sm">
+                    {videoUploading ? `Uploading ${pendingVideoCount} video(s)...` : 'Upload Video Files'}
+                  </span>
+                  <input type="file" accept="video/mp4,video/webm,video/ogg,video/quicktime,video/*" multiple
+                    onChange={handleVideoUpload} disabled={videoUploading} className="hidden" />
+                </label>
+
+                <div className="flex gap-2 mb-4">
+                  <input value={videoInput} onChange={e => setVideoInput(e.target.value)} placeholder="Paste YouTube, Vimeo, or video URL"
+                    onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); addToList('videos', videoInput); setVideoInput(''); } }}
+                    className="flex-1 px-4 py-2.5 bg-neutral-50 border border-neutral-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500" />
+                  <button type="button" onClick={() => { addToList('videos', videoInput); setVideoInput(''); }}
+                    className="px-4 py-2.5 bg-brand-500 text-white rounded-xl text-sm font-semibold hover:bg-brand-600 transition-colors flex items-center gap-1.5">
+                    <Plus className="h-4 w-4" /><span>Add</span>
+                  </button>
+                </div>
+
+                {(form.videos || []).length > 0 ? (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {(form.videos || []).map((videoUrl, i) => {
+                      const parsed = parseVideoUrl(videoUrl);
+                      return (
+                        <div key={i} className="relative bg-neutral-900 rounded-xl overflow-hidden border border-neutral-200 shadow-sm group">
+                          <div className="aspect-video w-full bg-black flex items-center justify-center">
+                            {parsed.type === 'youtube' || parsed.type === 'vimeo' ? (
+                              <iframe src={parsed.embedUrl} title={`Property Video ${i + 1}`} className="w-full h-full border-0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen />
+                            ) : (
+                              <video src={parsed.embedUrl} controls className="w-full h-full object-contain" preload="metadata" />
+                            )}
+                          </div>
+                          <div className="p-3 bg-white flex items-center justify-between border-t border-neutral-100">
+                            <div className="flex items-center space-x-2 truncate">
+                              <span className="text-[10px] font-bold uppercase px-2 py-0.5 rounded bg-brand-50 text-brand-700">{parsed.type}</span>
+                              <span className="text-xs text-neutral-600 truncate max-w-[200px]">{videoUrl}</span>
+                            </div>
+                            <button type="button" onClick={() => removeFromList('videos', i)}
+                              className="p-1.5 rounded-lg bg-red-50 text-red-500 hover:bg-red-100 transition-colors" title="Remove Video">
+                              <X className="h-4 w-4" />
+                            </button>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <p className="text-xs text-neutral-400 text-center py-4">No videos added yet.</p>
+                )}
+              </section>
+            </>
+          )}
+
+          {/* ── DESCRIPTION ── */}
+          {activeSection === 'description' && (
+            <section className="bg-white rounded-2xl shadow-sm border border-neutral-100 p-6 space-y-4">
+              <h2 className={sectionHeadingCls}>Description</h2>
+              <div>
+                <label className={labelCls}>Short Description <span className="text-neutral-400 normal-case">(cards &amp; previews, 1–2 lines)</span></label>
+                <textarea value={form.shortDescription} onChange={e => update('shortDescription', e.target.value)} rows={2} className={`${inputCls} resize-none`} />
+              </div>
+              <div>
+                <label className={labelCls}>Detailed Description</label>
+                <textarea value={form.description} onChange={e => update('description', e.target.value)} rows={5} className={`${inputCls} resize-none`} />
+              </div>
+              <div>
+                <label className={labelCls}>Contact Email</label>
+                <input value={form.contactEmail} onChange={e => update('contactEmail', e.target.value)} className={inputCls} />
+              </div>
+
+              <h3 className={subHeadingCls}>SEO</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className={labelCls}>SEO Title</label>
+                  <input value={form.seoTitle || ''} onChange={e => update('seoTitle', e.target.value)} className={inputCls} />
+                </div>
+                <div>
+                  <label className={labelCls}>URL Slug</label>
+                  <input value={form.slug || ''} onChange={e => update('slug', e.target.value)} placeholder="auto-generated if blank" className={inputCls} />
+                </div>
+                <div className="md:col-span-2">
+                  <label className={labelCls}>SEO Description</label>
+                  <textarea value={form.seoDescription || ''} onChange={e => update('seoDescription', e.target.value)} rows={2} className={`${inputCls} resize-none`} />
+                </div>
+                <div className="md:col-span-2">
+                  <label className={labelCls}>Meta Keywords</label>
+                  <input value={form.metaKeywords || ''} onChange={e => update('metaKeywords', e.target.value)} placeholder="comma, separated, keywords" className={inputCls} />
+                </div>
+              </div>
+            </section>
+          )}
+
+          {/* ── OWNER & SOURCE (ADMIN ONLY) ── */}
+          {activeSection === 'owner' && (
             <section className="bg-white rounded-2xl shadow-sm border border-neutral-100 p-6">
-              <h2 className="text-sm font-semibold text-navy-900 uppercase tracking-wider mb-4">Owner / Source Information</h2>
+              <div className="flex items-center gap-1.5 text-[11px] font-semibold text-neutral-400 uppercase tracking-wider mb-4">
+                <Info className="h-3.5 w-3.5" /> Admin only — never shown on the public website · all fields optional
+              </div>
+              <h2 className={sectionHeadingCls}>Owner / Source Information</h2>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                 <div>
                   <label className={labelCls}>Owner Name</label>
@@ -932,72 +1063,107 @@ export default function AdminPropertyForm() {
                 <textarea value={form.source?.notes || ''} onChange={e => updateSource('notes', e.target.value)} rows={2} className={`${inputCls} resize-none`} />
               </div>
             </section>
-          </>
-        )}
+          )}
 
-        {/* ── REVIEWS ── */}
-        {activeTab === 'reviews' && (
-          <section className="bg-white rounded-2xl shadow-sm border border-neutral-100 p-6">
-            <h2 className="text-sm font-semibold text-navy-900 uppercase tracking-wider mb-4">Reviews</h2>
-            <div className="mb-6 p-4 bg-neutral-50 rounded-xl border border-neutral-200">
-              <h3 className="text-xs font-semibold text-neutral-700 uppercase tracking-wide mb-3">Add New Review</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
-                <div>
-                  <label className={labelCls}>Reviewer Name</label>
-                  <input value={newReviewName} onChange={e => setNewReviewName(e.target.value)} placeholder="e.g. Rahul Sharma"
-                    className="w-full px-3 py-2 bg-white border border-neutral-200 rounded-lg text-sm outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500" />
-                </div>
-                <div>
-                  <label className={labelCls}>Rating</label>
-                  <div className="flex items-center gap-1">
-                    {[1, 2, 3, 4, 5].map(star => (
-                      <button key={star} type="button" onClick={() => setNewReviewRating(star)} className="p-1.5 rounded-lg transition-all">
-                        <Star className={`h-5 w-5 ${star <= newReviewRating ? 'text-yellow-400 fill-yellow-400' : 'text-neutral-300'}`} />
-                      </button>
-                    ))}
+          {/* ── REVIEWS (optional) ── */}
+          {activeSection === 'reviews' && (
+            <section className="bg-white rounded-2xl shadow-sm border border-neutral-100 p-6">
+              <h2 className={sectionHeadingCls}>Reviews <span className="text-neutral-400 font-normal normal-case">(optional)</span></h2>
+              <div className="mb-6 p-4 bg-neutral-50 rounded-xl border border-neutral-200">
+                <h3 className="text-xs font-semibold text-neutral-700 uppercase tracking-wide mb-3">Add New Review</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
+                  <div>
+                    <label className={labelCls}>Reviewer Name</label>
+                    <input value={newReviewName} onChange={e => setNewReviewName(e.target.value)} placeholder="e.g. Rahul Sharma"
+                      className="w-full px-3 py-2 bg-white border border-neutral-200 rounded-lg text-sm outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500" />
                   </div>
-                </div>
-              </div>
-              <div className="mb-3">
-                <label className={labelCls}>Review Text</label>
-                <textarea value={newReviewText} onChange={e => setNewReviewText(e.target.value)} placeholder="Write a review..." rows={3}
-                  className="w-full px-3 py-2 bg-white border border-neutral-200 rounded-lg text-sm outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 resize-none" />
-              </div>
-              <button type="button" onClick={addReview}
-                className="flex items-center gap-2 px-4 py-2 bg-brand-500 text-white rounded-lg text-sm font-semibold hover:bg-brand-600 transition-colors">
-                <Plus className="h-4 w-4" /> Add Review
-              </button>
-            </div>
-
-            {form.reviews.length > 0 ? (
-              <div className="space-y-4">
-                {form.reviews.map((review, i) => (
-                  <div key={review.id} className="p-4 bg-neutral-50 rounded-xl border border-neutral-200">
-                    <div className="flex items-start justify-between">
-                      <div className="flex-1">
-                        <h4 className="text-sm font-semibold text-navy-900">{review.name}</h4>
-                        <div className="flex items-center gap-1 mb-1">
-                          {[1, 2, 3, 4, 5].map(star => (
-                            <Star key={star} className={`h-3.5 w-3.5 ${star <= review.rating ? 'text-yellow-400 fill-yellow-400' : 'text-neutral-300'}`} />
-                          ))}
-                          <span className="text-xs text-neutral-500 ml-1">{review.date}</span>
-                        </div>
-                        <p className="text-sm text-neutral-700 leading-relaxed">{review.text}</p>
-                      </div>
-                      <button type="button" onClick={() => removeReview(i)}
-                        className="p-1.5 rounded-lg hover:bg-red-50 text-neutral-400 hover:text-red-500 transition-colors">
-                        <X className="h-4 w-4" />
-                      </button>
+                  <div>
+                    <label className={labelCls}>Rating</label>
+                    <div className="flex items-center gap-1">
+                      {[1, 2, 3, 4, 5].map(star => (
+                        <button key={star} type="button" onClick={() => setNewReviewRating(star)} className="p-1.5 rounded-lg transition-all">
+                          <Star className={`h-5 w-5 ${star <= newReviewRating ? 'text-yellow-400 fill-yellow-400' : 'text-neutral-300'}`} />
+                        </button>
+                      ))}
                     </div>
                   </div>
-                ))}
+                </div>
+                <div className="mb-3">
+                  <label className={labelCls}>Review Text</label>
+                  <textarea value={newReviewText} onChange={e => setNewReviewText(e.target.value)} placeholder="Write a review..." rows={3}
+                    className="w-full px-3 py-2 bg-white border border-neutral-200 rounded-lg text-sm outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 resize-none" />
+                </div>
+                <button type="button" onClick={addReview}
+                  className="flex items-center gap-2 px-4 py-2 bg-brand-500 text-white rounded-lg text-sm font-semibold hover:bg-brand-600 transition-colors">
+                  <Plus className="h-4 w-4" /> Add Review
+                </button>
               </div>
+
+              {form.reviews.length > 0 ? (
+                <div className="space-y-4">
+                  {form.reviews.map((review, i) => (
+                    <div key={review.id} className="p-4 bg-neutral-50 rounded-xl border border-neutral-200">
+                      <div className="flex items-start justify-between">
+                        <div className="flex-1">
+                          <h4 className="text-sm font-semibold text-navy-900">{review.name}</h4>
+                          <div className="flex items-center gap-1 mb-1">
+                            {[1, 2, 3, 4, 5].map(star => (
+                              <Star key={star} className={`h-3.5 w-3.5 ${star <= review.rating ? 'text-yellow-400 fill-yellow-400' : 'text-neutral-300'}`} />
+                            ))}
+                            <span className="text-xs text-neutral-500 ml-1">{review.date}</span>
+                          </div>
+                          <p className="text-sm text-neutral-700 leading-relaxed">{review.text}</p>
+                        </div>
+                        <button type="button" onClick={() => removeReview(i)}
+                          className="p-1.5 rounded-lg hover:bg-red-50 text-neutral-400 hover:text-red-500 transition-colors">
+                          <X className="h-4 w-4" />
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-sm text-neutral-500 text-center py-6">No reviews yet. Add your first review above!</p>
+              )}
+            </section>
+          )}
+        </div>
+      </div>
+
+      {/* Sticky bottom action bar */}
+      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-neutral-200 shadow-[0_-4px_16px_rgba(0,0,0,0.04)] z-40">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between gap-3">
+          <div className="min-w-0 hidden sm:block">
+            {missingRequired.length > 0 ? (
+              <p className="text-xs text-neutral-500">
+                <span className="font-semibold text-amber-600">{missingRequired.join(', ')}</span> required to publish. Draft saving is always available.
+              </p>
             ) : (
-              <p className="text-sm text-neutral-500 text-center py-6">No reviews yet. Add your first review above!</p>
+              <p className="text-xs text-emerald-600 font-medium flex items-center gap-1.5">
+                <CheckCircle2 className="h-3.5 w-3.5" /> All required fields complete — ready to publish.
+              </p>
             )}
-          </section>
-        )}
-      </form>
+          </div>
+          <div className="flex items-center gap-2 ml-auto flex-shrink-0">
+            <button type="button" onClick={() => handleSubmit(false)} disabled={savingMode !== null}
+              className="flex items-center gap-1.5 bg-neutral-100 hover:bg-neutral-200 disabled:opacity-60 text-navy-900 font-semibold px-3.5 sm:px-4 py-2.5 rounded-xl text-xs sm:text-sm transition-all">
+              {savingMode === 'draft' ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
+              <span className="hidden sm:inline">Save Draft</span>
+            </button>
+            <button type="button" onClick={handlePreview} disabled={!id}
+              title={id ? 'Open the live/preview page in a new tab' : 'Save as a draft first to preview'}
+              className="flex items-center gap-1.5 bg-neutral-100 hover:bg-neutral-200 disabled:opacity-40 disabled:cursor-not-allowed text-navy-900 font-semibold px-3.5 sm:px-4 py-2.5 rounded-xl text-xs sm:text-sm transition-all">
+              <Eye className="h-4 w-4" />
+              <span className="hidden sm:inline">Preview</span>
+            </button>
+            <button type="button" onClick={() => handleSubmit(true)} disabled={savingMode !== null}
+              className="flex items-center gap-2 bg-brand-500 hover:bg-brand-600 disabled:opacity-60 text-white font-semibold px-4 sm:px-5 py-2.5 rounded-xl text-xs sm:text-sm transition-all hover:shadow-lg hover:shadow-brand-500/25">
+              {savingMode === 'publish' ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
+              <span>{isEdit ? 'Save & Publish' : 'Publish Property'}</span>
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
