@@ -165,28 +165,8 @@ export default function Home() {
               Plots, farmhouse plots, agricultural land, rental & lease homes, and commercial spaces — sourced and listed as they become available, anywhere in Karnataka.
             </p>
 
-            {/* Filter Tabs & Search Box */}
+            {/* Search Box */}
             <div className="max-w-xl">
-              {/* Type Tabs */}
-              <div className="flex items-center flex-wrap gap-1.5 sm:gap-2 mb-3" role="tablist" aria-label="Filter by property category">
-                {TYPE_TABS.map((tab) => (
-                  <button
-                    key={tab.id}
-                    type="button"
-                    role="tab"
-                    aria-selected={selectedType === tab.id}
-                    onClick={() => setSelectedType(tab.id)}
-                    className={`px-3.5 sm:px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all duration-300 flex-shrink-0 backdrop-blur-md ${
-                      selectedType === tab.id
-                        ? 'bg-brand-500 text-white shadow-lg shadow-brand-500/30 scale-105'
-                        : 'bg-navy-900/60 text-neutral-300 hover:text-white hover:bg-navy-900/80 border border-white/10'
-                    }`}
-                  >
-                    {tab.label}
-                  </button>
-                ))}
-              </div>
-
               {/* Search Bar */}
               <form onSubmit={handleSearchSubmit} className="bg-white rounded-2xl shadow-glass p-2 border border-white/10" role="search" aria-label="Search properties">
                 <div className="flex items-center flex-col sm:flex-row gap-2">
