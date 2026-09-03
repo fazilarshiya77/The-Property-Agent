@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { Home, Building, Building2, Info, Menu, X, Phone, Lock, Sparkles, MessageCircle } from 'lucide-react';
+import { Home, Building, Building2, Info, Menu, X, Phone, Sparkles, MessageCircle } from 'lucide-react';
 import { useState, useEffect } from 'react';
 
 export default function Navbar() {
@@ -95,13 +95,6 @@ export default function Navbar() {
               >
                 Contact Us
               </Link>
-              <Link
-                to="/admin"
-                className="flex items-center space-x-1.5 bg-neutral-100 hover:bg-neutral-200 text-neutral-700 text-xs lg:text-sm font-semibold px-3 py-2 rounded-lg transition-all duration-300"
-              >
-                <Lock className="h-3.5 w-3.5" />
-                <span className="hidden lg:inline">Admin</span>
-              </Link>
             </div>
 
             {/* Mobile Menu Toggle */}
@@ -181,13 +174,6 @@ export default function Navbar() {
                 className="block mt-3 text-center bg-brand-500 hover:bg-brand-600 text-white font-semibold py-3.5 rounded-xl transition-colors"
               >
                 Contact Us
-              </Link>
-              <Link
-                to="/admin"
-                className="flex items-center space-x-3 px-4 py-3 mt-2 text-neutral-400 hover:text-brand-500 transition-colors"
-              >
-                <Lock className="h-5 w-5" />
-                <span className="text-sm font-medium">Admin</span>
               </Link>
             </div>
           </div>
