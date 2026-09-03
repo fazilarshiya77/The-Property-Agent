@@ -2,13 +2,13 @@
 @import "shadcn/tailwind.css";
 @import "@fontsource-variable/geist";
 @import "lenis/dist/lenis.css";
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Josefin+Sans:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600;1,700&family=Roboto:wght@300;400;500;600;700;800&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  font-family: 'Josefin Sans', 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  font-family: 'Roboto', system-ui, -apple-system, 'Segoe UI', sans-serif;
   line-height: 1.6;
   font-weight: 400;
   font-synthesis: none;
@@ -16,11 +16,11 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
-  --brand-500: #0F766E;
-  --brand-600: #0d9488;
-  --navy-900: #102a43;
-  --navy-950: #0B1D3A;
-  --gold-400: #d4af37;
+  --brand-500: #C6A75E;
+  --brand-600: #AD8F4C;
+  --navy-900: #1F2A44;
+  --navy-950: #141B2E;
+  --gold-400: #C6A75E;
 }
 
 html {
@@ -29,8 +29,8 @@ html {
 }
 
 body {
-  color: #344563;
-  background: #FAFBFC;
+  color: #1F2A44;
+  background: #FAF7F1;
 }
 
 /* Custom scrollbar */
@@ -38,14 +38,14 @@ body {
   width: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: #f0f4f8;
+  background: #F3EDE2;
 }
 ::-webkit-scrollbar-thumb {
-  background: #bcccdc;
+  background: #DFD5C0;
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #9fb3c8;
+  background: #C1B7A3;
 }
 
 /* Hide scrollbar utility */
@@ -90,7 +90,7 @@ body {
 
 /* Gradient text */
 .gradient-text {
-  background: linear-gradient(135deg, #0F766E 0%, #d4af37 50%, #115e59 100%);
+  background: linear-gradient(135deg, #C6A75E 0%, #E8DCC8 50%, #C6A75E 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -98,7 +98,7 @@ body {
 
 /* Image loading skeleton */
 .skeleton {
-  background: linear-gradient(90deg, #f0f4f8 25%, #d9e2ec 50%, #f0f4f8 75%);
+  background: linear-gradient(90deg, #F3EDE2 25%, #E8DCC8 50%, #F3EDE2 75%);
   background-size: 200% 100%;
   animation: shimmer 1.5s ease-in-out infinite;
 }
@@ -110,7 +110,7 @@ img {
 
 /* Focus ring utility */
 .focus-ring:focus-visible {
-  outline: 2px solid #0F766E;
+  outline: 2px solid #C6A75E;
   outline-offset: 2px;
   border-radius: 4px;
 }
@@ -174,28 +174,28 @@ html, body {
 
 @layer base {
   .theme {
-    --font-heading: 'Cinzel', serif;
-    --font-sans: 'Josefin Sans', sans-serif;
+    --font-heading: 'Playfair Display', Georgia, serif;
+    --font-sans: 'Roboto', sans-serif;
   }
   :root {
-    --background: oklch(1 0 0);
-    --foreground: oklch(0.145 0 0);
-    --card: oklch(1 0 0);
-    --card-foreground: oklch(0.145 0 0);
-    --popover: oklch(1 0 0);
-    --popover-foreground: oklch(0.145 0 0);
-    --primary: oklch(0.439 0.123 189);
-    --primary-foreground: oklch(0.985 0 0);
-    --secondary: oklch(0.97 0 0);
-    --secondary-foreground: oklch(0.205 0 0);
-    --muted: oklch(0.97 0 0);
-    --muted-foreground: oklch(0.556 0 0);
-    --accent: oklch(0.97 0 0);
-    --accent-foreground: oklch(0.205 0 0);
+    --background: #FDFBF7;
+    --foreground: #1F2A44;
+    --card: #FFFFFF;
+    --card-foreground: #1F2A44;
+    --popover: #FFFFFF;
+    --popover-foreground: #1F2A44;
+    --primary: #C6A75E;
+    --primary-foreground: #1F2A44;
+    --secondary: #F3EDE2;
+    --secondary-foreground: #1F2A44;
+    --muted: #F3EDE2;
+    --muted-foreground: #6B655A;
+    --accent: #F5EBD3;
+    --accent-foreground: #1F2A44;
     --destructive: oklch(0.577 0.245 27.325);
-    --border: oklch(0.922 0 0);
-    --input: oklch(0.922 0 0);
-    --ring: oklch(0.439 0.123 189);
+    --border: #DFD5C0;
+    --input: #DFD5C0;
+    --ring: #C6A75E;
     --chart-1: oklch(0.87 0 0);
     --chart-2: oklch(0.556 0 0);
     --chart-3: oklch(0.439 0 0);

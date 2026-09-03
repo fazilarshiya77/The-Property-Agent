@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { Home, Building, Info, Menu, X, Phone, Lock, Sparkles, MessageCircle } from 'lucide-react';
+import { Home, Building, Building2, Info, Menu, X, Phone, Lock, Sparkles, MessageCircle } from 'lucide-react';
 import { useState, useEffect } from 'react';
 
 export default function Navbar() {
@@ -51,20 +51,13 @@ export default function Navbar() {
         <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16 lg:h-20">
             {/* Logo */}
-            <Link to="/" className="flex items-center space-x-3 group flex-shrink-0" aria-label="Trishna Property Management - Home">
-              <img
-                src="/logo.jpeg"
-                alt="Trishna Property Management — Premium Real Estate in Bangalore"
-                className="h-10 w-10 sm:h-12 sm:w-12 rounded-xl object-contain border border-neutral-100 shadow-sm group-hover:shadow-md transition-all duration-300 group-hover:scale-105 bg-white"
-                width="48"
-                height="48"
-              />
+            <Link to="/" className="flex items-center space-x-3 group flex-shrink-0" aria-label="The Property Agent - Home">
+              <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-xl bg-brand-500 flex items-center justify-center shadow-sm group-hover:shadow-md transition-all duration-300 group-hover:scale-105 flex-shrink-0">
+                <Building2 className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
+              </div>
               <div className="flex flex-col">
                 <span className="text-xl sm:text-2xl font-display font-bold text-navy-900 leading-tight tracking-wider transition-colors duration-300 group-hover:text-brand-500">
-                  Trishna
-                </span>
-                <span className="text-[8px] sm:text-[9px] font-semibold text-brand-500 uppercase tracking-widest -mt-0.5">
-                  Property Management
+                  The Property Agent
                 </span>
               </div>
             </Link>
@@ -97,17 +90,17 @@ export default function Navbar() {
             {/* Desktop CTA */}
             <div className="hidden md:flex items-center space-x-3 lg:space-x-4">
               <a
-                href="tel:+919886104532"
+                href="tel:+919019488368"
                 className="flex items-center space-x-1.5 text-xs lg:text-sm font-semibold text-neutral-600 hover:text-brand-500 transition-colors duration-300"
-                title="Call +91 98861 04532"
+                title="Call +91 90194 88368"
               >
                 <Phone className="h-4 w-4 text-brand-500 flex-shrink-0" />
-                <span className="hidden xl:inline">+91 98861 04532</span>
+                <span className="hidden xl:inline">+91 90194 88368</span>
               </a>
 
               {/* WhatsApp Redirect Button */}
               <a
-                href="https://wa.me/919886104532?text=Hi%20Trishna%20Property%20Management%2C%20I%20would%20like%20to%20inquire%20about%20your%20properties%20and%20services."
+                href="https://wa.me/919945011138?text=Hi%20The%20Property%20Agent%2C%20I%20would%20like%20to%20inquire%20about%20your%20properties%20and%20services."
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center space-x-1.5 px-3 py-2 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-semibold text-xs transition-all duration-300 border border-emerald-200/60 shadow-sm active:scale-95"
@@ -161,11 +154,10 @@ export default function Navbar() {
         }`}>
           {/* Mobile menu header with logo */}
           <div className="p-5 border-b border-neutral-100 flex items-center space-x-3">
-            <img src="/logo.jpeg" alt="Trishna Property Management" className="h-10 w-10 rounded-lg object-contain bg-white" />
-            <div>
-              <div className="text-sm font-bold text-navy-900">Trishna</div>
-              <div className="text-[9px] text-neutral-500 uppercase tracking-wider">Property Management</div>
+            <div className="h-10 w-10 rounded-lg bg-brand-500 flex items-center justify-center flex-shrink-0">
+              <Building2 className="h-5 w-5 text-white" />
             </div>
+            <div className="text-sm font-bold text-navy-900">The Property Agent</div>
           </div>
 
           <div className="p-5">
@@ -191,14 +183,14 @@ export default function Navbar() {
             </div>
             <div className="mt-8 pt-6 border-t border-neutral-100 space-y-2">
               <a
-                href="tel:+919886104532"
+                href="tel:+919019488368"
                 className="flex items-center space-x-3 px-4 py-3 text-neutral-700 hover:text-brand-500 hover:bg-neutral-50 rounded-xl transition-colors"
               >
                 <Phone className="h-5 w-5 text-brand-500" />
-                <span className="text-sm font-medium">+91 98861 04532</span>
+                <span className="text-sm font-medium">+91 90194 88368</span>
               </a>
               <a
-                href="https://wa.me/919886104532?text=Hi%20Trishna%20Property%20Management%2C%20I%20would%20like%20to%20inquire%20about%20your%20properties%20and%20services."
+                href="https://wa.me/919945011138?text=Hi%20The%20Property%20Agent%2C%20I%20would%20like%20to%20inquire%20about%20your%20properties%20and%20services."
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center space-x-3 px-4 py-3 text-emerald-700 bg-emerald-50 hover:bg-emerald-100 rounded-xl transition-colors font-medium text-sm"

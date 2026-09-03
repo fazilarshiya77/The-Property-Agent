@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
+import { BarChart3, Settings } from "lucide-react";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import ScrollToTop from "./components/ScrollToTop";
@@ -10,7 +11,11 @@ import About from "./pages/About";
 import Services from "./pages/Services";
 import AdminLogin from "./pages/AdminLogin";
 import AdminDashboard from "./pages/AdminDashboard";
+import AdminProperties from "./pages/AdminProperties";
 import AdminPropertyForm from "./pages/AdminPropertyForm";
+import AdminLeads from "./pages/AdminLeads";
+import AdminSiteVisits from "./pages/AdminSiteVisits";
+import AdminComingSoon from "./pages/AdminComingSoon";
 import { SEOProvider, SEO } from "./components/SEO";
 
 function AppLayout() {
@@ -22,8 +27,13 @@ function AppLayout() {
       <Routes>
         <Route path="/admin" element={<AdminLogin />} />
         <Route path="/admin/dashboard" element={<AdminDashboard />} />
+        <Route path="/admin/properties" element={<AdminProperties />} />
         <Route path="/admin/new" element={<AdminPropertyForm />} />
         <Route path="/admin/edit/:id" element={<AdminPropertyForm />} />
+        <Route path="/admin/leads" element={<AdminLeads />} />
+        <Route path="/admin/site-visits" element={<AdminSiteVisits />} />
+        <Route path="/admin/reports" element={<AdminComingSoon title="Reports" icon={BarChart3} description="Inventory, source, and conversion analytics once there's enough real activity to report on." />} />
+        <Route path="/admin/settings" element={<AdminComingSoon title="Settings" icon={Settings} description="Manage the Karnataka location list, amenities master, and site defaults from here." />} />
       </Routes>
     );
   }

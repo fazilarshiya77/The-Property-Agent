@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom';
 import ContactForm from '../components/ContactForm';
-import StatsCounter from '../components/StatsCounter';
-import { Shield, Users, MapPin, Clock, Star, Award, ExternalLink, Home, ChevronRight } from 'lucide-react';
+import { Shield, Users, MapPin, Clock, Star, Award, ExternalLink, Home, ChevronRight, Building2, MessageCircle } from 'lucide-react';
 import { useScrollReveal, useSectionReveal } from '../hooks/useScrollReveal';
 import { SEO } from '../components/SEO';
 import type { BreadcrumbItem, FAQItem } from '../components/SEO';
@@ -9,26 +8,25 @@ import type { BreadcrumbItem, FAQItem } from '../components/SEO';
 // About page FAQ data for AEO
 const aboutFaqData: FAQItem[] = [
   {
-    question: "How can I contact Trishna Property Management?",
-    answer: "You can reach Trishna Property Management by phone at +91 98861 04532, email at trishnaproperties78@gmail.com, or visit our office at 31, GM Palya Main Rd, KG Colony, GM Palya, C V Raman Nagar, Bengaluru, Karnataka 560075. We are open Monday to Saturday, 9 AM to 7 PM."
+    question: "How can I contact The Property Agent?",
+    answer: "You can reach The Property Agent by phone at +91 90194 88368, WhatsApp at +91 99450 11138, email at trishnaproperties78@gmail.com, or visit our office at No. 84, 4th cross kashi nagar, yelachanahalli, B-78., Bengaluru, Karnataka. We are open Monday to Saturday, 9 AM to 7 PM."
   },
   {
-    question: "What services does Trishna Property Management offer in Bangalore?",
-    answer: "Trishna Property Management offers comprehensive real estate and property care services in Bangalore including: 1) Rental and purchase of verified premium homes, 2) Official Government E-Stamping & rental agreement drafting, 3) Electrical works and diagnostics, 4) Plumbing & sanitary solutions, 5) Carpentry & modular woodwork repairs, 6) Civil building works, painting & waterproofing, and 7) Local & intercity Packers & Movers shifting."
+    question: "What services does The Property Agent offer across Karnataka?",
+    answer: "We help in three ways: 1) Buying — we actively search for plots, farmhouse plots, agricultural land, and homes matching your requirement, and support you through site visits, negotiation, and documentation. 2) Selling / Listing — if you have a property to sell or rent out, we list it and connect you with genuine buyers or tenants. 3) Renting & Leasing — we help tenants find rental or lease homes and assist with the agreement, including e-stamp paperwork."
   },
   {
-    question: "How many properties and service technicians does Trishna Property Management have?",
-    answer: "Trishna Property Management currently has 50+ verified property listings and a dedicated team of verified electricians, plumbers, carpenters, civil contractors, and packers & movers across Bangalore serving 200+ happy families."
+    question: "Does The Property Agent hold fixed property inventory?",
+    answer: "No — The Property Agent works as an active agent rather than holding fixed stock. Properties are added to this site as they become available and removed once sold, rented, or leased. Contact us directly to check on current availability in a specific area or category."
   }
 ];
 
 export default function About() {
-  const address = '31, GM Palya Main Rd, KG Colony, GM Palya, C V Raman Nagar, Bengaluru, Karnataka 560075';
+  const address = 'No. 84, 4th cross kashi nagar, yelachanahalli, B-78., Bengaluru, Karnataka';
   const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
   const mapsEmbed = `https://www.google.com/maps?q=${encodeURIComponent(address)}&output=embed`;
 
   // Scroll reveal refs
-  const statsRef = useScrollReveal({ direction: 'up', stagger: 0.12 });
   const storyRef = useScrollReveal({ direction: 'up', stagger: 0.15 });
   const diffHeaderRef = useSectionReveal();
   const diffGridRef = useScrollReveal({ direction: 'up', stagger: 0.1 });
@@ -45,9 +43,9 @@ export default function About() {
   return (
     <div className="min-h-screen" itemScope itemType="https://schema.org/AboutPage">
       <SEO
-        title="About Trishna Property Management — Real Estate & Home Services in Bangalore"
-        description="Learn about Trishna Property Management, Bangalore's trusted property & home care partner. 50+ verified properties, 200+ happy families, 5+ years experience. Expert E-Stamping, Electrical, Plumbing, Carpentry, Building Works & Movers across Bangalore."
-        keywords="about Trishna Property Management, Trishna Properties, real estate agent Bangalore, property management Bangalore, home services Bangalore, E-stamp Bangalore, electrician CV Raman Nagar, plumber GM Palya, carpentry Murgeshpalya, packers and movers Bangalore"
+        title="About The Property Agent — Independent Real Estate Agent Across Karnataka"
+        description="Learn about The Property Agent, an independent real estate agent covering all of Karnataka — helping you buy plots, farmhouse plots, land, and homes; helping owners sell or list properties; and helping tenants find rental & lease homes."
+        keywords="about The Property Agent, real estate agent Karnataka, plot for sale Karnataka, farmhouse plot Karnataka, agricultural land Karnataka, property services Karnataka, Bengaluru real estate agent"
         type="website"
         canonicalPath="/about"
         location="Bengaluru, Karnataka, India"
@@ -78,33 +76,21 @@ export default function About() {
       </nav>
 
       {/* Hero */}
-      <section className="relative py-8 sm:py-12 lg:py-16 bg-gradient-to-br from-navy-900 to-navy-950 overflow-hidden" aria-label="About Trishna Property Management">
+      <section className="relative py-8 sm:py-12 lg:py-16 bg-gradient-to-br from-navy-900 to-navy-950 overflow-hidden" aria-label="About The Property Agent">
         <div className="absolute inset-0 opacity-5">
           <div className="absolute top-10 right-10 w-96 h-96 bg-brand-500 rounded-full blur-3xl" />
         </div>
         <div className="relative max-w-4xl mx-auto px-3 sm:px-6 lg:px-8 text-center">
           <span className="inline-block px-3 py-1 bg-brand-500/20 text-brand-300 text-sm font-medium rounded-full mb-6">
-            About Trishna
+            About Us
           </span>
           <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-display font-bold text-white mb-4 sm:mb-6 leading-tight">
-            Your Trusted Partner for<br className="hidden sm:block" />
-            <span className="gradient-text">Premium Homes in Bangalore</span>
+            Your Direct Contact for<br className="hidden sm:block" />
+            <span className="gradient-text">Properties Across Karnataka</span>
           </h1>
           <p className="text-base sm:text-lg text-neutral-300 max-w-2xl mx-auto leading-relaxed">
-            We specialize in connecting families with quality-verified rental and sale properties across Bangalore's finest neighborhoods. <strong>50+ verified properties. 200+ happy families. 10+ prime locations.</strong>
+            An independent property agent dealing in <strong>plots, farmhouse plots, agricultural land, rentals, lease, and sale properties</strong> across Karnataka — no fixed inventory, just active deals as they come in.
           </p>
-        </div>
-      </section>
-
-      {/* Stats */}
-      <section className="py-8 sm:py-10 bg-white border-b border-neutral-100 -mt-1" aria-label="Company statistics">
-        <div className="max-w-5xl mx-auto px-3 sm:px-6 lg:px-8">
-          <div ref={statsRef} className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 md:gap-8">
-            <StatsCounter end={50} suffix="+" label="Properties Listed" />
-            <StatsCounter end={200} suffix="+" label="Happy Families" />
-            <StatsCounter end={6} label="Prime Locations" />
-            <StatsCounter end={5} suffix="+" label="Years Experience" />
-          </div>
         </div>
       </section>
 
@@ -116,48 +102,41 @@ export default function About() {
               <h2 className="text-2xl sm:text-3xl font-display font-bold text-navy-900 mb-5 sm:mb-6">Our Story</h2>
               <div className="space-y-4 text-neutral-600 text-sm sm:text-base leading-relaxed">
                 <p>
-                  <strong>Trishna Property Management</strong> (also known as <strong>Trishna Properties</strong>) was founded with a simple mission — to make finding a quality home in <strong>Bangalore</strong> hassle-free and transparent. Whether you want to <strong>Buy, Rent, or Sell</strong>, we're here to help with our deep expertise in the Bangalore real estate market.
+                  <strong>The Property Agent</strong> was founded with a simple mission — to connect people directly with the right property, wherever in <strong>Karnataka</strong> it happens to be. We're not tied to a fixed set of listings in one neighborhood; as plots, farmhouse plots, agricultural land, rental homes, and commercial spaces become available, we bring them to you.
                 </p>
                 <p>
-                  We understand that finding the right home is more than just a transaction. It's about finding a space where memories are made, where families grow, and where every day feels comfortable and secure. That's why we personally inspect every property and maintain strict quality standards.
+                  We understand that finding the right property is more than just a transaction. That's why every listing we put up is personally checked before it goes live, and taken down as soon as it's sold, rented, or leased — so what you see is always current.
                 </p>
                 <p>
-                  Based in <strong>GM Palya, C V Raman Nagar, Bengaluru</strong>, our team covers properties across <strong>East Bangalore, South Bangalore, and Whitefield</strong>. We partner with top developers like <strong>Brigade Group, Godrej Properties, and Mahindra Lifespaces</strong> to bring you the best premium projects alongside our curated rental portfolio.
+                  Based in <strong>Yelachanahalli, Bengaluru</strong>, our reach covers the whole state — from residential rentals and leases to plots, farmhouses, and agricultural land in districts across Karnataka.
                 </p>
               </div>
             </article>
-            <div className="rounded-2xl overflow-hidden shadow-card-hover">
-              <img
-                src="/properties/brigade-insignia/our-story.jpg"
-                alt="Premium apartment interior showcasing quality properties managed by Trishna Property Management in Bangalore"
-                className="w-full h-64 sm:h-80 object-cover"
-                loading="lazy"
-                width="640"
-                height="320"
-              />
+            <div className="rounded-2xl overflow-hidden shadow-card-hover h-64 sm:h-80 bg-gradient-to-br from-navy-900 to-navy-950 flex items-center justify-center">
+              <Building2 className="h-16 w-16 text-white/20" strokeWidth={1} />
             </div>
           </div>
         </div>
       </section>
 
       {/* What Makes Us Different */}
-      <section className="py-12 sm:py-16 lg:py-20 bg-white" aria-label="What makes Trishna Property Management different">
+      <section className="py-12 sm:py-16 lg:py-20 bg-white" aria-label="What makes The Property Agent different">
         <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
           <div ref={diffHeaderRef} className="text-center mb-8 sm:mb-12">
-            <h2 className="text-2xl sm:text-3xl font-display font-bold text-navy-900 mb-3">What Makes Trishna Property Management Different</h2>
+            <h2 className="text-2xl sm:text-3xl font-display font-bold text-navy-900 mb-3">What Makes The Property Agent Different</h2>
             <p className="text-neutral-500 max-w-2xl mx-auto text-sm sm:text-base">
-              We go above and beyond to ensure every family finds the perfect home in Bangalore
+              We go above and beyond to help you find the right property, anywhere in Karnataka
             </p>
           </div>
 
           <div ref={diffGridRef} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             {[
-              { icon: Shield, title: 'Verified Listings', desc: 'Every property is personally visited and verified by our team. We check legal documentation, property condition, and amenities availability.' },
-              { icon: Users, title: 'Dedicated Support', desc: 'A dedicated property manager assists you from initial search to move-in and throughout your stay. Available via phone at +91 98861 04532.' },
-              { icon: MapPin, title: '10+ Prime Locations', desc: 'Properties across Murgeshpalya, CV Raman Nagar, GM Palya, Bommasandra, Yelahanka, Whitefield, Sarjapur Road, Bannerghatta Road, and more.' },
-              { icon: Clock, title: 'Quick 2-7 Day Process', desc: 'Most tenants move in within a week. We handle documentation, owner coordination, and rental agreement preparation.' },
-              { icon: Star, title: 'Quality Interiors', desc: 'We list only well-maintained properties with modern fittings and clean interiors. Fully furnished and semi-furnished options available.' },
-              { icon: Award, title: 'Transparent Pricing', desc: 'Honest pricing with no hidden charges. Rent, deposit, and maintenance charges clearly stated upfront for every property.' },
+              { icon: Shield, title: 'Personally Verified', desc: 'Every listing is personally checked before it goes live. We look at documentation, condition, and legitimacy before you ever see it.' },
+              { icon: Users, title: 'Direct Support', desc: 'You deal with us directly — no call centers, no runaround. Reach out by phone or WhatsApp and get a straight answer.' },
+              { icon: MapPin, title: 'Statewide Coverage', desc: 'Plots, farmhouse plots, land, rentals, lease & sale properties from anywhere across Karnataka — not limited to one city or neighborhood.' },
+              { icon: Clock, title: 'Fast Response', desc: 'We handle documentation, owner coordination, and paperwork promptly so deals move quickly once you\'re ready.' },
+              { icon: Star, title: 'Honest Listings', desc: 'What you see is what you get — no inflated descriptions, no bait-and-switch on price or condition.' },
+              { icon: Award, title: 'Transparent Pricing', desc: 'Fees are clearly communicated upfront before you commit. No hidden charges, ever.' },
             ].map(item => (
               <article key={item.title} className="p-5 sm:p-6 rounded-2xl bg-neutral-50 hover:bg-white hover:shadow-card-hover transition-all duration-300 group text-center">
                 <div className="w-11 h-11 sm:w-12 sm:h-12 bg-brand-50 rounded-xl flex items-center justify-center mb-4 sm:mb-5 group-hover:bg-brand-100 group-hover:scale-110 transition-all duration-300 mx-auto">
@@ -172,16 +151,15 @@ export default function About() {
       </section>
 
       {/* Office & Map Section */}
-      <section className="py-12 sm:py-16 lg:py-20 bg-neutral-50" aria-label="Visit our office in Bangalore" itemScope itemType="https://schema.org/LocalBusiness">
-        <meta itemProp="name" content="Trishna Property Management" />
-        <meta itemProp="telephone" content="+91 98861 04532" />
+      <section className="py-12 sm:py-16 lg:py-20 bg-neutral-50" aria-label="Visit our office in Bengaluru" itemScope itemType="https://schema.org/LocalBusiness">
+        <meta itemProp="name" content="The Property Agent" />
+        <meta itemProp="telephone" content="+91 90194 88368" />
         <meta itemProp="email" content="trishnaproperties78@gmail.com" />
-        <meta itemProp="priceRange" content="₹35,000 - ₹3.2 Cr" />
-        
+
         <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
           <div ref={officeHeaderRef} className="text-center mb-8 sm:mb-12">
             <h2 className="text-2xl sm:text-3xl font-display font-bold text-navy-900 mb-3">Visit Our Office</h2>
-            <p className="text-neutral-500 text-sm sm:text-base">Come meet us in person — we'd love to help you find your dream home in Bangalore</p>
+            <p className="text-neutral-500 text-sm sm:text-base">Come meet us in person — we'd love to help you find the right property</p>
           </div>
 
           <div ref={officeRef} className="grid grid-cols-1 lg:grid-cols-5 gap-6 lg:gap-8">
@@ -189,23 +167,25 @@ export default function About() {
             <div className="lg:col-span-3 rounded-2xl overflow-hidden shadow-card border border-neutral-100 bg-white">
               <iframe
                 src={mapsEmbed}
-                title="Trishna Property Management office location — GM Palya, CV Raman Nagar, Bengaluru"
+                title="The Property Agent office location — Yelachanahalli, Bengaluru"
                 className="w-full h-64 sm:h-80 lg:h-96"
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
                 style={{ border: 0 }}
                 allowFullScreen
-                aria-label="Google Maps showing Trishna Property Management office at GM Palya, Bengaluru"
+                aria-label="Google Maps showing The Property Agent office at Yelachanahalli, Bengaluru"
               />
             </div>
 
             {/* Office Info */}
             <div className="lg:col-span-2 bg-white rounded-2xl shadow-card p-6 sm:p-8 flex flex-col justify-center">
               <div className="flex items-center space-x-3 mb-6">
-                <img src="/logo.jpeg" alt="Trishna Property Management logo" className="h-12 w-12 rounded-xl object-contain bg-white shadow-sm border border-neutral-100" width="48" height="48" />
+                <div className="h-12 w-12 rounded-xl bg-brand-500 flex items-center justify-center flex-shrink-0">
+                  <Building2 className="h-6 w-6 text-white" />
+                </div>
                 <div>
-                  <h3 className="font-display font-bold text-navy-900 tracking-wide" itemProp="legalName">Trishna Property Management</h3>
-                  <p className="text-[10px] font-semibold text-brand-500 uppercase tracking-widest">Buy · Rent · Sell</p>
+                  <h3 className="font-display font-bold text-navy-900 tracking-wide" itemProp="legalName">The Property Agent</h3>
+                  <p className="text-[10px] font-semibold text-brand-500 uppercase tracking-widest">Plots · Land · Rentals · Sale</p>
                 </div>
               </div>
 
@@ -217,10 +197,9 @@ export default function About() {
                   <div>
                     <h4 className="text-xs font-semibold text-navy-900 uppercase tracking-wide mb-1">Address</h4>
                     <p className="text-sm text-neutral-600 leading-relaxed">
-                      <span itemProp="streetAddress">31, GM Palya Main Rd, KG Colony, GM Palya</span>,{' '}
-                      <span itemProp="addressLocality">C V Raman Nagar, Bengaluru</span>,{' '}
-                      <span itemProp="addressRegion">Karnataka</span>{' '}
-                      <span itemProp="postalCode">560075</span>
+                      <span itemProp="streetAddress">No. 84, 4th cross kashi nagar, yelachanahalli, B-78.</span>,{' '}
+                      <span itemProp="addressLocality">Bengaluru</span>,{' '}
+                      <span itemProp="addressRegion">Karnataka</span>
                     </p>
                   </div>
                 </div>
@@ -230,7 +209,7 @@ export default function About() {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center justify-center space-x-2 w-full py-3 bg-brand-500 hover:bg-brand-600 text-white text-sm font-semibold rounded-xl transition-all hover:shadow-lg hover:shadow-brand-500/25"
-                  aria-label="Open Trishna Property Management office location in Google Maps"
+                  aria-label="Open The Property Agent office location in Google Maps"
                 >
                   <MapPin className="h-4 w-4" aria-hidden="true" />
                   <span>Open in Google Maps</span>
@@ -243,13 +222,13 @@ export default function About() {
       </section>
 
       {/* Contact Section */}
-      <section id="contact" className="py-12 sm:py-16 lg:py-20 bg-white" aria-label="Contact Trishna Property Management">
+      <section id="contact" className="py-12 sm:py-16 lg:py-20 bg-white" aria-label="Contact The Property Agent">
         <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
           <div ref={contactRef} className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
             <div>
               <h2 className="text-2xl sm:text-3xl font-display font-bold text-navy-900 mb-4">Get in Touch</h2>
               <p className="text-neutral-600 mb-6 sm:mb-8 leading-relaxed text-sm sm:text-base">
-                Whether you're looking for a <strong>rental home in East Bangalore</strong>, want to <strong>buy a premium apartment from Brigade, Godrej, or Mahindra</strong>, or list your property with us, we'd love to hear from you. Contact Trishna Property Management today for expert real estate guidance.
+                Whether you're looking for a <strong>plot, farmhouse, or agricultural land</strong>, want to <strong>rent, lease, or buy a home</strong>, or want to <strong>list your property with us</strong>, we'd love to hear from you. Contact The Property Agent today.
               </p>
 
               <div className="space-y-5">
@@ -264,11 +243,24 @@ export default function About() {
                 </div>
                 <div className="flex items-start space-x-4">
                   <div className="w-10 h-10 bg-brand-50 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <MessageCircle className="h-5 w-5 text-brand-500" aria-hidden="true" />
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-semibold text-navy-900">Call or WhatsApp</h4>
+                    <p className="text-sm text-neutral-500 mt-1">
+                      <a href="tel:+919019488368" className="hover:text-brand-500 transition-colors">+91 90194 88368</a>
+                      {' · '}
+                      <a href="https://wa.me/919945011138" target="_blank" rel="noopener noreferrer" className="hover:text-brand-500 transition-colors">+91 99450 11138 (WhatsApp)</a>
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-start space-x-4">
+                  <div className="w-10 h-10 bg-brand-50 rounded-lg flex items-center justify-center flex-shrink-0">
                     <Star className="h-5 w-5 text-brand-500" aria-hidden="true" />
                   </div>
                   <div>
-                    <h4 className="text-sm font-semibold text-navy-900">Areas We Serve in Bangalore</h4>
-                    <p className="text-sm text-neutral-500 mt-1">Murgeshpalya, CV Raman Nagar, GM Palya, Bommasandra, Yelahanka, Devinagar, Kaggadasapura, Sarjapur Road, Bannerghatta Road, Whitefield, Singasandra & more</p>
+                    <h4 className="text-sm font-semibold text-navy-900">Areas We Serve</h4>
+                    <p className="text-sm text-neutral-500 mt-1">All of Karnataka</p>
                   </div>
                 </div>
               </div>

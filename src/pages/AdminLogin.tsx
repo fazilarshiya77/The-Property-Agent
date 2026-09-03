@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Lock, Eye, EyeOff, AlertCircle, Mail } from 'lucide-react';
-import { supabase } from '../lib/supabase';
-import { setAdminAuthenticated } from '../stores/propertyStore';
+import { setAdminAuthenticated, verifyAdminPassword } from '../stores/propertyStore';
 import { SEO } from '../components/SEO';
 
 export default function AdminLogin() {
@@ -19,16 +18,13 @@ export default function AdminLogin() {
     setError('');
 
     try {
-      const { data, error: supabaseError } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
+      const isValid = await verifyAdminPassword(email, password);
 
-      if (supabaseError) {
-        setError('Ran into an issue, please try again later.');
-      } else if (data.user) {
+      if (isValid) {
         setAdminAuthenticated(true);
         navigate('/admin/dashboard');
+      } else {
+        setError('Incorrect email or password.');
       }
     } catch (err) {
       setError('Ran into an issue, please try again later.');
@@ -40,8 +36,8 @@ export default function AdminLogin() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-navy-900 to-navy-950 px-4">
       <SEO
-        title="Admin Login - Trishna Property Management"
-        description="Admin login for Trishna Property Management dashboard"
+        title="Admin Login - The Property Agent"
+        description="Admin login for The Property Agent dashboard"
         type="website"
       />
       <div className="w-full max-w-md">
@@ -71,7 +67,7 @@ export default function AdminLogin() {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="admin@trishnapropertymanagement.in"
+                placeholder="admin@thepropertyagent.in"
                 className="w-full px-4 py-3 pl-10 bg-neutral-50 border border-neutral-200 rounded-xl focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 outline-none text-sm"
                 autoComplete="email"
               />

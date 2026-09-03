@@ -1,5 +1,5 @@
 /**
- * Universal Logger for Trishna Property Management
+ * Universal Logger for The Property Agent
  * Sends structured log events to Google Sheets via Apps Script Webhook.
  */
 

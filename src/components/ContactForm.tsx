@@ -36,8 +36,8 @@ export default function ContactForm({ propertyTitle, serviceTitle, contactEmail 
     setSubmitError(false);
     
     // Prepare WhatsApp Message
-    const whatsappText = `*New Inquiry — Trishna Property Management*\n\n*Name:* ${formData.name}\n*Phone:* ${formData.phone}\n*Email:* ${formData.email || 'N/A'}\n${propertyTitle ? `*Property:* ${propertyTitle}\n` : ''}${serviceTitle ? `*Service:* ${serviceTitle}\n` : ''}*Message:* ${formData.message}`;
-    const whatsappUrl = `https://wa.me/919886104532?text=${encodeURIComponent(whatsappText)}`;
+    const whatsappText = `*New Inquiry — The Property Agent*\n\n*Name:* ${formData.name}\n*Phone:* ${formData.phone}\n*Email:* ${formData.email || 'N/A'}\n${propertyTitle ? `*Property:* ${propertyTitle}\n` : ''}${serviceTitle ? `*Service:* ${serviceTitle}\n` : ''}*Message:* ${formData.message}`;
+    const whatsappUrl = `https://wa.me/919945011138?text=${encodeURIComponent(whatsappText)}`;
 
     try {
       // 1. Send email using web3forms
@@ -47,7 +47,7 @@ export default function ContactForm({ propertyTitle, serviceTitle, contactEmail 
       form.append('phone', formData.phone);
       form.append('email', formData.email);
       form.append('message', formData.message);
-      form.append('subject', propertyTitle ? `Inquiry: ${propertyTitle}` : "Inquiry - Trishna Property Management");
+      form.append('subject', propertyTitle ? `Inquiry: ${propertyTitle}` : "Inquiry - The Property Agent");
       form.append('to', contactEmail || 'trishnaproperties78@gmail.com');
       
       const response = await fetch('https://api.web3forms.com/submit', {
@@ -104,10 +104,10 @@ export default function ContactForm({ propertyTitle, serviceTitle, contactEmail 
   };
 
   const defaultWhatsappMessage = propertyTitle
-    ? `Hi Trishna Property Management, I am interested in "${propertyTitle}". Please share more details.`
+    ? `Hi The Property Agent, I am interested in "${propertyTitle}". Please share more details.`
     : serviceTitle
-    ? `Hi Trishna Property Management, I would like to inquire about "${serviceTitle}".`
-    : `Hi Trishna Property Management, I would like to make an inquiry.`;
+    ? `Hi The Property Agent, I would like to inquire about "${serviceTitle}".`
+    : `Hi The Property Agent, I would like to make an inquiry.`;
 
   return (
     <Card className="border border-neutral-100 bg-white shadow-card p-6 lg:p-8 rounded-2xl">
@@ -212,7 +212,7 @@ export default function ContactForm({ propertyTitle, serviceTitle, contactEmail 
             </div>
 
             <a
-              href={`https://wa.me/919886104532?text=${encodeURIComponent(defaultWhatsappMessage)}`}
+              href={`https://wa.me/919945011138?text=${encodeURIComponent(defaultWhatsappMessage)}`}
               target="_blank"
               rel="noopener noreferrer"
               className="w-full h-11 bg-[#25D366] hover:bg-[#20bd5a] text-white font-semibold rounded-xl transition-all duration-300 hover:shadow-md flex items-center justify-center space-x-2 active:scale-[0.98] text-sm"

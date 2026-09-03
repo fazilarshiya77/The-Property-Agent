@@ -1,5 +1,5 @@
-# Trishna Property Management - Robots.txt
-# https://www.trishnapropertymanagement.in
+# The Property Agent - Robots.txt
+# https://www.thepropertyagent.in
 
 User-agent: *
 Allow: /
@@ -13,7 +13,7 @@ Disallow: /admin/edit/
 Crawl-delay: 1
 
 # Sitemap location
-Sitemap: https://www.trishnapropertymanagement.in/sitemap.xml
+Sitemap: https://www.thepropertyagent.in/sitemap.xml
 
 # Google-specific
 User-agent: Googlebot

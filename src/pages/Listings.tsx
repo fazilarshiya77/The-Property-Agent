@@ -6,15 +6,31 @@ import { Search, SlidersHorizontal, X, ChevronDown, Home, ChevronRight } from 'l
 import { useScrollReveal } from '../hooks/useScrollReveal';
 import { SEO, generateItemListSchema } from '../components/SEO';
 import type { BreadcrumbItem } from '../components/SEO';
+import type { PropertyType } from '../data/properties';
+import { PROPERTY_TYPE_LABELS } from '../data/properties';
 import { Helmet } from 'react-helmet-async';
 
 type SortOption = 'default' | 'price-asc' | 'price-desc' | 'area-desc';
+type TypeFilter = 'all' | PropertyType;
+
+const TYPE_PILLS: { id: TypeFilter; label: string }[] = [
+  { id: 'all', label: 'All' },
+  { id: 'plot', label: 'Plots' },
+  { id: 'farmhouse', label: 'Farmhouse Plots' },
+  { id: 'land', label: 'Land' },
+  { id: 'rent', label: 'For Rent' },
+  { id: 'lease', label: 'For Lease' },
+  { id: 'sale', label: 'For Sale' },
+  { id: 'commercial', label: 'Commercial' },
+];
+
+const LAND_TYPES: PropertyType[] = ['plot', 'farmhouse', 'land'];
 
 export default function Listings() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [searchTerm, setSearchTerm] = useState(searchParams.get('search') || '');
-  const [propertyType, setPropertyType] = useState<'all' | 'rent' | 'sale' | 'lease' | 'commercial'>(
-    (searchParams.get('type') as 'rent' | 'sale' | 'lease' | 'commercial') || 'all'
+  const [propertyType, setPropertyType] = useState<TypeFilter>(
+    (searchParams.get('type') as TypeFilter) || 'all'
   );
   const [selectedLocation, setSelectedLocation] = useState(
     searchParams.get('location') || 'all'
@@ -27,14 +43,18 @@ export default function Listings() {
   useEffect(() => {
     setSearchTerm(searchParams.get('search') || '');
     setSelectedLocation(searchParams.get('location') || 'all');
-    setPropertyType((searchParams.get('type') as 'rent' | 'sale' | 'lease' | 'commercial') || 'all');
+    setPropertyType((searchParams.get('type') as TypeFilter) || 'all');
   }, [searchParams]);
 
-  const { properties, fetchProperties, loading } = usePropertyStore();
-  
+  const { properties: allProperties, fetchProperties, loading } = usePropertyStore();
+
   useEffect(() => {
     fetchProperties()
   }, [fetchProperties])
+
+  // Public listings only ever show published properties — drafts, reserved,
+  // sold etc. stay admin-only.
+  const properties = useMemo(() => allProperties.filter(p => p.status === 'published'), [allProperties]);
 
   const allLocations = useMemo(() => {
     const locs = [...new Set(properties.map(p => p.areaName))];
@@ -50,9 +70,10 @@ export default function Listings() {
       const matchesLocation = selectedLocation === 'all' || 
         (property.areaName && property.areaName.toLowerCase() === selectedLocation.toLowerCase()) ||
         (property.location && property.location.toLowerCase().includes(selectedLocation.toLowerCase()));
-      const matchesBedrooms = bedrooms === 'all' || 
+      const isNonResidential = property.type === 'commercial' || LAND_TYPES.includes(property.type);
+      const matchesBedrooms = bedrooms === 'all' ||
         property.bedrooms >= Number(bedrooms) ||
-        (property.type === 'commercial' && bedrooms === 'all');
+        isNonResidential;
       return matchesSearch && matchesType && matchesLocation && matchesBedrooms;
     });
 
@@ -85,30 +106,22 @@ export default function Listings() {
   ];
 
   // Dynamic title and description based on filters
-  const locationLabel = selectedLocation !== 'all' ? selectedLocation : 'Bangalore';
-  const typeLabel = propertyType === 'rent'
-    ? 'for Rent'
-    : propertyType === 'sale'
-    ? 'for Sale'
-    : propertyType === 'lease'
-    ? 'for Lease'
-    : propertyType === 'commercial'
-    ? 'Commercial'
-    : 'for Rent, Sale & Lease';
-  const pageTitle = `Properties ${typeLabel} in ${locationLabel}`;
-  const pageDescription = `Browse ${filteredProperties.length}+ verified properties ${typeLabel.toLowerCase()} in ${locationLabel}, Bangalore. Filter by location, price, bedrooms, and property type (Sale, Rent, Lease, Commercial). Find your perfect space with Trishna Property Management. Every listing personally inspected.`;
+  const locationLabel = selectedLocation !== 'all' ? selectedLocation : 'Karnataka';
+  const typeLabel = propertyType === 'all' ? 'Properties' : PROPERTY_TYPE_LABELS[propertyType];
+  const pageTitle = `${typeLabel} in ${locationLabel}`;
+  const pageDescription = `Browse ${filteredProperties.length} ${typeLabel.toLowerCase()} listings in ${locationLabel}. Filter by location, price, and category (Plots, Farmhouse Plots, Land, Rent, Lease, Sale, Commercial). Listings are added and updated regularly by The Property Agent.`;
 
-  const itemListSchema = generateItemListSchema(pageTitle, pageDescription);
+  const itemListSchema = generateItemListSchema(pageTitle, pageDescription, filteredProperties.length);
 
   return (
     <div className="min-h-screen bg-neutral-50/50">
       <SEO
         title={pageTitle}
         description={pageDescription}
-        keywords={`properties ${typeLabel.toLowerCase()} ${locationLabel}, ${locationLabel} real estate listings, ${locationLabel} apartments, ${locationLabel} houses, 2BHK ${locationLabel}, 3BHK ${locationLabel}, verified properties ${locationLabel}, Trishna Property Management ${locationLabel}, Trishna Properties ${locationLabel}, rental homes ${locationLabel} Bangalore, buy property ${locationLabel}`}
+        keywords={`${typeLabel.toLowerCase()} ${locationLabel}, ${locationLabel} real estate listings, plot for sale ${locationLabel}, farmhouse plot ${locationLabel}, land for sale ${locationLabel}, rental house ${locationLabel}, The Property Agent ${locationLabel}`}
         type="website"
         canonicalPath="/listings"
-        location={`${locationLabel}, Karnataka, India`}
+        location={selectedLocation !== 'all' ? `${locationLabel}, Karnataka, India` : 'Karnataka, India'}
         geoRegion="IN-KA"
         geoPosition="12.9716;77.5946"
         breadcrumbs={breadcrumbs}
@@ -153,8 +166,8 @@ export default function Listings() {
           {/* SEO Intro Paragraph */}
           <p className="text-neutral-500 text-xs sm:text-sm mt-2 leading-relaxed max-w-3xl">
             {selectedLocation !== 'all'
-              ? `Explore verified properties ${typeLabel.toLowerCase()} in ${selectedLocation}, Bangalore. All listings are personally inspected by the Trishna Property Management team. Find 2BHK, 3BHK, and 4BHK homes in ${selectedLocation} with transparent pricing and no hidden charges.`
-              : `Browse our curated collection of premium verified properties across Bangalore. From affordable 2BHK rentals in Murgeshpalya to luxury 4BHK apartments from Brigade, Godrej, and Mahindra. Every property is personally inspected and verified by our team.`
+              ? `Explore ${typeLabel.toLowerCase()} in ${selectedLocation}. All listings are personally checked by The Property Agent before going live, with transparent pricing and no hidden charges.`
+              : `Browse our current collection of plots, farmhouse plots, agricultural land, rental & lease homes, and commercial properties across Karnataka. Since we don't hold fixed inventory, this list changes as new deals come in — check back often or contact us directly.`
             }
           </p>
         </div>
@@ -202,17 +215,11 @@ export default function Listings() {
 
           {/* Type pills */}
           <div className="flex items-center gap-1.5 sm:gap-2 mt-3 sm:mt-4 overflow-x-auto pb-1" role="group" aria-label="Filter by property type">
-            {[
-              { id: 'all', label: 'All' },
-              { id: 'rent', label: 'For Rent' },
-              { id: 'sale', label: 'For Sale' },
-              { id: 'lease', label: 'For Lease' },
-              { id: 'commercial', label: 'Commercial' },
-            ].map(({ id, label }) => (
+            {TYPE_PILLS.map(({ id, label }) => (
               <button
                 key={id}
                 id={`filter-type-${id}`}
-                onClick={() => setPropertyType(id as typeof propertyType)}
+                onClick={() => setPropertyType(id)}
                 className={`px-3 sm:px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all duration-300 flex-shrink-0 ${
                   propertyType === id
                     ? 'bg-navy-950 text-brand-400 border border-brand-500/20 shadow-md'
@@ -283,7 +290,7 @@ export default function Listings() {
             <div className="flex flex-wrap gap-1.5 sm:gap-2 mt-2.5 sm:mt-3" role="list" aria-label="Active filters">
               {propertyType !== 'all' && (
                 <span className="flex items-center gap-1 px-3 py-1 bg-navy-900 text-white text-xs font-medium rounded-full" role="listitem">
-                  {propertyType === 'rent' ? 'For Rent' : propertyType === 'sale' ? 'For Sale' : propertyType === 'lease' ? 'For Lease' : 'Commercial'}
+                  {PROPERTY_TYPE_LABELS[propertyType]}
                   <button onClick={() => setPropertyType('all')} aria-label={`Remove ${propertyType} filter`}><X className="h-3 w-3" /></button>
                 </span>
               )}
@@ -314,8 +321,8 @@ export default function Listings() {
         ) : (
           <>
             <p className="text-sm text-neutral-500 mb-4 sm:mb-6">
-              Showing <span className="font-semibold text-navy-900">{filteredProperties.length}</span> verified properties
-              {selectedLocation !== 'all' ? ` in ${selectedLocation}` : ' across Bangalore'}
+              Showing <span className="font-semibold text-navy-900">{filteredProperties.length}</span> {filteredProperties.length === 1 ? 'property' : 'properties'}
+              {selectedLocation !== 'all' ? ` in ${selectedLocation}` : ' across Karnataka'}
             </p>
 
             {filteredProperties.length > 0 ? (
@@ -328,11 +335,17 @@ export default function Listings() {
               <div className="text-center py-16 sm:py-20">
                 <div className="text-4xl sm:text-5xl mb-3 sm:mb-4">🏠</div>
                 <h3 className="text-base sm:text-lg font-semibold text-navy-800 mb-1.5 sm:mb-2">No properties found</h3>
-                <p className="text-neutral-500 text-sm mb-4 sm:mb-6">Try adjusting your filters or search terms</p>
-                <button id="no-results-clear-btn" onClick={clearFilters}
-                  className="text-brand-500 hover:text-brand-600 font-medium text-sm transition-colors">
-                  Clear all filters
-                </button>
+                <p className="text-neutral-500 text-sm mb-4 sm:mb-6 max-w-md mx-auto">Try adjusting your filters, or reach out directly — we don't hold fixed inventory, so new deals come in that aren't listed yet.</p>
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+                  <button id="no-results-clear-btn" onClick={clearFilters}
+                    className="text-brand-500 hover:text-brand-600 font-medium text-sm transition-colors">
+                    Clear all filters
+                  </button>
+                  <a href="https://wa.me/919945011138" target="_blank" rel="noopener noreferrer"
+                    className="bg-brand-500 hover:bg-brand-600 text-white font-semibold text-sm px-5 py-2.5 rounded-xl transition-all">
+                    Ask on WhatsApp
+                  </a>
+                </div>
               </div>
             )}
           </>

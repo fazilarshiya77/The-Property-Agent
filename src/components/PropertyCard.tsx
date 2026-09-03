@@ -1,7 +1,8 @@
 import { Link } from 'react-router-dom';
-import { Bed, Bath, Maximize, MapPin, Camera, Video, Share2, Building } from 'lucide-react';
+import { Bed, Bath, Maximize, MapPin, Camera, Video, Share2, Building, ImageOff, Trees } from 'lucide-react';
 import { useState } from 'react';
 import type { Property } from '../data/properties';
+import { PROPERTY_TYPE_LABELS } from '../data/properties';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import ShareModal from './ShareModal';
@@ -43,10 +44,18 @@ export default function PropertyCard({ property }: PropertyCardProps) {
         return { label: 'For Lease', className: 'bg-indigo-600 text-white' };
       case 'commercial':
         return { label: 'Commercial', className: 'bg-emerald-600 text-white' };
+      case 'plot':
+        return { label: 'Plot for Sale', className: 'bg-amber-600 text-white' };
+      case 'farmhouse':
+        return { label: 'Farmhouse Plot', className: 'bg-lime-600 text-white' };
+      case 'land':
+        return { label: 'Land', className: 'bg-orange-600 text-white' };
       default:
         return { label: type, className: 'bg-navy-900 text-white' };
     }
   };
+
+  const isLandType = property.type === 'plot' || property.type === 'farmhouse' || property.type === 'land';
 
   const badgeInfo = getBadgeInfo(property.type);
 
@@ -56,15 +65,23 @@ export default function PropertyCard({ property }: PropertyCardProps) {
         <Link to={`/listings/${property.id}`} className="block">
           {/* Image Section */}
           <div className="relative aspect-[16/10] overflow-hidden bg-neutral-50">
-            {!imageLoaded && <div className="absolute inset-0 skeleton bg-neutral-100" />}
-            <img
-              src={property.images[0]}
-              alt={`${property.title} — ${badgeInfo.label} in ${property.location}`}
-              className={`w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out ${
-                imageLoaded ? 'opacity-100' : 'opacity-0'
-              }`}
-              onLoad={() => setImageLoaded(true)}
-            />
+            {property.images.length > 0 ? (
+              <>
+                {!imageLoaded && <div className="absolute inset-0 skeleton bg-neutral-100" />}
+                <img
+                  src={property.images[0]}
+                  alt={`${property.title} — ${badgeInfo.label} in ${property.location}`}
+                  className={`w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out ${
+                    imageLoaded ? 'opacity-100' : 'opacity-0'
+                  }`}
+                  onLoad={() => setImageLoaded(true)}
+                />
+              </>
+            ) : (
+              <div className="absolute inset-0 flex items-center justify-center bg-neutral-100 text-neutral-400">
+                <ImageOff className="h-8 w-8" strokeWidth={1.5} />
+              </div>
+            )}
             {/* Subtle overlay shadow */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-60" />
 
@@ -115,10 +132,12 @@ export default function PropertyCard({ property }: PropertyCardProps) {
             </div>
 
             {/* Image count */}
-            <div className="absolute bottom-4 right-4 flex items-center space-x-1.5 px-3 py-1 rounded-xl bg-black/60 backdrop-blur-sm text-white text-xs font-semibold shadow-sm">
-              <Camera className="h-3.5 w-3.5" />
-              <span>{property.images.length}</span>
-            </div>
+            {property.images.length > 0 && (
+              <div className="absolute bottom-4 right-4 flex items-center space-x-1.5 px-3 py-1 rounded-xl bg-black/60 backdrop-blur-sm text-white text-xs font-semibold shadow-sm">
+                <Camera className="h-3.5 w-3.5" />
+                <span>{property.images.length}</span>
+              </div>
+            )}
 
             {/* Price overlay on mobile */}
             <div className="absolute bottom-4 left-4 md:hidden">
@@ -168,6 +187,11 @@ export default function PropertyCard({ property }: PropertyCardProps) {
                     <Bed className="h-4 w-4 text-brand-500/80" />
                     <span className="font-medium">{property.bedrooms} Beds</span>
                   </>
+                ) : isLandType ? (
+                  <>
+                    <Trees className="h-4 w-4 text-brand-500/80" />
+                    <span className="font-medium">{PROPERTY_TYPE_LABELS[property.type]}</span>
+                  </>
                 ) : (
                   <>
                     <Building className="h-4 w-4 text-brand-500/80" />
@@ -175,10 +199,12 @@ export default function PropertyCard({ property }: PropertyCardProps) {
                   </>
                 )}
               </div>
-              <div className="flex items-center space-x-1 hover:text-brand-500 transition-colors">
-                <Bath className="h-4 w-4 text-brand-500/80" />
-                <span className="font-medium">{property.bathrooms} Baths</span>
-              </div>
+              {!isLandType && (
+                <div className="flex items-center space-x-1 hover:text-brand-500 transition-colors">
+                  <Bath className="h-4 w-4 text-brand-500/80" />
+                  <span className="font-medium">{property.bathrooms} Baths</span>
+                </div>
+              )}
               <div className="flex items-center space-x-1 hover:text-brand-500 transition-colors">
                 <Maximize className="h-4 w-4 text-brand-500/80" />
                 <span className="font-medium">{property.area} Sq.Ft</span>

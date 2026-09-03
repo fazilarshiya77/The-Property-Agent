@@ -1,12 +1,9 @@
 import { useState, useId, useMemo } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import {
-  FileCheck,
-  Zap,
-  Droplets,
-  Hammer,
-  Building2,
-  Truck,
+  Search,
+  Tag,
+  Key,
   CheckCircle,
   Clock,
   Shield,
@@ -16,7 +13,6 @@ import {
   ArrowRight,
   Send,
   Loader2,
-  Calendar,
   MapPin,
   ChevronDown,
   ChevronUp,
@@ -36,18 +32,12 @@ import { logToGoogleSheet } from '../lib/logger';
 // Helper to get Lucide icon component by name
 function getServiceIcon(iconName: string, className: string = 'h-6 w-6') {
   switch (iconName) {
-    case 'FileCheck':
-      return <FileCheck className={className} />;
-    case 'Zap':
-      return <Zap className={className} />;
-    case 'Droplets':
-      return <Droplets className={className} />;
-    case 'Hammer':
-      return <Hammer className={className} />;
-    case 'Building2':
-      return <Building2 className={className} />;
-    case 'Truck':
-      return <Truck className={className} />;
+    case 'Search':
+      return <Search className={className} />;
+    case 'Tag':
+      return <Tag className={className} />;
+    case 'Key':
+      return <Key className={className} />;
     default:
       return <Sparkles className={className} />;
   }
@@ -57,23 +47,23 @@ export default function Services() {
   const location = useLocation();
   const serviceFormId = useId();
 
-  // Parse any initial service query parameter (e.g. /services?service=electrical-works)
+  // Parse any initial service query parameter (e.g. /services?service=buying-assistance)
   const initialServiceFromUrl = useMemo(() => {
     const params = new URLSearchParams(location.search);
     const serviceParam = params.get('service');
     if (serviceParam) {
       const match = servicesData.find(s => s.id === serviceParam || s.slug === serviceParam);
-      return match ? match.id : 'e-stamp';
+      return match ? match.id : 'buying-assistance';
     }
-    return 'e-stamp';
+    return 'buying-assistance';
   }, [location.search]);
 
   // State
-  const [activeCategory, setActiveCategory] = useState<'all' | 'legal' | 'maintenance' | 'renovation' | 'relocation'>('all');
+  const [activeCategory, setActiveCategory] = useState<'all' | 'buying' | 'selling' | 'renting'>('all');
   const [selectedServiceForModal, setSelectedServiceForModal] = useState<ServiceItem | null>(null);
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
 
-  // Booking Form State
+  // Inquiry Form State
   const [selectedServiceId, setSelectedServiceId] = useState<string>(initialServiceFromUrl);
   const [formData, setFormData] = useState({
     name: '',
@@ -81,8 +71,6 @@ export default function Services() {
     email: '',
     locality: '',
     subService: '',
-    preferredDate: '',
-    preferredTime: 'Morning (9 AM - 12 PM)',
     message: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -115,7 +103,7 @@ export default function Services() {
     setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const handleSelectServiceForBooking = (serviceId: string) => {
+  const handleSelectServiceForInquiry = (serviceId: string) => {
     setSelectedServiceId(serviceId);
     setFormData(prev => ({ ...prev, subService: '' }));
     // Smooth scroll to form
@@ -126,28 +114,26 @@ export default function Services() {
   };
 
   // Handle Form Submit
-  const handleBookingSubmit = async (e: React.FormEvent) => {
+  const handleInquirySubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
     setSubmitError(false);
 
-    const serviceTitle = currentServiceItem ? currentServiceItem.title : 'General Home Service';
-    const whatsappMsg = `*New Service Booking — Trishna Property Management*\n\n*Service:* ${serviceTitle}\n*Sub-service:* ${formData.subService || 'General Inquiry'}\n*Name:* ${formData.name}\n*Phone:* ${formData.phone}\n*Email:* ${formData.email || 'N/A'}\n*Locality:* ${formData.locality}\n*Preferred Date/Time:* ${formData.preferredDate || 'Flexible'} (${formData.preferredTime})\n*Message/Notes:* ${formData.message || 'None'}`;
-    const whatsappUrl = `https://wa.me/919886104532?text=${encodeURIComponent(whatsappMsg)}`;
+    const serviceTitle = currentServiceItem ? currentServiceItem.title : 'General Property Inquiry';
+    const whatsappMsg = `*New Property Inquiry — The Property Agent*\n\n*Looking for:* ${serviceTitle}\n*Category:* ${formData.subService || 'General Inquiry'}\n*Name:* ${formData.name}\n*Phone:* ${formData.phone}\n*Email:* ${formData.email || 'N/A'}\n*Preferred Area:* ${formData.locality}\n*Message/Notes:* ${formData.message || 'None'}`;
+    const whatsappUrl = `https://wa.me/919945011138?text=${encodeURIComponent(whatsappMsg)}`;
 
     try {
       const formPayload = new FormData();
       formPayload.append('access_key', import.meta.env.VITE_WEB3FORMS_ACCESS_KEY || '0469cb33-7c50-44d8-b019-c70583307942');
       formPayload.append('name', formData.name);
       formPayload.append('phone', formData.phone);
-      formPayload.append('email', formData.email || 'not-provided@trishnaproperties.in');
-      formPayload.append('service', serviceTitle);
-      formPayload.append('sub_service', formData.subService || 'General Inquiry');
-      formPayload.append('locality_address', formData.locality);
-      formPayload.append('preferred_date', formData.preferredDate || 'Flexible');
-      formPayload.append('preferred_time', formData.preferredTime);
+      formPayload.append('email', formData.email || 'not-provided@thepropertyagent.in');
+      formPayload.append('looking_for', serviceTitle);
+      formPayload.append('category', formData.subService || 'General Inquiry');
+      formPayload.append('preferred_area', formData.locality);
       formPayload.append('message', formData.message);
-      formPayload.append('subject', `Service Request: ${serviceTitle} - ${formData.name}`);
+      formPayload.append('subject', `Property Inquiry: ${serviceTitle} - ${formData.name}`);
       formPayload.append('to', 'trishnaproperties78@gmail.com');
 
       const response = await fetch('https://api.web3forms.com/submit', {
@@ -160,16 +146,14 @@ export default function Services() {
       if (result.success) {
         logToGoogleSheet({
           logType: 'CONTACT_FORM',
-          message: `New Service Request: ${serviceTitle} by ${formData.name}`,
+          message: `New Property Inquiry: ${serviceTitle} by ${formData.name}`,
           details: {
-            service: serviceTitle,
-            subService: formData.subService,
+            lookingFor: serviceTitle,
+            category: formData.subService,
             name: formData.name,
             phone: formData.phone,
             email: formData.email,
-            locality: formData.locality,
-            date: formData.preferredDate,
-            time: formData.preferredTime,
+            preferredArea: formData.locality,
             message: formData.message,
           },
         });
@@ -185,8 +169,6 @@ export default function Services() {
           email: '',
           locality: '',
           subService: '',
-          preferredDate: '',
-          preferredTime: 'Morning (9 AM - 12 PM)',
           message: ''
         });
         setTimeout(() => setSubmitSuccess(false), 8000);
@@ -195,10 +177,10 @@ export default function Services() {
         throw new Error(result.message);
       }
     } catch (error) {
-      console.error('Error submitting service booking:', error);
+      console.error('Error submitting inquiry:', error);
       logToGoogleSheet({
         logType: 'ERROR',
-        message: 'Service Booking Submission Failed',
+        message: 'Property Inquiry Submission Failed',
         details: {
           error: (error as Error).message,
           service: serviceTitle,
@@ -215,28 +197,28 @@ export default function Services() {
   const allServicesFaqs: FAQItem[] = useMemo(() => {
     const list: FAQItem[] = [
       {
-        question: 'What home & property services does Trishna Property Management provide in Bangalore?',
-        answer: 'Trishna Property Management provides 6 core home services across Bangalore: 1) E-Stamp paper procurement and legal rental agreement drafting, 2) Electrical works and diagnostics by licensed electricians, 3) Plumbing repairs, sanitaryware fittings and tank cleaning, 4) Carpentry, modular kitchen fixes, and custom woodwork, 5) Civil building works, painting, waterproofing & renovation, and 6) Packers & movers local shifting and intercity relocation.'
+        question: 'What does The Property Agent actually do?',
+        answer: "We work as an independent real estate agent across Karnataka. We don't hold fixed property inventory — instead, we actively help people buy properties (plots, farmhouse plots, agricultural land, homes, commercial spaces), help owners sell or list their properties, and help tenants find rental or lease homes."
       },
       {
-        question: 'How do I book an E-stamp or rental agreement in Bangalore?',
-        answer: 'You can book e-stamp papers and rental agreement drafting online through our booking form, via WhatsApp at +91 98861 04532, or by calling us. We draft the agreement, procure official SHCIL/KAVERI government e-stamps, and deliver the hardcopy to your doorstep within same-day or 24 hours.'
+        question: 'I want to buy a property — how does it work?',
+        answer: "Tell us what you're looking for (property type, area, budget) via the form below, WhatsApp, or a call. We search for matching properties, arrange site visits, help you negotiate, and support you through documentation and registration."
       },
       {
-        question: 'Are your electricians, plumbers, and carpenters background verified?',
-        answer: 'Yes, 100% of our technicians, craftsmen, and moving crew are verified, highly experienced, and equipped with professional diagnostic and installation tools. We also provide a 30-day workmanship warranty on all repair services.'
+        question: 'I have a property to sell or rent out — can you help?',
+        answer: "Yes. Share your property details with us and we'll list it and connect you with genuine, interested buyers or tenants from our network. We help with pricing guidance, coordinating visits, and paperwork through to closing."
       },
       {
-        question: 'Do you provide emergency plumbing and electrical services?',
-        answer: 'Yes! We offer rapid 60 to 90-minute emergency response in prime East Bangalore locations including GM Palya, CV Raman Nagar, Murgeshpalya, Kaggadasapura, and surrounding areas.'
+        question: 'Does The Property Agent charge a fee?',
+        answer: 'Our fee structure is clearly communicated upfront before you commit, and varies by deal type and value. No hidden charges — contact us for specific details on your requirement.'
       },
       {
-        question: 'What are the charges for local home shifting (Packers & Movers) in Bangalore?',
-        answer: 'Our local Bangalore house shifting starts from ₹3,499 for 1BHK, ₹5,499 for 2BHK, and ₹7,999 for 3BHK. We provide 3-layer protective packing, furniture dismantling/reassembly, safe transportation in covered vehicles, and end-to-end relocation assistance.'
+        question: 'Which areas of Karnataka do you cover?',
+        answer: "We aren't limited to one city or neighborhood — we work across Karnataka. Since we don't hold fixed inventory, the best way to know what's currently available in your area of interest is to contact us directly."
       },
       {
-        question: 'Do you offer free inspection for building works, painting, and renovations?',
-        answer: 'Yes! For building works, false ceiling, tile laying, terrace waterproofing, and home painting, our project supervisor visits your site for a free inspection and provides a transparent, itemized quotation with zero hidden charges.'
+        question: 'Can you help with the rental agreement or e-stamp paperwork?',
+        answer: 'Yes, when you rent or lease a property through us, we assist with drafting and e-stamping the rental/lease agreement so the process is fully documented and legally valid.'
       }
     ];
     return list;
@@ -250,12 +232,12 @@ export default function Services() {
   return (
     <div className="min-h-screen bg-neutral-50/50">
       <SEO
-        title="Home Services in Bangalore — E-Stamp, Electrical, Plumbing, Carpentry, Painting & Packers Movers"
-        description="Comprehensive property and home services by Trishna Property Management in Bangalore. Government E-Stamp & Rental Agreements, Certified Electrical Works, Emergency Plumbing, Master Carpentry, Civil Building & Renovation, and Reliable Packers & Movers. 100% verified experts, transparent pricing, 30-day warranty."
-        keywords="E-stamp Bangalore, rental agreement e-stamping GM Palya, electricians CV Raman Nagar, plumber Murgeshpalya, carpentry woodwork Bangalore, painting and building works Bangalore, terrace waterproofing, packers and movers East Bangalore, home shifting services Bangalore, Trishna Property Management services"
+        title="How We Help You Buy, Sell & Rent Property Across Karnataka"
+        description="The Property Agent helps you buy plots, farmhouse plots, agricultural land, and homes; helps owners sell or list properties; and helps tenants find rental & lease homes — all across Karnataka."
+        keywords="property agent Karnataka, buy plot Karnataka, sell property Karnataka, list property for sale Karnataka, rental home Karnataka, lease property Karnataka, The Property Agent services"
         type="website"
         canonicalPath="/services"
-        location="Bangalore, Karnataka, India"
+        location="Karnataka, India"
         geoRegion="IN-KA"
         geoPosition="12.9716;77.5946"
         breadcrumbs={breadcrumbs}
@@ -293,14 +275,14 @@ export default function Services() {
           <div className="max-w-3xl">
             <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 bg-brand-500/20 border border-brand-500/30 text-brand-300 rounded-full text-xs font-semibold uppercase tracking-widest mb-4 sm:mb-6 backdrop-blur-md">
               <Sparkles className="h-3.5 w-3.5" />
-              <span>One-Stop Home & Property Solutions</span>
+              <span>Independent Property Agent · All of Karnataka</span>
             </div>
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-display font-bold leading-tight tracking-wide mb-4 sm:mb-6">
-              Complete Property &<br />
-              <span className="gradient-text">Home Maintenance Services</span>
+              How We Help You<br />
+              <span className="gradient-text">Buy, Sell & Rent Property</span>
             </h1>
             <p className="text-sm sm:text-base lg:text-lg text-neutral-300 font-light leading-relaxed mb-8 max-w-2xl">
-              From official Government <strong>E-Stamp papers</strong> and <strong>Rental Agreements</strong> to certified <strong>Electrical, Plumbing, Carpentry, Civil Renovation</strong>, and trusted <strong>Packers & Movers</strong> — Trishna Property Management delivers verified doorstep excellence across Bangalore.
+              We don't hold fixed inventory. As an active agent, we help <strong>buyers</strong> find and purchase plots, farmhouse plots, agricultural land, and homes; help <strong>owners</strong> sell or list their property; and help <strong>tenants</strong> find rental or lease homes — anywhere in Karnataka.
             </p>
 
             <div className="flex flex-wrap gap-3 sm:gap-4">
@@ -308,24 +290,24 @@ export default function Services() {
                 href="#service-booking-form"
                 className="bg-brand-500 hover:bg-brand-600 text-white text-sm font-semibold px-6 py-3.5 rounded-xl transition-all shadow-lg shadow-brand-500/20 hover:shadow-brand-500/30 active:scale-[0.98] inline-flex items-center space-x-2"
               >
-                <span>Book a Service Online</span>
+                <span>Tell Us What You Need</span>
                 <ArrowRight className="h-4 w-4" />
               </a>
               <a
-                href="https://wa.me/919886104532?text=Hello%20Trishna%20Properties,%20I%20would%20like%20to%20inquire%20about%20your%20home%20services."
+                href="https://wa.me/919945011138?text=Hello%20The%20Property%20Agent,%20I%20would%20like%20to%20inquire%20about%20buying%2C%20selling%2C%20or%20renting%20a%20property."
                 target="_blank"
                 rel="noopener noreferrer"
                 className="bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold px-6 py-3.5 rounded-xl transition-all inline-flex items-center space-x-2 shadow-md active:scale-[0.98]"
               >
                 <MessageSquare className="h-4 w-4" />
-                <span>WhatsApp Booking</span>
+                <span>WhatsApp Us</span>
               </a>
               <a
-                href="tel:+919886104532"
+                href="tel:+919019488368"
                 className="bg-white/10 hover:bg-white/20 text-white text-sm font-semibold px-5 py-3.5 rounded-xl transition-all border border-white/10 inline-flex items-center space-x-2"
               >
                 <Phone className="h-4 w-4 text-brand-400" />
-                <span>+91 98861 04532</span>
+                <span>+91 90194 88368</span>
               </a>
             </div>
           </div>
@@ -333,36 +315,36 @@ export default function Services() {
       </section>
 
       {/* ─── QUICK METRICS ────────────────────── */}
-      <section className="py-6 sm:py-8 bg-white border-b border-neutral-100" aria-label="Services Key Metrics">
+      <section className="py-6 sm:py-8 bg-white border-b border-neutral-100" aria-label="How we work">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div ref={statsRef} className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
             <div className="flex items-center space-x-3 p-3 sm:p-4 rounded-xl bg-neutral-50 border border-neutral-100">
               <div className="w-10 h-10 rounded-lg bg-brand-50 flex items-center justify-center text-brand-500 flex-shrink-0">
-                <FileCheck className="h-5 w-5" />
+                <Search className="h-5 w-5" />
               </div>
               <div>
-                <div className="text-base sm:text-lg font-bold text-navy-900">6 Core</div>
-                <div className="text-xs text-neutral-500">Home & Legal Services</div>
+                <div className="text-base sm:text-lg font-bold text-navy-900">Buy · Sell · Rent</div>
+                <div className="text-xs text-neutral-500">Three ways we help</div>
               </div>
             </div>
 
             <div className="flex items-center space-x-3 p-3 sm:p-4 rounded-xl bg-neutral-50 border border-neutral-100">
               <div className="w-10 h-10 rounded-lg bg-brand-50 flex items-center justify-center text-brand-500 flex-shrink-0">
-                <Shield className="h-5 w-5" />
+                <MapPin className="h-5 w-5" />
               </div>
               <div>
-                <div className="text-base sm:text-lg font-bold text-navy-900">100% Verified</div>
-                <div className="text-xs text-neutral-500">Skilled Technicians</div>
+                <div className="text-base sm:text-lg font-bold text-navy-900">Statewide</div>
+                <div className="text-xs text-neutral-500">No fixed inventory, all of Karnataka</div>
               </div>
             </div>
 
             <div className="flex items-center space-x-3 p-3 sm:p-4 rounded-xl bg-neutral-50 border border-neutral-100">
               <div className="w-10 h-10 rounded-lg bg-brand-50 flex items-center justify-center text-brand-500 flex-shrink-0">
-                <Clock className="h-5 w-5" />
+                <MessageSquare className="h-5 w-5" />
               </div>
               <div>
-                <div className="text-base sm:text-lg font-bold text-navy-900">60-90 Min</div>
-                <div className="text-xs text-neutral-500">Fast Doorstep Response</div>
+                <div className="text-base sm:text-lg font-bold text-navy-900">Direct Contact</div>
+                <div className="text-xs text-neutral-500">No call centers, no middlemen</div>
               </div>
             </div>
 
@@ -371,8 +353,8 @@ export default function Services() {
                 <Award className="h-5 w-5" />
               </div>
               <div>
-                <div className="text-base sm:text-lg font-bold text-navy-900">30-Day</div>
-                <div className="text-xs text-neutral-500">Workmanship Warranty</div>
+                <div className="text-base sm:text-lg font-bold text-navy-900">Personally Checked</div>
+                <div className="text-xs text-neutral-500">Every listing verified before going live</div>
               </div>
             </div>
           </div>
@@ -384,11 +366,10 @@ export default function Services() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-start sm:justify-center overflow-x-auto no-scrollbar gap-2 py-1">
             {[
-              { id: 'all', label: 'All 6 Services' },
-              { id: 'legal', label: 'E-Stamp & Legal' },
-              { id: 'maintenance', label: 'Electrical, Plumbing & Carpentry' },
-              { id: 'renovation', label: 'Building & Painting' },
-              { id: 'relocation', label: 'Packers & Movers' },
+              { id: 'all', label: 'All' },
+              { id: 'buying', label: 'For Buyers' },
+              { id: 'selling', label: 'For Owners (Sell / List)' },
+              { id: 'renting', label: 'For Tenants (Rent / Lease)' },
             ].map((tab) => (
               <button
                 key={tab.id}
@@ -407,14 +388,14 @@ export default function Services() {
       </section>
 
       {/* ─── MAIN SERVICES SHOWCASE GRID ───────── */}
-      <section className="py-10 sm:py-16 lg:py-20" aria-label="Our Services in Bangalore">
+      <section className="py-10 sm:py-16 lg:py-20" aria-label="How we help across Karnataka">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div ref={servicesHeaderRef} className="text-center max-w-3xl mx-auto mb-10 sm:mb-14">
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-display font-bold text-navy-900 mb-3">
-              Explore Our Professional Services
+              What We Help With
             </h2>
             <p className="text-neutral-600 text-sm sm:text-base leading-relaxed">
-              Transparent rates, trained technicians, genuine materials, and guaranteed peace of mind. Select a service to view full package details or book instantly.
+              Whether you're buying, selling, or renting, here's exactly how we work with you.
             </p>
           </div>
 
@@ -448,21 +429,21 @@ export default function Services() {
                     {service.shortDesc}
                   </p>
 
-                  {/* Turnaround & Availability Info */}
+                  {/* Coverage & Response Info */}
                   <div className="flex items-center justify-between py-3 px-3.5 bg-neutral-50 rounded-xl border border-neutral-100 mb-5 text-xs">
                     <div>
-                      <span className="text-neutral-400 block text-[10px] uppercase font-semibold">Availability</span>
-                      <span className="font-bold text-navy-900">Doorstep Assistance</span>
+                      <span className="text-neutral-400 block text-[10px] uppercase font-semibold">Coverage</span>
+                      <span className="font-bold text-navy-900">All of Karnataka</span>
                     </div>
                     <div className="text-right">
-                      <span className="text-neutral-400 block text-[10px] uppercase font-semibold">Turnaround</span>
+                      <span className="text-neutral-400 block text-[10px] uppercase font-semibold">Timeline</span>
                       <span className="font-semibold text-brand-600">{service.turnaroundTime}</span>
                     </div>
                   </div>
 
                   {/* Key Features Checklist */}
                   <div className="space-y-2 mb-6">
-                    <div className="text-xs font-bold text-navy-900 uppercase tracking-wider">What's Included:</div>
+                    <div className="text-xs font-bold text-navy-900 uppercase tracking-wider">How We Help:</div>
                     {service.features.slice(0, 4).map((feat, idx) => (
                       <div key={idx} className="flex items-start text-xs text-neutral-600">
                         <Check className="h-3.5 w-3.5 text-brand-500 mr-2 mt-0.5 flex-shrink-0" />
@@ -473,7 +454,7 @@ export default function Services() {
 
                   {/* Sub Services Preview Tags */}
                   <div className="pt-4 border-t border-neutral-100">
-                    <div className="text-[11px] font-semibold text-neutral-400 uppercase tracking-wider mb-2">Available Options:</div>
+                    <div className="text-[11px] font-semibold text-neutral-400 uppercase tracking-wider mb-2">Covers:</div>
                     <div className="flex flex-wrap gap-1.5">
                       {service.subServices.map((sub, sIdx) => (
                         <span key={sIdx} className="text-[11px] bg-neutral-100 text-neutral-700 px-2.5 py-1 rounded-lg border border-neutral-200">
@@ -487,10 +468,10 @@ export default function Services() {
                 {/* Card Footer Actions */}
                 <div className="p-4 sm:p-6 bg-neutral-50/60 border-t border-neutral-100 flex items-center gap-2.5">
                   <button
-                    onClick={() => handleSelectServiceForBooking(service.id)}
+                    onClick={() => handleSelectServiceForInquiry(service.id)}
                     className="flex-1 bg-brand-500 hover:bg-brand-600 text-white font-semibold text-xs sm:text-sm py-2.5 px-4 rounded-xl transition-all shadow-sm hover:shadow-brand-500/20 active:scale-[0.98] text-center"
                   >
-                    Book Now
+                    Get Started
                   </button>
                   <button
                     onClick={() => setSelectedServiceForModal(service)}
@@ -500,7 +481,7 @@ export default function Services() {
                     Details
                   </button>
                   <a
-                    href={`https://wa.me/919886104532?text=${encodeURIComponent(`Hello Trishna Properties, I want to book/inquire about "${service.title}". Please provide details.`)}`}
+                    href={`https://wa.me/919945011138?text=${encodeURIComponent(`Hello The Property Agent, I'd like help with "${service.title}". Please share more details.`)}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 p-2.5 rounded-xl transition-colors"
@@ -515,22 +496,22 @@ export default function Services() {
         </div>
       </section>
 
-      {/* ─── INTERACTIVE SERVICE BOOKING & ESTIMATE FORM ─── */}
-      <section id="service-booking-form" className="py-12 sm:py-16 lg:py-20 bg-white border-y border-neutral-200/80" aria-label="Book a Service">
+      {/* ─── INTERACTIVE INQUIRY FORM ─── */}
+      <section id="service-booking-form" className="py-12 sm:py-16 lg:py-20 bg-white border-y border-neutral-200/80" aria-label="Tell us what you need">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
-            
+
             {/* Left Info Column */}
             <div className="lg:col-span-5">
               <div className="inline-flex items-center space-x-2 px-3 py-1 bg-brand-50 text-brand-600 rounded-full text-xs font-semibold uppercase tracking-wider mb-4">
                 <Sparkles className="h-3.5 w-3.5" />
-                <span>Instant Doorstep Booking</span>
+                <span>Direct Inquiry</span>
               </div>
               <h2 className="text-2xl sm:text-3xl font-display font-bold text-navy-900 mb-4">
-                Request Service or Get a Free Estimate
+                Tell Us What You're Looking For
               </h2>
               <p className="text-neutral-600 text-sm leading-relaxed mb-6">
-                Fill in your details below and our service supervisor will confirm your appointment within <strong>30 minutes</strong>. No advance payment required for standard inspections.
+                Fill in your details below and we'll get back to you directly — usually within a few hours. No call centers, no fixed inventory pitch, just a straight answer on what's available or possible.
               </p>
 
               <div className="space-y-4 mb-8">
@@ -539,8 +520,8 @@ export default function Services() {
                     <Clock className="h-4 w-4" />
                   </div>
                   <div>
-                    <h4 className="text-sm font-bold text-navy-900">Same-Day & Flexible Slots</h4>
-                    <p className="text-xs text-neutral-500 mt-0.5">Choose your preferred morning, afternoon, or evening timing.</p>
+                    <h4 className="text-sm font-bold text-navy-900">We Get Back To You Fast</h4>
+                    <p className="text-xs text-neutral-500 mt-0.5">Most inquiries hear back from us the same day.</p>
                   </div>
                 </div>
 
@@ -549,8 +530,8 @@ export default function Services() {
                     <Shield className="h-4 w-4" />
                   </div>
                   <div>
-                    <h4 className="text-sm font-bold text-navy-900">Upfront Transparent Pricing</h4>
-                    <p className="text-xs text-neutral-500 mt-0.5">Inspect first, approve price estimate, pay only after satisfied completion.</p>
+                    <h4 className="text-sm font-bold text-navy-900">Honest, Upfront Answers</h4>
+                    <p className="text-xs text-neutral-500 mt-0.5">If nothing matches your requirement right now, we'll tell you — and reach out once something does.</p>
                   </div>
                 </div>
 
@@ -560,7 +541,7 @@ export default function Services() {
                   </div>
                   <div>
                     <h4 className="text-sm font-bold text-navy-900">Need Immediate Help?</h4>
-                    <p className="text-xs text-neutral-500 mt-0.5">Call our direct service desk at <a href="tel:+919886104532" className="text-brand-600 font-bold hover:underline">+91 98861 04532</a></p>
+                    <p className="text-xs text-neutral-500 mt-0.5">Call us directly at <a href="tel:+919019488368" className="text-brand-600 font-bold hover:underline">+91 90194 88368</a></p>
                   </div>
                 </div>
               </div>
@@ -568,28 +549,28 @@ export default function Services() {
               {/* Service Areas */}
               <div className="p-4 rounded-xl bg-navy-900 text-white">
                 <div className="text-xs font-semibold uppercase tracking-wider text-brand-300 mb-2">
-                  Key Service Areas in Bangalore:
+                  Areas We Cover:
                 </div>
                 <p className="text-xs text-neutral-300 leading-relaxed">
-                  GM Palya · CV Raman Nagar · Murgeshpalya · Kaggadasapura · Whitefield · Indiranagar · Bommasandra · Yelahanka · Sarjapur Road · Singasandra & surrounding neighborhoods.
+                  All of Karnataka. We're not limited to one city or neighborhood — tell us the area you're interested in and we'll let you know what's possible.
                 </p>
               </div>
             </div>
 
-            {/* Right Booking Form Column */}
+            {/* Right Inquiry Form Column */}
             <div ref={formRef} className="lg:col-span-7 bg-white rounded-2xl border border-neutral-200 p-6 sm:p-8 shadow-card">
               {submitSuccess ? (
                 <div className="text-center py-10 animate-scale-in">
                   <div className="w-16 h-16 bg-brand-50 rounded-full flex items-center justify-center mx-auto mb-4 border border-brand-100">
                     <CheckCircle className="h-9 w-9 text-brand-500" />
                   </div>
-                  <h3 className="text-2xl font-display font-bold text-navy-900">Service Request Received!</h3>
+                  <h3 className="text-2xl font-display font-bold text-navy-900">Inquiry Received!</h3>
                   <p className="text-sm text-neutral-600 max-w-md mx-auto mt-2 leading-relaxed">
-                    Thank you for choosing Trishna Property Management. Our service coordinator will call you shortly at your registered number to confirm the technician's arrival slot.
+                    Thank you for reaching out to The Property Agent. We'll call or WhatsApp you shortly at your registered number.
                   </p>
                   <div className="mt-6 flex justify-center gap-3">
                     <a
-                      href="https://wa.me/919886104532?text=Hello%20Trishna%20Properties,%20I%20just%20submitted%20a%20service%20booking%20request%20online."
+                      href="https://wa.me/919945011138?text=Hello%20The%20Property%20Agent,%20I%20just%20submitted%20an%20inquiry%20online."
                       target="_blank"
                       rel="noopener noreferrer"
                       className="inline-flex items-center space-x-2 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs sm:text-sm px-5 py-2.5 rounded-xl transition-all"
@@ -606,21 +587,21 @@ export default function Services() {
                   </div>
                   <h3 className="text-xl font-bold text-navy-900">Submission Error</h3>
                   <p className="text-sm text-neutral-500 max-w-md mx-auto mt-2">
-                    Something went wrong submitting your form. Please call us directly at +91 98861 04532.
+                    Something went wrong submitting your form. Please call us directly at +91 90194 88368.
                   </p>
                 </div>
               ) : (
-                <form onSubmit={handleBookingSubmit} className="space-y-4 sm:space-y-5">
+                <form onSubmit={handleInquirySubmit} className="space-y-4 sm:space-y-5">
                   <h3 className="text-xl font-display font-bold text-navy-900 pb-2 border-b border-neutral-100">
-                    Book a Service Appointment
+                    Send Us Your Requirement
                   </h3>
 
                   {/* Service Selection Radio Grid */}
                   <div>
                     <label className="block text-xs font-bold text-neutral-700 uppercase tracking-wider mb-2">
-                      1. Select Service Type *
+                      1. I'm Looking To *
                     </label>
-                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                       {servicesData.map((s) => {
                         const isSelected = selectedServiceId === s.id;
                         return (
@@ -643,7 +624,7 @@ export default function Services() {
                               </span>
                               {isSelected && <Check className="h-3.5 w-3.5 text-brand-600" />}
                             </div>
-                            <span className="text-xs font-semibold line-clamp-1">{s.title.split('&')[0]}</span>
+                            <span className="text-xs font-semibold">{s.categoryLabel}</span>
                           </button>
                         );
                       })}
@@ -654,7 +635,7 @@ export default function Services() {
                   {currentServiceItem && currentServiceItem.subServices.length > 0 && (
                     <div>
                       <label className="block text-xs font-bold text-neutral-700 uppercase tracking-wider mb-1.5">
-                        2. Specific Requirement / Package (Optional)
+                        2. Property Category (Optional)
                       </label>
                       <select
                         name="subService"
@@ -662,7 +643,7 @@ export default function Services() {
                         onChange={handleInputChange}
                         className="w-full h-11 px-3 bg-neutral-50 border border-neutral-200 rounded-xl focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 outline-none text-xs sm:text-sm text-neutral-800"
                       >
-                        <option value="">Select specific service package (Optional)</option>
+                        <option value="">Select property category (Optional)</option>
                         {currentServiceItem.subServices.map((sub, idx) => (
                           <option key={idx} value={sub.title}>
                             {sub.title}
@@ -699,7 +680,7 @@ export default function Services() {
                         required
                         value={formData.phone}
                         onChange={handleInputChange}
-                        placeholder="+91 98861 XXXXX"
+                        placeholder="+91 XXXXX XXXXX"
                         className="w-full h-11 px-4 bg-neutral-50 border border-neutral-200 rounded-xl focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 outline-none text-xs sm:text-sm text-neutral-800"
                       />
                     </div>
@@ -723,7 +704,7 @@ export default function Services() {
 
                     <div>
                       <label className="block text-xs font-bold text-neutral-700 uppercase tracking-wider mb-1.5">
-                        Bangalore Locality / Flat Address *
+                        Preferred Area in Karnataka *
                       </label>
                       <input
                         type="text"
@@ -731,57 +712,24 @@ export default function Services() {
                         required
                         value={formData.locality}
                         onChange={handleInputChange}
-                        placeholder="e.g. GM Palya / CV Raman Nagar"
+                        placeholder="e.g. Yelachanahalli, Bengaluru / Mysuru / any area"
                         className="w-full h-11 px-4 bg-neutral-50 border border-neutral-200 rounded-xl focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 outline-none text-xs sm:text-sm text-neutral-800"
                       />
-                    </div>
-                  </div>
-
-                  {/* Preferred Date & Time Slot */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-xs font-bold text-neutral-700 uppercase tracking-wider mb-1.5">
-                        Preferred Date
-                      </label>
-                      <input
-                        type="date"
-                        name="preferredDate"
-                        value={formData.preferredDate}
-                        onChange={handleInputChange}
-                        className="w-full h-11 px-4 bg-neutral-50 border border-neutral-200 rounded-xl focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 outline-none text-xs sm:text-sm text-neutral-800"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-xs font-bold text-neutral-700 uppercase tracking-wider mb-1.5">
-                        Preferred Time Slot
-                      </label>
-                      <select
-                        name="preferredTime"
-                        value={formData.preferredTime}
-                        onChange={handleInputChange}
-                        className="w-full h-11 px-3 bg-neutral-50 border border-neutral-200 rounded-xl focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 outline-none text-xs sm:text-sm text-neutral-800"
-                      >
-                        <option value="Morning (9 AM - 12 PM)">Morning (9 AM - 12 PM)</option>
-                        <option value="Afternoon (12 PM - 3 PM)">Afternoon (12 PM - 3 PM)</option>
-                        <option value="Evening (3 PM - 7 PM)">Evening (3 PM - 7 PM)</option>
-                        <option value="Emergency (Immediate / ASAP)">Emergency (Immediate / ASAP)</option>
-                      </select>
                     </div>
                   </div>
 
                   {/* Message/Notes */}
                   <div>
                     <label className="block text-xs font-bold text-neutral-700 uppercase tracking-wider mb-1.5">
-                      Describe Your Issue or Requirement
+                      Tell Us More
                     </label>
                     <textarea
                       name="message"
                       rows={3}
                       value={formData.message}
                       onChange={handleInputChange}
-                      placeholder="e.g. Need 11-month rental agreement e-stamp + doorstep delivery / Fixing bathroom pipe leakage and tap change..."
-                      className="w-full px-4 py-3 bg-neutral-50 border border-neutral-200 rounded-xl focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 outline-none text-xs sm:text-sm text-neutral-800 resize-none"
+                      placeholder="e.g. Looking for a 2-3 acre farmhouse plot near Kanakapura Road, budget up to 50 lakhs / Want to sell my residential plot in Mysuru..."
+                      className="w-full px-4 py-3 bg-neutral-50 border border-neutral-200 rounded-xl focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 outline-none transition-all text-xs sm:text-sm text-neutral-800 resize-none"
                     />
                   </div>
 
@@ -794,11 +742,11 @@ export default function Services() {
                     {isSubmitting ? (
                       <>
                         <Loader2 className="h-4 w-4 animate-spin" />
-                        <span>Submitting Booking...</span>
+                        <span>Submitting...</span>
                       </>
                     ) : (
                       <>
-                        <span>Confirm Service Request</span>
+                        <span>Send Inquiry</span>
                         <Send className="h-4 w-4" />
                       </>
                     )}
@@ -811,14 +759,14 @@ export default function Services() {
       </section>
 
       {/* ─── HOW IT WORKS (4 STEPS) ──────────── */}
-      <section className="py-12 sm:py-16 lg:py-20 bg-neutral-50" aria-label="How Our Service Works">
+      <section className="py-12 sm:py-16 lg:py-20 bg-neutral-50" aria-label="How it works">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div ref={processHeaderRef} className="text-center max-w-2xl mx-auto mb-10 sm:mb-14">
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-display font-bold text-navy-900 mb-3">
               How It Works
             </h2>
             <p className="text-neutral-600 text-sm sm:text-base">
-              Simple, transparent, and hassle-free service delivery in 4 easy steps
+              Simple and direct, whether you're buying, selling, or renting
             </p>
           </div>
 
@@ -826,23 +774,23 @@ export default function Services() {
             {[
               {
                 step: '01',
-                title: 'Choose Service',
-                desc: 'Select from E-stamping, Electrical, Plumbing, Carpentry, Building works, or Packers & Movers.'
+                title: 'Tell Us What You Need',
+                desc: 'Buying, selling, or renting — share your requirement, budget, and preferred area in Karnataka.'
               },
               {
                 step: '02',
-                title: 'Instant Confirmation',
-                desc: 'Our coordinator calls within 30 minutes to confirm requirements and schedule your technician visit.'
+                title: 'We Search or List',
+                desc: 'We actively look for matching properties, or list your property to our network of buyers and tenants.'
               },
               {
                 step: '03',
-                title: 'Doorstep Execution',
-                desc: 'Trained, verified professionals arrive with tools and genuine materials to complete the job cleanly.'
+                title: 'Site Visits & Negotiation',
+                desc: 'We coordinate visits, answer questions, and support negotiation on price and terms.'
               },
               {
                 step: '04',
-                title: 'Quality Check & Pay',
-                desc: 'Inspect the completed work, pay transparently with no hidden fees, and enjoy our 30-day warranty.'
+                title: 'Documentation & Closing',
+                desc: 'We help with agreements, e-stamping, and paperwork through to the final deal.'
               }
             ].map((step, idx) => (
               <div key={idx} className="bg-white p-6 rounded-2xl border border-neutral-200/80 shadow-sm relative group hover:shadow-card-hover transition-all">
@@ -857,15 +805,15 @@ export default function Services() {
         </div>
       </section>
 
-      {/* ─── WHY CHOOSE TRISHNA SERVICES ─────── */}
-      <section className="py-12 sm:py-16 lg:py-20 bg-white" aria-label="Why Choose Trishna Home Services">
+      {/* ─── WHY WORK WITH US ─────── */}
+      <section className="py-12 sm:py-16 lg:py-20 bg-white" aria-label="Why choose The Property Agent">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div ref={trustHeaderRef} className="text-center max-w-2xl mx-auto mb-10 sm:mb-14">
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-display font-bold text-navy-900 mb-3">
-              The Trishna Service Guarantee
+              Why Work With The Property Agent
             </h2>
             <p className="text-neutral-600 text-sm sm:text-base">
-              Why Bangalore residents and landlords trust us for property maintenance
+              What buyers, sellers, and tenants across Karnataka can expect from us
             </p>
           </div>
 
@@ -874,9 +822,9 @@ export default function Services() {
               <div className="w-12 h-12 rounded-xl bg-brand-50 flex items-center justify-center text-brand-600 mb-4">
                 <Shield className="h-6 w-6" />
               </div>
-              <h3 className="text-lg font-bold text-navy-900 mb-2">Verified & Certified Pros</h3>
+              <h3 className="text-lg font-bold text-navy-900 mb-2">Personally Verified</h3>
               <p className="text-xs sm:text-sm text-neutral-600 leading-relaxed">
-                Every electrician, plumber, carpenter, and painter in our team undergoes stringent background checks, skill assessments, and safety training.
+                Every property we bring to you is personally checked before we recommend it — documentation, condition, and legitimacy included.
               </p>
             </div>
 
@@ -884,9 +832,9 @@ export default function Services() {
               <div className="w-12 h-12 rounded-xl bg-brand-50 flex items-center justify-center text-brand-600 mb-4">
                 <Award className="h-6 w-6" />
               </div>
-              <h3 className="text-lg font-bold text-navy-900 mb-2">30-Day Workmanship Warranty</h3>
+              <h3 className="text-lg font-bold text-navy-900 mb-2">Direct, Personal Service</h3>
               <p className="text-xs sm:text-sm text-neutral-600 leading-relaxed">
-                We stand behind our work. If any issue arises within 30 days of service completion, our technician will re-inspect and fix it at zero extra labor cost.
+                You deal with us directly — no call centers, no runaround. Reach out by phone or WhatsApp and get a straight answer.
               </p>
             </div>
 
@@ -896,7 +844,7 @@ export default function Services() {
               </div>
               <h3 className="text-lg font-bold text-navy-900 mb-2">Honest, Upfront Pricing</h3>
               <p className="text-xs sm:text-sm text-neutral-600 leading-relaxed">
-                No surprises or inflated bills. Detailed itemized quotation provided before commencing any work, with clear labor and genuine material breakdowns.
+                Our fee structure is communicated clearly before you commit — no hidden charges, no surprises.
               </p>
             </div>
           </div>
@@ -911,7 +859,7 @@ export default function Services() {
               Frequently Asked Questions
             </h2>
             <p className="text-neutral-500 text-sm">
-              Common questions about our home services, pricing, turnaround times, and booking in Bangalore
+              Common questions about buying, selling, and renting property with The Property Agent
             </p>
           </div>
 
@@ -950,27 +898,27 @@ export default function Services() {
       </section>
 
       {/* ─── BOTTOM CTA BANNER ───────────────── */}
-      <section className="py-12 sm:py-16 bg-navy-950 text-white relative overflow-hidden" aria-label="Book Services Now">
+      <section className="py-12 sm:py-16 bg-navy-950 text-white relative overflow-hidden" aria-label="Get in touch">
         <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-display font-bold mb-3 sm:mb-4">
-            Need Fast, Reliable Home Assistance in Bangalore?
+            Ready to Buy, Sell, or Rent?
           </h2>
           <p className="text-sm sm:text-base text-neutral-300 mb-6 sm:mb-8 max-w-2xl mx-auto font-light">
-            Contact Trishna Property Management today for same-day e-stamping, skilled repairs, renovation, or smooth house shifting.
+            Contact The Property Agent today — tell us what you need and we'll help you get there, anywhere in Karnataka.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
             <a
               href="#service-booking-form"
               className="bg-brand-500 hover:bg-brand-600 text-white font-semibold px-6 sm:px-8 py-3 rounded-xl transition-all shadow-lg hover:shadow-brand-500/25 text-sm"
             >
-              Book Service Online
+              Tell Us What You Need
             </a>
             <a
-              href="tel:+919886104532"
+              href="tel:+919019488368"
               className="bg-white/10 hover:bg-white/20 text-white font-semibold px-6 sm:px-8 py-3 rounded-xl transition-all border border-white/10 text-sm inline-flex items-center justify-center space-x-2"
             >
               <Phone className="h-4 w-4 text-brand-400" />
-              <span>Call +91 98861 04532</span>
+              <span>Call +91 90194 88368</span>
             </a>
           </div>
         </div>
@@ -1008,7 +956,7 @@ export default function Services() {
 
             {/* Sub-services Breakdown */}
             <div className="space-y-3 mb-6">
-              <h4 className="text-xs font-bold text-navy-900 uppercase tracking-wider">Service Packages & Offerings:</h4>
+              <h4 className="text-xs font-bold text-navy-900 uppercase tracking-wider">What This Covers:</h4>
               {selectedServiceForModal.subServices.map((sub, idx) => (
                 <div key={idx} className="p-3.5 bg-neutral-50 rounded-xl border border-neutral-100">
                   <h5 className="text-sm font-bold text-navy-900">{sub.title}</h5>
@@ -1019,7 +967,7 @@ export default function Services() {
 
             {/* Features Checklist */}
             <div className="space-y-2 mb-6">
-              <h4 className="text-xs font-bold text-navy-900 uppercase tracking-wider">Key Inclusions:</h4>
+              <h4 className="text-xs font-bold text-navy-900 uppercase tracking-wider">How We Help:</h4>
               {selectedServiceForModal.features.map((feat, idx) => (
                 <div key={idx} className="flex items-start text-xs text-neutral-600">
                   <Check className="h-3.5 w-3.5 text-brand-500 mr-2 mt-0.5 flex-shrink-0" />
@@ -1034,14 +982,14 @@ export default function Services() {
                 onClick={() => {
                   const sId = selectedServiceForModal.id;
                   setSelectedServiceForModal(null);
-                  handleSelectServiceForBooking(sId);
+                  handleSelectServiceForInquiry(sId);
                 }}
                 className="flex-1 bg-brand-500 hover:bg-brand-600 text-white font-semibold text-sm py-3 px-4 rounded-xl transition-all text-center shadow-md"
               >
-                Book This Service Now
+                Send an Inquiry
               </button>
               <a
-                href={`https://wa.me/919886104532?text=${encodeURIComponent(`Hello Trishna Properties, I want to book "${selectedServiceForModal.title}".`)}`}
+                href={`https://wa.me/919945011138?text=${encodeURIComponent(`Hello The Property Agent, I'd like help with "${selectedServiceForModal.title}".`)}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-sm py-3 px-5 rounded-xl transition-all text-center inline-flex items-center justify-center space-x-2"

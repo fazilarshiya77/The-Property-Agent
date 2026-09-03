@@ -1,61 +1,49 @@
 import { Link } from 'react-router-dom';
-import { Mail, Phone, MapPin, ExternalLink } from 'lucide-react';
+import { Mail, Phone, MapPin, ExternalLink, Building2, MessageCircle } from 'lucide-react';
 
 export default function Footer() {
-  const address = '31, GM Palya Main Rd, KG Colony, GM Palya, C V Raman Nagar, Bengaluru, Karnataka 560075';
+  const address = 'No. 84, 4th cross kashi nagar, yelachanahalli, B-78., Bengaluru, Karnataka';
   const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
   const mapsEmbed = `https://www.google.com/maps?q=${encodeURIComponent(address)}&output=embed`;
 
   return (
-    <footer className="bg-navy-950 text-white" role="contentinfo" aria-label="Trishna Property Management footer">
+    <footer className="bg-navy-950 text-white" role="contentinfo" aria-label="The Property Agent footer">
       <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-10 sm:py-12 lg:py-16">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 sm:gap-8 lg:gap-8">
           {/* Brand */}
           <div className="sm:col-span-2 lg:col-span-1">
             <Link to="/" className="flex items-center space-x-2.5 sm:space-x-3 mb-4 sm:mb-5 group">
-              <img
-                src="/logo.jpeg"
-                alt="Trishna Property Management — Bangalore Real Estate Agency"
-                className="h-10 w-10 sm:h-11 sm:w-11 rounded-xl object-contain border border-white/10 shadow-md group-hover:scale-105 transition-transform bg-white"
-                width="44"
-                height="44"
-              />
-              <div>
-                <span className="text-lg sm:text-xl font-display font-bold leading-tight block tracking-wider">Trishna</span>
-                <span className="text-[8px] sm:text-[9px] font-semibold text-brand-500 uppercase tracking-widest">
-                  Property Management
-                </span>
+              <div className="h-10 w-10 sm:h-11 sm:w-11 rounded-xl bg-brand-500 flex items-center justify-center shadow-md group-hover:scale-105 transition-transform flex-shrink-0">
+                <Building2 className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
               </div>
+              <span className="text-lg sm:text-xl font-display font-bold leading-tight tracking-wider">The Property Agent</span>
             </Link>
             <p className="text-neutral-400 text-sm leading-relaxed font-light">
-              Your trusted partner for premium homes and complete property services in Bangalore. Buy, Rent, Sell & Maintain — we help you manage every aspect of your home.
+              An independent property agent dealing in plots, farmhouse plots, land, rentals, lease & sale properties across Karnataka. Listings change as new deals come in — reach out directly for the latest.
             </p>
           </div>
 
-          {/* Home Services */}
+          {/* Services */}
           <div>
-            <h4 className="text-sm font-semibold text-neutral-200 uppercase tracking-wider mb-3 sm:mb-4">Our Services</h4>
-            <ul className="space-y-2 sm:space-y-2.5 text-sm" aria-label="Home and property services">
-              <li><Link to="/services#e-stamp" className="text-neutral-400 hover:text-brand-400 transition-colors">E-Stamp & Agreements</Link></li>
-              <li><Link to="/services#electrical-works" className="text-neutral-400 hover:text-brand-400 transition-colors">Electrical Works</Link></li>
-              <li><Link to="/services#plumbing-works" className="text-neutral-400 hover:text-brand-400 transition-colors">Plumbing & Sanitary</Link></li>
-              <li><Link to="/services#carpentry-works" className="text-neutral-400 hover:text-brand-400 transition-colors">Carpentry & Woodwork</Link></li>
-              <li><Link to="/services#building-works" className="text-neutral-400 hover:text-brand-400 transition-colors">Building & Renovation</Link></li>
-              <li><Link to="/services#packers-movers" className="text-neutral-400 hover:text-brand-400 transition-colors">Packers & Movers</Link></li>
+            <h4 className="text-sm font-semibold text-neutral-200 uppercase tracking-wider mb-3 sm:mb-4">How We Help</h4>
+            <ul className="space-y-2 sm:space-y-2.5 text-sm" aria-label="Buying, selling, and renting services">
+              <li><Link to="/services#buying-assistance" className="text-neutral-400 hover:text-brand-400 transition-colors">Help You Buy</Link></li>
+              <li><Link to="/services#selling-assistance" className="text-neutral-400 hover:text-brand-400 transition-colors">Help You Sell / List</Link></li>
+              <li><Link to="/services#rental-lease-assistance" className="text-neutral-400 hover:text-brand-400 transition-colors">Help You Rent / Lease</Link></li>
             </ul>
           </div>
 
           {/* Properties */}
           <div>
-            <h4 className="text-sm font-semibold text-neutral-200 uppercase tracking-wider mb-3 sm:mb-4">Properties</h4>
-            <ul className="space-y-2 sm:space-y-2.5 text-sm" aria-label="Browse properties by location">
-              <li><Link to="/listings?location=Murgeshpalya" className="text-neutral-400 hover:text-brand-400 transition-colors">Murgeshpalya</Link></li>
-              <li><Link to="/listings?location=CV+Raman+Nagar" className="text-neutral-400 hover:text-brand-400 transition-colors">CV Raman Nagar</Link></li>
-              <li><Link to="/listings?location=GM+Palya" className="text-neutral-400 hover:text-brand-400 transition-colors">GM Palya</Link></li>
-              <li><Link to="/listings?location=Bommasandra" className="text-neutral-400 hover:text-brand-400 transition-colors">Bommasandra</Link></li>
-              <li><Link to="/listings?location=Whitefield" className="text-neutral-400 hover:text-brand-400 transition-colors">Whitefield</Link></li>
+            <h4 className="text-sm font-semibold text-neutral-200 uppercase tracking-wider mb-3 sm:mb-4">Property Categories</h4>
+            <ul className="space-y-2 sm:space-y-2.5 text-sm" aria-label="Browse properties by category">
+              <li><Link to="/listings?type=plot" className="text-neutral-400 hover:text-brand-400 transition-colors">Plots for Sale</Link></li>
+              <li><Link to="/listings?type=farmhouse" className="text-neutral-400 hover:text-brand-400 transition-colors">Farmhouse Plots</Link></li>
+              <li><Link to="/listings?type=land" className="text-neutral-400 hover:text-brand-400 transition-colors">Land</Link></li>
               <li><Link to="/listings?type=rent" className="text-neutral-400 hover:text-brand-400 transition-colors">For Rent</Link></li>
+              <li><Link to="/listings?type=lease" className="text-neutral-400 hover:text-brand-400 transition-colors">For Lease</Link></li>
               <li><Link to="/listings?type=sale" className="text-neutral-400 hover:text-brand-400 transition-colors">For Sale</Link></li>
+              <li><Link to="/listings?type=commercial" className="text-neutral-400 hover:text-brand-400 transition-colors">Commercial</Link></li>
             </ul>
           </div>
 
@@ -83,8 +71,14 @@ export default function Footer() {
               </li>
               <li className="flex items-start space-x-2.5 sm:space-x-3">
                 <Phone className="h-4 w-4 text-brand-400 mt-0.5 flex-shrink-0" />
-                <a href="tel:+919886104532" className="text-neutral-400 hover:text-brand-400 transition-colors">
-                  +91 98861 04532
+                <a href="tel:+919019488368" className="text-neutral-400 hover:text-brand-400 transition-colors">
+                  +91 90194 88368
+                </a>
+              </li>
+              <li className="flex items-start space-x-2.5 sm:space-x-3">
+                <MessageCircle className="h-4 w-4 text-brand-400 mt-0.5 flex-shrink-0" />
+                <a href="https://wa.me/919945011138" target="_blank" rel="noopener noreferrer" className="text-neutral-400 hover:text-brand-400 transition-colors">
+                  +91 99450 11138 (WhatsApp)
                 </a>
               </li>
               <li className="flex items-start space-x-2.5 sm:space-x-3">
@@ -107,20 +101,20 @@ export default function Footer() {
         <div className="mt-8 sm:mt-10 lg:mt-12 rounded-2xl overflow-hidden border border-white/5 shadow-glass transition-all duration-300 hover:border-brand-500/30">
           <iframe
             src={mapsEmbed}
-            title="Trishna Property Management Office Location"
+            title="The Property Agent Office Location"
             className="w-full h-44 sm:h-48 lg:h-64"
             loading="lazy"
             referrerPolicy="no-referrer-when-downgrade"
             style={{ border: 0, filter: 'grayscale(0.4) invert(0.02) contrast(1.1)' }}
             allowFullScreen
-            aria-label="Google Maps showing Trishna Property Management office location at GM Palya, Bengaluru"
+            aria-label="Google Maps showing The Property Agent office location at Yelachanahalli, Bengaluru"
           />
         </div>
 
         {/* Bottom bar */}
         <div className="border-t border-white/5 mt-6 sm:mt-8 pt-5 sm:pt-6 flex flex-col sm:flex-row justify-between items-center gap-2.5 sm:gap-3">
           <p className="text-neutral-500 text-sm text-center sm:text-left font-light">
-            © {new Date().getFullYear()} Trishna Property Management. All rights reserved.
+            © {new Date().getFullYear()} The Property Agent. All rights reserved.
           </p>
           <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4">
             <p className="text-neutral-600 text-xs font-light">

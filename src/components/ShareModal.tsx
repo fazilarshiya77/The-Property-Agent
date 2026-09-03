@@ -86,7 +86,7 @@ export default function ShareModal({ isOpen, onClose, property }: ShareModalProp
       try {
         await navigator.share({
           title: property.title,
-          text: `Check out ${property.title} in ${property.location} on Trishna Property Management`,
+          text: `Check out ${property.title} in ${property.location} on The Property Agent`,
           url: shareUrl,
         });
       } catch (err) {
@@ -98,7 +98,7 @@ export default function ShareModal({ isOpen, onClose, property }: ShareModalProp
     }
   };
 
-  const shareText = `Check out this property on Trishna Property Management: ${property.title} (${formatPrice(property.price, property.type)}) in ${property.location}`;
+  const shareText = `Check out this property on The Property Agent: ${property.title} (${formatPrice(property.price, property.type)}) in ${property.location}`;
 
   const shareLinks = [
     {
@@ -129,7 +129,7 @@ export default function ShareModal({ isOpen, onClose, property }: ShareModalProp
       name: 'Email',
       icon: Mail,
       color: 'bg-neutral-800 hover:bg-neutral-900 text-white',
-      url: `mailto:?subject=${encodeURIComponent(`Property: ${property.title}`)}&body=${encodeURIComponent(`Hi,\n\nI thought you might be interested in this property on Trishna Property Management:\n\n${property.title}\nLocation: ${property.location}\nPrice: ${formatPrice(property.price, property.type)}\n\nView details: ${shareUrl}\n`)}`,
+      url: `mailto:?subject=${encodeURIComponent(`Property: ${property.title}`)}&body=${encodeURIComponent(`Hi,\n\nI thought you might be interested in this property on The Property Agent:\n\n${property.title}\nLocation: ${property.location}\nPrice: ${formatPrice(property.price, property.type)}\n\nView details: ${shareUrl}\n`)}`,
     },
   ];
 

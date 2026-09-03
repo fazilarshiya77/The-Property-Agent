@@ -1,5 +1,5 @@
 {
-  "name": "trae-project",
+  "name": "the-property-agent",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -15,8 +15,6 @@
     "@base-ui/react": "^1.6.0",
     "@fontsource-variable/geist": "^5.2.9",
     "@gsap/react": "^2.1.2",
-    "@supabase/ssr": "^0.12.0",
-    "@supabase/supabase-js": "^2.110.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "gsap": "^3.15.0",

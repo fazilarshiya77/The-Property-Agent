@@ -3,12 +3,12 @@ import { Helmet, HelmetProvider } from 'react-helmet-async';
 import { useLocation } from 'react-router-dom';
 
 // ─── CONSTANTS ──────────────────────────────────────────
-const SITE_URL = 'https://www.trishnapropertymanagement.in';
-const SITE_NAME = 'Trishna Property Management';
-const DEFAULT_OG_IMAGE = `${SITE_URL}/logo.jpeg`;
-const PHONE = '+91 98861 04532';
+const SITE_URL = 'https://www.thepropertyagent.in';
+const SITE_NAME = 'The Property Agent';
+const DEFAULT_OG_IMAGE = `${SITE_URL}/favicon.svg`;
+const PHONE = '+91 90194 88368';
 const EMAIL = 'trishnaproperties78@gmail.com';
-const ADDRESS = '31, GM Palya Main Rd, KG Colony, GM Palya, C V Raman Nagar, Bengaluru, Karnataka 560075';
+const ADDRESS = 'No. 84, 4th cross kashi nagar, yelachanahalli, B-78., Bengaluru, Karnataka';
 
 // ─── TYPES ──────────────────────────────────────────────
 interface BreadcrumbItem {
@@ -26,7 +26,7 @@ interface PropertySchemaData {
   description: string;
   price: number;
   priceCurrency?: string;
-  type: 'rent' | 'sale' | 'lease' | 'commercial';
+  type: 'rent' | 'sale' | 'lease' | 'commercial' | 'plot' | 'farmhouse' | 'land';
   bedrooms: number;
   bathrooms: number;
   area: number;
@@ -69,11 +69,11 @@ interface SEOProps {
 
 // ─── DEFAULT VALUES ─────────────────────────────────────
 const defaultProps: Required<Pick<SEOProps, 'description' | 'keywords' | 'image' | 'type' | 'location' | 'geoRegion' | 'geoPosition'>> = {
-  description: 'Trishna Property Management is Bangalore\'s trusted real estate partner offering premium verified rental homes and properties for sale in Murgeshpalya, CV Raman Nagar, GM Palya, Bommasandra, Yelahanka, Whitefield, and Sarjapur Road. 50+ verified listings, 200+ happy families.',
-  keywords: 'Trishna Property Management, Trishna Properties, Bangalore real estate, properties for rent Bangalore, houses for sale Bangalore, 2BHK Murgeshpalya, 3BHK CV Raman Nagar, apartments GM Palya, Brigade Valencia, Godrej Lakeside, Mahindra Blossom, verified properties Bangalore, premium rentals Bangalore, East Bangalore properties, rental homes near IT parks',
+  description: 'The Property Agent is a Karnataka-wide real estate agent dealing in plot sales, farmhouse plots, agricultural land, rental & lease homes, and commercial properties. New listings are added and updated regularly across Karnataka.',
+  keywords: 'The Property Agent, Karnataka real estate agent, plot for sale Karnataka, farmhouse plot Karnataka, agricultural land for sale Karnataka, rental house Karnataka, lease property Karnataka, commercial property Karnataka, Bengaluru real estate agent',
   image: DEFAULT_OG_IMAGE,
   type: 'website',
-  location: 'Bangalore, Karnataka, India',
+  location: 'Karnataka, India',
   geoRegion: 'IN-KA',
   geoPosition: '12.9716;77.5946',
 };
@@ -86,7 +86,7 @@ function generateWebSiteSchema(): object {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
     name: SITE_NAME,
-    alternateName: ['Trishna Properties', 'Trishna Properties Bangalore'],
+    alternateName: ['The Property Agent Karnataka'],
     url: SITE_URL,
     description: defaultProps.description,
     publisher: {
@@ -111,22 +111,20 @@ function generateBusinessSchema(): object {
     '@type': ['RealEstateAgent', 'LocalBusiness'],
     '@id': `${SITE_URL}/#organization`,
     name: SITE_NAME,
-    alternateName: 'Trishna Properties',
-    description: 'Trishna Property Management is a premium real estate agency in Bangalore specializing in verified rental homes and properties for sale. We cover Murgeshpalya, CV Raman Nagar, GM Palya, Bommasandra, Yelahanka, Whitefield, Sarjapur Road, Bannerghatta Road, and more.',
+    alternateName: 'The Property Agent Karnataka',
+    description: 'The Property Agent is an independent real estate agent covering all of Karnataka, dealing in plot sales, farmhouse plots, agricultural land, rental & lease homes, and commercial properties as they become available.',
     url: SITE_URL,
     logo: DEFAULT_OG_IMAGE,
     image: DEFAULT_OG_IMAGE,
     telephone: PHONE,
     email: EMAIL,
-    priceRange: '₹35,000 - ₹3.2 Cr',
     currenciesAccepted: 'INR',
     paymentAccepted: 'Cash, Bank Transfer, UPI',
     address: {
       '@type': 'PostalAddress',
-      streetAddress: '31, GM Palya Main Rd, KG Colony, GM Palya',
+      streetAddress: 'No. 84, 4th cross kashi nagar, yelachanahalli, B-78.',
       addressLocality: 'Bengaluru',
       addressRegion: 'Karnataka',
-      postalCode: '560075',
       addressCountry: 'IN',
     },
     geo: {
@@ -143,31 +141,19 @@ function generateBusinessSchema(): object {
       },
     ],
     areaServed: [
-      { '@type': 'City', name: 'Bangalore', sameAs: 'https://en.wikipedia.org/wiki/Bangalore' },
-      { '@type': 'Place', name: 'Murgeshpalya' },
-      { '@type': 'Place', name: 'CV Raman Nagar' },
-      { '@type': 'Place', name: 'GM Palya' },
-      { '@type': 'Place', name: 'Bommasandra' },
-      { '@type': 'Place', name: 'Yelahanka' },
-      { '@type': 'Place', name: 'Kaggadasapura' },
-      { '@type': 'Place', name: 'Sarjapur Road' },
-      { '@type': 'Place', name: 'Bannerghatta Road' },
-      { '@type': 'Place', name: 'Whitefield' },
-      { '@type': 'Place', name: 'Singasandra' },
-      { '@type': 'Place', name: 'Devinagar' },
+      { '@type': 'State', name: 'Karnataka' },
     ],
     hasOfferCatalog: {
       '@type': 'OfferCatalog',
-      name: 'Real Estate & Home Services in Bangalore',
+      name: 'Property Categories Across Karnataka',
       itemListElement: [
-        { '@type': 'OfferCatalog', name: 'Properties for Rent' },
+        { '@type': 'OfferCatalog', name: 'Plots for Sale' },
+        { '@type': 'OfferCatalog', name: 'Farmhouse Plots' },
+        { '@type': 'OfferCatalog', name: 'Agricultural Land' },
+        { '@type': 'OfferCatalog', name: 'Rental Houses' },
+        { '@type': 'OfferCatalog', name: 'Lease Properties' },
         { '@type': 'OfferCatalog', name: 'Properties for Sale' },
-        { '@type': 'OfferCatalog', name: 'E-Stamp Paper & Rental Agreements' },
-        { '@type': 'OfferCatalog', name: 'Electrical Works & Repairs' },
-        { '@type': 'OfferCatalog', name: 'Plumbing & Sanitary Solutions' },
-        { '@type': 'OfferCatalog', name: 'Carpentry & Woodwork Services' },
-        { '@type': 'OfferCatalog', name: 'Building Works & Renovation' },
-        { '@type': 'OfferCatalog', name: 'Packers & Movers Shifting Services' },
+        { '@type': 'OfferCatalog', name: 'Commercial Properties' },
       ],
     },
     sameAs: [
@@ -176,13 +162,6 @@ function generateBusinessSchema(): object {
     founder: {
       '@type': 'Organization',
       name: SITE_NAME,
-    },
-    aggregateRating: {
-      '@type': 'AggregateRating',
-      ratingValue: '4.8',
-      reviewCount: '200',
-      bestRating: '5',
-      worstRating: '1',
     },
   };
 }
@@ -301,14 +280,14 @@ function generatePropertySchema(property: PropertySchemaData): object {
 }
 
 /** ItemList schema for listings page */
-function generateItemListSchema(title: string, description: string): object {
+function generateItemListSchema(title: string, description: string, numberOfItems: number = 0): object {
   return {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
     name: title,
     description: description,
     url: `${SITE_URL}/listings`,
-    numberOfItems: 17,
+    numberOfItems,
     itemListOrder: 'https://schema.org/ItemListUnordered',
   };
 }
@@ -335,7 +314,7 @@ export const SEO: React.FC<SEOProps> = (props) => {
   // Build the full page title
   const pageTitle = title
     ? `${title} | ${SITE_NAME}`
-    : `${SITE_NAME} — Premium Rental Homes & Properties for Sale in Bangalore`;
+    : `${SITE_NAME} — Plots, Farmhouses, Land, Rentals & Properties Across Karnataka`;
 
   // Build canonical URL
   const canonical = canonicalPath
@@ -398,8 +377,8 @@ export const SEO: React.FC<SEOProps> = (props) => {
       <meta name="author" content={SITE_NAME} />
       <meta name="publisher" content={SITE_NAME} />
       <meta name="copyright" content={`© ${new Date().getFullYear()} ${SITE_NAME}`} />
-      <meta name="theme-color" content="#0c1832" />
-      <meta name="msapplication-TileColor" content="#0c1832" />
+      <meta name="theme-color" content="#1F2A44" />
+      <meta name="msapplication-TileColor" content="#1F2A44" />
       <meta name="application-name" content={SITE_NAME} />
       <meta name="apple-mobile-web-app-title" content={SITE_NAME} />
       <meta name="format-detection" content="telephone=no" />
@@ -414,8 +393,8 @@ export const SEO: React.FC<SEOProps> = (props) => {
       */}
 
       {/* ─── Favicon ─── */}
-      <link rel="icon" type="image/jpeg" href="/logo.jpeg" />
-      <link rel="apple-touch-icon" href="/logo.jpeg" />
+      <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+      <link rel="apple-touch-icon" href="/favicon.svg" />
 
       {/* ─── Structured Data: WebSite (Home page only) ─── */}
       {isHomePage && (

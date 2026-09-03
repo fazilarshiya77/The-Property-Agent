@@ -15,9 +15,9 @@ jobs:
           SUPABASE_URL="${{ secrets.SUPABASE_URL }}"
           SUPABASE_KEY="${{ secrets.SUPABASE_ANON_KEY }}"
 
-          # Fallback to hardcoded URL if secrets are not set yet
           if [ -z "$SUPABASE_URL" ]; then
-            SUPABASE_URL="https://bvhpfwkbhhzwjauaxwpd.supabase.co"
+            echo "⚠️ SUPABASE_URL secret is not set. Skipping ping."
+            exit 0
           fi
 
           echo "📡 Pinging Supabase project at $SUPABASE_URL ..."

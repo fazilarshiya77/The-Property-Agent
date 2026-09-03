@@ -75,9 +75,14 @@ export default function PropertyDetails() {
       case 'sale': return { label: 'For Sale', className: 'bg-gold-400' };
       case 'lease': return { label: 'For Lease', className: 'bg-indigo-600' };
       case 'commercial': return { label: 'Commercial', className: 'bg-emerald-600' };
+      case 'plot': return { label: 'Plot for Sale', className: 'bg-amber-600' };
+      case 'farmhouse': return { label: 'Farmhouse Plot', className: 'bg-lime-600' };
+      case 'land': return { label: 'Land', className: 'bg-orange-600' };
       default: return { label: type, className: 'bg-navy-900' };
     }
   };
+
+  const isLandType = property.type === 'plot' || property.type === 'farmhouse' || property.type === 'land';
 
   // Calculate average rating
   const averageRating = property.reviews.length > 0 
@@ -92,11 +97,17 @@ export default function PropertyDetails() {
   })();
 
   const specs = [
-    { icon: Bed, label: 'Bedrooms', value: property.bedrooms > 0 ? property.bedrooms : 'Commercial' },
-    { icon: Bath, label: 'Bathrooms', value: property.bathrooms },
+    ...(isLandType
+      ? []
+      : [
+          { icon: Bed, label: 'Bedrooms', value: property.bedrooms > 0 ? property.bedrooms : 'Commercial' },
+          { icon: Bath, label: 'Bathrooms', value: property.bathrooms },
+        ]),
     { icon: Maximize, label: 'Area', value: `${property.area} sqft` },
     ...(property.floor ? [{ icon: Layers, label: 'Floor', value: property.floor }] : []),
-    { icon: Building, label: 'Furnished', value: property.furnished === 'fully' ? 'Fully' : property.furnished === 'semi' ? 'Semi' : 'No' },
+    ...(isLandType
+      ? []
+      : [{ icon: Building, label: 'Furnished', value: property.furnished === 'fully' ? 'Fully' : property.furnished === 'semi' ? 'Semi' : 'No' }]),
     ...(property.facing ? [{ icon: Compass, label: 'Facing', value: property.facing }] : []),
   ];
 
@@ -135,14 +146,14 @@ export default function PropertyDetails() {
   const badgeInfo = getBadgeInfo(property.type);
 
   // Build a rich, unique meta description for this property
-  const metaDescription = `${property.title} in ${property.location}. ${badgeInfo.label} at ${formatPrice(property.price, property.type)}${property.type === 'rent' ? '/month' : ''}. ${property.bedrooms > 0 ? `${property.bedrooms} bedrooms, ` : ''}${property.bathrooms} bathrooms, ${property.area} sqft. ${property.furnished === 'fully' ? 'Fully furnished.' : property.furnished === 'semi' ? 'Semi-furnished.' : ''} ${property.availability === 'Immediate' || property.availability === 'Ready to Move' ? 'Ready to move in.' : `Possession: ${property.availability}.`} Contact Trishna Property Management: +91 98861 04532.`;
+  const metaDescription = `${property.title} in ${property.location}. ${badgeInfo.label} at ${formatPrice(property.price, property.type)}${property.type === 'rent' ? '/month' : ''}. ${property.bedrooms > 0 ? `${property.bedrooms} bedrooms, ` : ''}${property.bathrooms} bathrooms, ${property.area} sqft. ${property.furnished === 'fully' ? 'Fully furnished.' : property.furnished === 'semi' ? 'Semi-furnished.' : ''} ${property.availability === 'Immediate' || property.availability === 'Ready to Move' ? 'Ready to move in.' : `Possession: ${property.availability}.`} Contact The Property Agent: +91 90194 88368.`;
 
   return (
     <div className="min-h-screen bg-neutral-50 pb-24 lg:pb-8">
       <SEO
-        title={`${property.title} — ${property.areaName}, Bangalore`}
+        title={`${property.title} — ${property.areaName}, Karnataka`}
         description={metaDescription}
-        keywords={`${property.title}, ${property.areaName} ${property.type}, ${property.bedrooms > 0 ? `${property.bedrooms}BHK ` : ''}${property.areaName}, ${property.location}, properties ${badgeInfo.label.toLowerCase()} ${property.areaName} Bangalore, ${property.furnished === 'fully' ? 'furnished apartments' : 'apartments'} ${property.areaName}, Trishna Property Management ${property.areaName}, Trishna Properties ${property.areaName}, real estate ${property.areaName} Bangalore`}
+        keywords={`${property.title}, ${property.areaName} ${property.type}, ${property.bedrooms > 0 ? `${property.bedrooms}BHK ` : ''}${property.areaName}, ${property.location}, properties ${badgeInfo.label.toLowerCase()} ${property.areaName} Karnataka, ${property.furnished === 'fully' ? 'furnished apartments' : 'apartments'} ${property.areaName}, The Property Agent ${property.areaName}, real estate ${property.areaName} Karnataka`}
         type="product"
         image={property.images[0]}
         canonicalPath={`/listings/${property.id}`}
@@ -380,7 +391,7 @@ export default function PropertyDetails() {
                 <h2 className="text-lg font-display font-bold text-navy-900 mb-5 tracking-wide">Location</h2>
                 <div className="rounded-xl overflow-hidden border border-neutral-100" style={{ height: 300 }}>
                   <iframe
-                    title={`Map showing location of ${property.title} in ${property.areaName}, Bangalore`}
+                    title={`Map showing location of ${property.title} in ${property.areaName}, Karnataka`}
                     width="100%"
                     height="100%"
                     style={{ border: 0 }}
@@ -436,7 +447,7 @@ export default function PropertyDetails() {
                 <div className="space-y-4">
                   <a href={`mailto:${property.contactEmail}`}
                     className="flex items-center space-x-3 p-3 rounded-xl bg-neutral-50 hover:bg-neutral-100 transition-colors"
-                    aria-label={`Email Trishna Property Management at ${property.contactEmail}`}
+                    aria-label={`Email The Property Agent at ${property.contactEmail}`}
                   >
                     <Mail className="h-5 w-5 text-brand-500" aria-hidden="true" />
                     <div>
@@ -444,14 +455,14 @@ export default function PropertyDetails() {
                       <div className="text-sm font-medium text-navy-800">{property.contactEmail}</div>
                     </div>
                   </a>
-                  <a href="tel:+919886104532"
+                  <a href="tel:+919019488368"
                     className="flex items-center space-x-3 p-3 rounded-xl bg-neutral-50 hover:bg-neutral-100 transition-colors"
-                    aria-label="Call Trishna Property Management at +91 98861 04532"
+                    aria-label="Call The Property Agent at +91 90194 88368"
                   >
                     <Phone className="h-5 w-5 text-brand-500" aria-hidden="true" />
                     <div>
                       <div className="text-xs text-neutral-500">Phone</div>
-                      <div className="text-sm font-medium text-navy-800">+91 98861 04532</div>
+                      <div className="text-sm font-medium text-navy-800">+91 90194 88368</div>
                     </div>
                   </a>
                 </div>
@@ -483,15 +494,15 @@ export default function PropertyDetails() {
       {/* Mobile Sticky CTA Bar */}
       <div className="fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-neutral-200 p-3 flex items-center gap-2 lg:hidden shadow-xl">
         <a
-          href="tel:+919886104532"
+          href="tel:+919019488368"
           className="flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-navy-900 text-white font-semibold text-xs sm:text-sm hover:bg-navy-950 transition-all active:scale-[0.98] shadow-sm"
         >
           <Phone className="h-4 w-4 text-brand-400" />
           <span>Call Now</span>
         </a>
         <a
-          href={`https://wa.me/919886104532?text=${encodeURIComponent(
-            `Hi Trishna Property Management, I am interested in "${property.title}" in ${property.location}. Please share more details.`
+          href={`https://wa.me/919945011138?text=${encodeURIComponent(
+            `Hi The Property Agent, I am interested in "${property.title}" in ${property.location}. Please share more details.`
           )}`}
           target="_blank"
           rel="noopener noreferrer"

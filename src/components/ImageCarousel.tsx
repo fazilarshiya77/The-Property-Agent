@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
-import { ChevronLeft, ChevronRight, X, ZoomIn } from 'lucide-react';
+import { ChevronLeft, ChevronRight, X, ZoomIn, ImageOff } from 'lucide-react';
 
 interface ImageCarouselProps {
   images: string[];
@@ -55,6 +55,15 @@ export default function ImageCarousel({ images, title }: ImageCarouselProps) {
 
   const displayImages = images.slice(0, 5);
   const useSlideLayout = images.length < 5;
+
+  if (images.length === 0) {
+    return (
+      <div className="aspect-[4/3] sm:aspect-[16/9] rounded-2xl overflow-hidden bg-neutral-100 shadow-card flex flex-col items-center justify-center text-neutral-400">
+        <ImageOff className="h-10 w-10 mb-2" strokeWidth={1.5} />
+        <span className="text-sm font-medium">No photos available yet</span>
+      </div>
+    );
+  }
 
   return (
     <>
