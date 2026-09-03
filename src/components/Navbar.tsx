@@ -89,28 +89,6 @@ export default function Navbar() {
 
             {/* Desktop CTA */}
             <div className="hidden md:flex items-center space-x-3 lg:space-x-4">
-              <a
-                href="tel:+919019488368"
-                className="flex items-center space-x-1.5 text-xs lg:text-sm font-semibold text-neutral-600 hover:text-brand-500 transition-colors duration-300"
-                title="Call +91 90194 88368"
-              >
-                <Phone className="h-4 w-4 text-brand-500 flex-shrink-0" />
-                <span className="hidden xl:inline">+91 90194 88368</span>
-              </a>
-
-              {/* WhatsApp Redirect Button */}
-              <a
-                href="https://wa.me/919945011138?text=Hi%20The%20Property%20Agent%2C%20I%20would%20like%20to%20inquire%20about%20your%20properties%20and%20services."
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center space-x-1.5 px-2.5 py-1.5 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-semibold text-xs transition-all duration-300 border border-emerald-200/60 shadow-sm active:scale-95"
-                aria-label="Chat on WhatsApp"
-                title="Chat on WhatsApp"
-              >
-                <MessageCircle className="h-3.5 w-3.5 fill-emerald-600 text-emerald-600" />
-                <span>WhatsApp</span>
-              </a>
-
               <Link
                 to="/about#contact"
                 className="bg-brand-500 hover:bg-brand-600 text-white text-xs lg:text-sm font-bold px-4 lg:px-5 py-2 rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-brand-500/20 active:scale-95 whitespace-nowrap"
