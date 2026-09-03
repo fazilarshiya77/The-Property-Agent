@@ -1,7 +1,8 @@
 import { useEffect, useMemo } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Plus, Building2, CheckCircle2, FileEdit, Star, Clock, ArrowUpRight, MapPin, Users, Flame, CalendarCheck } from 'lucide-react';
-import { usePropertyStore, isAdminAuthenticated } from '../stores/propertyStore';
+import { usePropertyStore } from '../stores/propertyStore';
+import { useAdminGuard } from '../stores/authStore';
 import { useLeadStore } from '../stores/leadStore';
 import { useSiteVisitStore } from '../stores/siteVisitStore';
 import { useActivityStore } from '../stores/activityStore';
@@ -29,19 +30,20 @@ function timeAgo(iso: string): string {
 }
 
 export default function AdminDashboard() {
-  const navigate = useNavigate();
+  const ready = useAdminGuard();
   const { properties, fetchProperties } = usePropertyStore();
-  const { leads } = useLeadStore();
-  const { visits } = useSiteVisitStore();
+  const { leads, fetchLeads } = useLeadStore();
+  const { visits, fetchVisits } = useSiteVisitStore();
   const activityLog = useActivityStore(s => s.entries);
+  const fetchActivity = useActivityStore(s => s.fetchActivity);
 
   useEffect(() => {
-    fetchProperties()
-  }, [fetchProperties])
-
-  useEffect(() => {
-    if (!isAdminAuthenticated()) navigate('/admin');
-  }, [navigate]);
+    if (!ready) return;
+    fetchProperties();
+    fetchLeads();
+    fetchVisits();
+    fetchActivity();
+  }, [ready, fetchProperties, fetchLeads, fetchVisits, fetchActivity])
 
   const stats = useMemo(() => ({
     total: properties.length,
@@ -93,7 +95,7 @@ export default function AdminDashboard() {
     return `₹${(price / 100000).toFixed(1)} L`;
   };
 
-  if (!isAdminAuthenticated()) return null;
+  if (!ready) return null;
 
   return (
     <AdminLayout

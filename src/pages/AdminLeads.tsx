@@ -1,7 +1,6 @@
 import { useState, useMemo, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Plus, Pencil, Trash2, Search, Phone, MessageCircle, Mail } from 'lucide-react';
-import { isAdminAuthenticated } from '../stores/propertyStore';
+import { useAdminGuard } from '../stores/authStore';
 import { usePropertyStore } from '../stores/propertyStore';
 import { useLeadStore } from '../stores/leadStore';
 import type { Lead, LeadStatus, LeadTemperature, LeadSource, LeadPurpose } from '../data/leads';
@@ -38,9 +37,9 @@ const inputCls = "w-full px-3.5 py-2.5 bg-neutral-50 border border-neutral-200 r
 const labelCls = "block text-xs font-medium text-neutral-500 mb-1";
 
 export default function AdminLeads() {
-  const navigate = useNavigate();
-  const { leads, addLead, updateLead, deleteLead } = useLeadStore();
-  const { properties } = usePropertyStore();
+  const ready = useAdminGuard();
+  const { leads, fetchLeads, addLead, updateLead, deleteLead } = useLeadStore();
+  const { properties, fetchProperties } = usePropertyStore();
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState<'all' | LeadStatus>('all');
   const [modalOpen, setModalOpen] = useState(false);
@@ -48,8 +47,10 @@ export default function AdminLeads() {
   const [form, setForm] = useState(emptyLead);
 
   useEffect(() => {
-    if (!isAdminAuthenticated()) navigate('/admin');
-  }, [navigate]);
+    if (!ready) return;
+    fetchLeads();
+    fetchProperties();
+  }, [ready, fetchLeads, fetchProperties]);
 
   const filtered = useMemo(() => {
     return leads.filter(l => {
@@ -70,26 +71,36 @@ export default function AdminLeads() {
     setModalOpen(true);
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!form.name.trim() || !form.phone.trim()) {
       alert('Name and phone are required.');
       return;
     }
-    if (editingId) {
-      updateLead(editingId, form);
-    } else {
-      addLead(form);
+    try {
+      if (editingId) {
+        await updateLead(editingId, form);
+      } else {
+        await addLead(form);
+      }
+      setModalOpen(false);
+    } catch (err) {
+      console.error('Error saving lead:', err);
+      alert('Ran into an issue, please try again later.');
     }
-    setModalOpen(false);
   };
 
-  const handleDelete = (id: string, name: string) => {
+  const handleDelete = async (id: string, name: string) => {
     if (window.confirm(`Delete lead "${name}"? This cannot be undone.`)) {
-      deleteLead(id);
+      try {
+        await deleteLead(id);
+      } catch (err) {
+        console.error('Error deleting lead:', err);
+        alert('Ran into an issue, please try again later.');
+      }
     }
   };
 
-  if (!isAdminAuthenticated()) return null;
+  if (!ready) return null;
 
   return (
     <AdminLayout

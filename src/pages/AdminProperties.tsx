@@ -1,7 +1,8 @@
 import { useState, useMemo, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Plus, Pencil, Trash2, Search, Building, Video, Star } from 'lucide-react';
-import { usePropertyStore, isAdminAuthenticated } from '../stores/propertyStore';
+import { usePropertyStore } from '../stores/propertyStore';
+import { useAdminGuard } from '../stores/authStore';
 import type { PropertyType, PropertyStatus } from '../data/properties';
 import { PROPERTY_TYPE_LABELS, PROPERTY_STATUS_LABELS, PROPERTY_STATUS_TONE } from '../data/properties';
 import AdminLayout from '../components/admin/AdminLayout';
@@ -17,18 +18,14 @@ const STATUS_TONE_CLASS: Record<string, string> = {
 const STATUS_OPTIONS: PropertyStatus[] = ['draft', 'available', 'published', 'reserved', 'sold', 'rented', 'inactive'];
 
 export default function AdminProperties() {
-  const navigate = useNavigate();
+  const ready = useAdminGuard();
   const [search, setSearch] = useState('');
   const [typeFilter, setTypeFilter] = useState<'all' | PropertyType>('all');
   const { properties, fetchProperties, deleteProperty, updateProperty } = usePropertyStore();
 
   useEffect(() => {
-    fetchProperties()
-  }, [fetchProperties])
-
-  useEffect(() => {
-    if (!isAdminAuthenticated()) navigate('/admin');
-  }, [navigate]);
+    if (ready) fetchProperties()
+  }, [ready, fetchProperties])
 
   const filtered = useMemo(() => {
     return properties.filter(p => {
@@ -101,7 +98,7 @@ export default function AdminProperties() {
     }
   };
 
-  if (!isAdminAuthenticated()) return null;
+  if (!ready) return null;
 
   return (
     <AdminLayout

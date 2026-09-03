@@ -1,7 +1,5 @@
-import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import type { LucideIcon } from 'lucide-react';
-import { isAdminAuthenticated } from '../stores/propertyStore';
+import { useAdminGuard } from '../stores/authStore';
 import AdminLayout from '../components/admin/AdminLayout';
 
 interface AdminComingSoonProps {
@@ -11,13 +9,9 @@ interface AdminComingSoonProps {
 }
 
 export default function AdminComingSoon({ title, icon: Icon, description }: AdminComingSoonProps) {
-  const navigate = useNavigate();
+  const ready = useAdminGuard();
 
-  useEffect(() => {
-    if (!isAdminAuthenticated()) navigate('/admin');
-  }, [navigate]);
-
-  if (!isAdminAuthenticated()) return null;
+  if (!ready) return null;
 
   return (
     <AdminLayout title={title}>

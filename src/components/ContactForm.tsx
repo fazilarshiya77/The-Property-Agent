@@ -4,14 +4,16 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/com
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { logToGoogleSheet } from '@/lib/logger';
+import { supabase } from '@/lib/supabase';
 
 interface ContactFormProps {
   propertyTitle?: string;
   serviceTitle?: string;
   contactEmail: string;
+  propertyId?: string;
 }
 
-export default function ContactForm({ propertyTitle, serviceTitle, contactEmail }: ContactFormProps) {
+export default function ContactForm({ propertyTitle, serviceTitle, contactEmail, propertyId }: ContactFormProps) {
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
@@ -38,6 +40,22 @@ export default function ContactForm({ propertyTitle, serviceTitle, contactEmail 
     // Prepare WhatsApp Message
     const whatsappText = `*New Inquiry — The Property Agent*\n\n*Name:* ${formData.name}\n*Phone:* ${formData.phone}\n*Email:* ${formData.email || 'N/A'}\n${propertyTitle ? `*Property:* ${propertyTitle}\n` : ''}${serviceTitle ? `*Service:* ${serviceTitle}\n` : ''}*Message:* ${formData.message}`;
     const whatsappUrl = `https://wa.me/919945011138?text=${encodeURIComponent(whatsappText)}`;
+
+    // Create a real lead in the CRM — additive alongside the existing
+    // email/WhatsApp flow, never blocking on it either way.
+    supabase.from('leads').insert([{
+      name: formData.name,
+      phone: formData.phone,
+      email: formData.email || null,
+      interested_property_id: propertyId || null,
+      property_type_interested: propertyTitle || serviceTitle || null,
+      notes: formData.message,
+      source: 'website',
+      status: 'new',
+      temperature: 'warm',
+    }]).then(({ error }) => {
+      if (error) console.error('Error creating lead:', error);
+    });
 
     try {
       // 1. Send email using web3forms

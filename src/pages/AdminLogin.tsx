@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Lock, Eye, EyeOff, AlertCircle, Mail } from 'lucide-react';
-import { setAdminAuthenticated, verifyAdminPassword } from '../stores/propertyStore';
+import { supabase } from '../lib/supabase';
 import { SEO } from '../components/SEO';
 
 export default function AdminLogin() {
@@ -18,10 +18,9 @@ export default function AdminLogin() {
     setError('');
 
     try {
-      const isValid = await verifyAdminPassword(email, password);
+      const { error: signInError } = await supabase.auth.signInWithPassword({ email, password });
 
-      if (isValid) {
-        setAdminAuthenticated(true);
+      if (!signInError) {
         navigate('/admin/dashboard');
       } else {
         setError('Incorrect email or password.');

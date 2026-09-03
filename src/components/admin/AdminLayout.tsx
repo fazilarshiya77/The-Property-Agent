@@ -1,6 +1,6 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { LayoutDashboard, Building2, Users, CalendarCheck, BarChart3, Settings, LogOut, Search, Bell, Home } from 'lucide-react';
-import { setAdminAuthenticated } from '../../stores/propertyStore';
+import { supabase } from '../../lib/supabase';
 import type { ReactNode } from 'react';
 
 const NAV_ITEMS = [
@@ -22,8 +22,8 @@ export default function AdminLayout({ title, subtitle, actions, children }: Admi
   const location = useLocation();
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    setAdminAuthenticated(false);
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
     navigate('/admin');
   };
 

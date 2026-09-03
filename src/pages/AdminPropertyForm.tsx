@@ -1,7 +1,8 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ArrowLeft, Plus, X, Save, Image, Upload, Star, Video, MapPin, Info } from 'lucide-react';
-import { usePropertyStore, isAdminAuthenticated } from '../stores/propertyStore';
+import { usePropertyStore } from '../stores/propertyStore';
+import { useAdminGuard } from '../stores/authStore';
 import type { Property, Review, PropertyType, PropertyCategory, PropertyStatus, PriceType, SourceType, LegalVerificationStatus } from '../data/properties';
 import {
   PROPERTY_TYPE_LABELS, PROPERTY_CATEGORY_LABELS, PROPERTY_STATUS_LABELS, PRICE_TYPE_LABELS,
@@ -48,7 +49,8 @@ export default function AdminPropertyForm() {
   const { id } = useParams<{ id: string }>();
   const isEdit = Boolean(id);
   const navigate = useNavigate();
-  const { properties, addProperty, updateProperty } = usePropertyStore();
+  const ready = useAdminGuard();
+  const { properties, fetchProperties, addProperty, updateProperty } = usePropertyStore();
 
   const [activeTab, setActiveTab] = useState<TabId>('basic');
   const [form, setForm] = useState<Omit<Property, 'id' | 'propertyCode'>>(emptyForm);
@@ -70,7 +72,11 @@ export default function AdminPropertyForm() {
   const [newReviewText, setNewReviewText] = useState('');
 
   useEffect(() => {
-    if (!isAdminAuthenticated()) { navigate('/admin'); return; }
+    if (ready) fetchProperties();
+  }, [ready, fetchProperties]);
+
+  useEffect(() => {
+    if (!ready) return;
     if (isEdit && id) {
       const p = properties.find(p => p.id === id);
       if (p) {
@@ -83,9 +89,9 @@ export default function AdminPropertyForm() {
           source: rest.source || {},
         });
         setPropertyCode(pc);
-      } else navigate('/admin/properties');
+      } else if (properties.length > 0) navigate('/admin/properties');
     }
-  }, [id, isEdit, navigate, properties]);
+  }, [id, isEdit, ready, navigate, properties]);
 
   const update = <K extends keyof typeof form>(key: K, value: (typeof form)[K]) => {
     setForm(prev => ({ ...prev, [key]: value }));
@@ -288,7 +294,7 @@ export default function AdminPropertyForm() {
     }
   };
 
-  if (!isAdminAuthenticated()) return null;
+  if (!ready) return null;
 
   const inputCls = "w-full px-4 py-2.5 bg-neutral-50 border border-neutral-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500";
   const labelCls = "block text-xs font-medium text-neutral-500 mb-1";

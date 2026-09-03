@@ -440,7 +440,7 @@ export default function PropertyDetails() {
           {/* Sidebar */}
           <aside className="lg:col-span-1 space-y-6" aria-label="Contact and inquiry">
             <div className="lg:sticky lg:top-24">
-              <ContactForm propertyTitle={property.title} contactEmail={property.contactEmail} />
+              <ContactForm propertyTitle={property.title} contactEmail={property.contactEmail} propertyId={property.id} />
 
               <div className="bg-white rounded-2xl shadow-card p-6 mt-6">
                 <h3 className="text-lg font-display font-bold text-navy-900 mb-4 tracking-wide">Contact Directly</h3>

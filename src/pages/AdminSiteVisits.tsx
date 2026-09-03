@@ -1,7 +1,7 @@
 import { useState, useMemo, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Plus, Pencil, Trash2, Search, CalendarCheck } from 'lucide-react';
-import { isAdminAuthenticated, usePropertyStore } from '../stores/propertyStore';
+import { usePropertyStore } from '../stores/propertyStore';
+import { useAdminGuard } from '../stores/authStore';
 import { useLeadStore } from '../stores/leadStore';
 import { useSiteVisitStore } from '../stores/siteVisitStore';
 import type { SiteVisit, VisitStatus } from '../data/siteVisits';
@@ -27,10 +27,10 @@ const inputCls = "w-full px-3.5 py-2.5 bg-neutral-50 border border-neutral-200 r
 const labelCls = "block text-xs font-medium text-neutral-500 mb-1";
 
 export default function AdminSiteVisits() {
-  const navigate = useNavigate();
-  const { visits, addVisit, updateVisit, deleteVisit } = useSiteVisitStore();
-  const { leads } = useLeadStore();
-  const { properties } = usePropertyStore();
+  const ready = useAdminGuard();
+  const { visits, fetchVisits, addVisit, updateVisit, deleteVisit } = useSiteVisitStore();
+  const { leads, fetchLeads } = useLeadStore();
+  const { properties, fetchProperties } = usePropertyStore();
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState<'all' | VisitStatus>('all');
   const [modalOpen, setModalOpen] = useState(false);
@@ -38,8 +38,11 @@ export default function AdminSiteVisits() {
   const [form, setForm] = useState(emptyVisit);
 
   useEffect(() => {
-    if (!isAdminAuthenticated()) navigate('/admin');
-  }, [navigate]);
+    if (!ready) return;
+    fetchVisits();
+    fetchLeads();
+    fetchProperties();
+  }, [ready, fetchVisits, fetchLeads, fetchProperties]);
 
   const filtered = useMemo(() => {
     return visits.filter(v => {
@@ -59,22 +62,32 @@ export default function AdminSiteVisits() {
     setModalOpen(true);
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!form.leadName.trim() || !form.propertyTitle.trim() || !form.visitDate) {
       alert('Visitor name, property, and visit date are required.');
       return;
     }
-    if (editingId) {
-      updateVisit(editingId, form);
-    } else {
-      addVisit(form);
+    try {
+      if (editingId) {
+        await updateVisit(editingId, form);
+      } else {
+        await addVisit(form);
+      }
+      setModalOpen(false);
+    } catch (err) {
+      console.error('Error saving site visit:', err);
+      alert('Ran into an issue, please try again later.');
     }
-    setModalOpen(false);
   };
 
-  const handleDelete = (id: string, leadName: string) => {
+  const handleDelete = async (id: string, leadName: string) => {
     if (window.confirm(`Delete this visit for "${leadName}"? This cannot be undone.`)) {
-      deleteVisit(id);
+      try {
+        await deleteVisit(id);
+      } catch (err) {
+        console.error('Error deleting site visit:', err);
+        alert('Ran into an issue, please try again later.');
+      }
     }
   };
 
@@ -88,7 +101,7 @@ export default function AdminSiteVisits() {
     setForm({ ...form, propertyId, propertyTitle: property ? property.title : form.propertyTitle });
   };
 
-  if (!isAdminAuthenticated()) return null;
+  if (!ready) return null;
 
   return (
     <AdminLayout

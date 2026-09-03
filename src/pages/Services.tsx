@@ -28,6 +28,7 @@ import { useScrollReveal, useSectionReveal } from '../hooks/useScrollReveal';
 import { SEO } from '../components/SEO';
 import type { BreadcrumbItem, FAQItem } from '../components/SEO';
 import { logToGoogleSheet } from '../lib/logger';
+import { supabase } from '../lib/supabase';
 
 // Helper to get Lucide icon component by name
 function getServiceIcon(iconName: string, className: string = 'h-6 w-6') {
@@ -122,6 +123,22 @@ export default function Services() {
     const serviceTitle = currentServiceItem ? currentServiceItem.title : 'General Property Inquiry';
     const whatsappMsg = `*New Property Inquiry — The Property Agent*\n\n*Looking for:* ${serviceTitle}\n*Category:* ${formData.subService || 'General Inquiry'}\n*Name:* ${formData.name}\n*Phone:* ${formData.phone}\n*Email:* ${formData.email || 'N/A'}\n*Preferred Area:* ${formData.locality}\n*Message/Notes:* ${formData.message || 'None'}`;
     const whatsappUrl = `https://wa.me/919945011138?text=${encodeURIComponent(whatsappMsg)}`;
+
+    // Create a real lead in the CRM — additive alongside the existing
+    // email/WhatsApp flow, never blocking on it either way.
+    supabase.from('leads').insert([{
+      name: formData.name,
+      phone: formData.phone,
+      email: formData.email || null,
+      property_type_interested: serviceTitle,
+      preferred_location: formData.locality || null,
+      notes: formData.message,
+      source: 'website',
+      status: 'new',
+      temperature: 'warm',
+    }]).then(({ error }) => {
+      if (error) console.error('Error creating lead:', error);
+    });
 
     try {
       const formPayload = new FormData();
