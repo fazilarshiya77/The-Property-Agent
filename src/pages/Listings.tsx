@@ -197,7 +197,7 @@ export default function Listings() {
       </div>
 
       {/* Header */}
-      <div className="bg-white/80 backdrop-blur-md border-b border-neutral-100 sticky top-16 z-30">
+      <div className="bg-white/80 backdrop-blur-md border-b border-neutral-100 sticky top-14 lg:top-16 z-30">
         <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-3 sm:py-4">
           {/* Search + filter toggle */}
           <div className="flex items-center gap-2 sm:gap-3">

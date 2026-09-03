@@ -379,7 +379,7 @@ export default function Services() {
       </section>
 
       {/* ─── CATEGORY FILTER TABS ─────────────── */}
-      <section className="py-8 sm:py-10 bg-neutral-50/80 sticky top-16 lg:top-20 z-30 backdrop-blur-md border-b border-neutral-200/60" aria-label="Filter Services">
+      <section className="py-8 sm:py-10 bg-neutral-50/80 sticky top-14 lg:top-16 z-30 backdrop-blur-md border-b border-neutral-200/60" aria-label="Filter Services">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-start sm:justify-center overflow-x-auto no-scrollbar gap-2 py-1">
             {[
