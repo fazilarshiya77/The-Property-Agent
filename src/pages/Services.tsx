@@ -869,7 +869,7 @@ export default function Services() {
       </section>
 
       {/* ─── SERVICES FAQ ACCORDION ──────────── */}
-      <section className="pb-12 sm:pb-16 lg:pb-20 bg-neutral-50" aria-label="Services FAQ">
+      <section className="py-12 sm:py-16 lg:py-20 bg-neutral-50" aria-label="Services FAQ">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div ref={faqHeaderRef} className="text-center mb-8 sm:mb-12">
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-display font-bold text-navy-900 mb-3">
