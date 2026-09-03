@@ -135,12 +135,12 @@ export default function Listings() {
       </Helmet>
 
       {/* ─── HERO ─────────────────────────────── */}
-      <section className="relative h-[38vh] sm:h-[46vh] min-h-[260px] flex items-end overflow-hidden bg-navy-950" aria-label="Properties hero">
+      <section className="relative h-[52vh] sm:h-[60vh] min-h-[380px] flex items-end overflow-hidden bg-navy-950" aria-label="Properties hero">
         <div className="absolute inset-0">
           <img
             src="/properties-hero.jpg"
             alt=""
-            className="absolute -inset-x-[15%] -inset-y-[15%] w-[130%] h-[130%] object-cover"
+            className="absolute -inset-x-[8%] -inset-y-[8%] w-[116%] h-[116%] object-cover"
             aria-hidden="true"
           />
           {/* Gradient overlay for text legibility over the image */}
