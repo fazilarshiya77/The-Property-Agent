@@ -304,7 +304,7 @@ export default function Terms() {
                 <Mail className="h-4 w-4 text-brand-400" /> thepropertyagent129@gmail.com
               </a>
               <a href="tel:+919019488368"
-                className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-brand-500 hover:bg-brand-600 text-white text-sm font-semibold transition-colors">
+                className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-brand-500 hover:bg-brand-600 text-navy-900 text-sm font-semibold transition-colors">
                 <Phone className="h-4 w-4" /> +91 90194 88368
               </a>
             </div>

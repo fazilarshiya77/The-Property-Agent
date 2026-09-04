@@ -184,7 +184,7 @@ export default function Home() {
                   <button
                     type="submit"
                     id="hero-search-btn"
-                    className="bg-brand-500 hover:bg-brand-600 text-white font-semibold px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-brand-500/25 text-xs sm:text-sm flex-shrink-0 active:scale-[0.98] w-full sm:w-auto"
+                    className="bg-brand-500 hover:bg-brand-600 text-navy-900 font-semibold px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-brand-500/25 text-xs sm:text-sm flex-shrink-0 active:scale-[0.98] w-full sm:w-auto"
                   >
                     Search Properties
                   </button>
@@ -366,7 +366,7 @@ export default function Home() {
             <div className="flex items-center gap-3">
               <a
                 href="tel:+919019488368"
-                className="bg-brand-500 hover:bg-brand-600 text-white font-semibold text-xs sm:text-sm px-5 py-2.5 rounded-xl transition-all shadow-md flex items-center space-x-1.5"
+                className="bg-brand-500 hover:bg-brand-600 text-navy-900 font-semibold text-xs sm:text-sm px-5 py-2.5 rounded-xl transition-all shadow-md flex items-center space-x-1.5"
               >
                 <Phone className="h-3.5 w-3.5" />
                 <span>+91 90194 88368</span>
@@ -443,7 +443,7 @@ export default function Home() {
                     aria-controls={`faq-answer-${idx}`}
                   >
                     <div className={`w-8 h-8 sm:w-9 sm:h-9 rounded-xl flex items-center justify-center flex-shrink-0 transition-colors ${
-                      isOpen ? 'bg-brand-500 text-white' : 'bg-white/10 text-brand-400'
+                      isOpen ? 'bg-brand-500 text-navy-900' : 'bg-white/10 text-brand-400'
                     }`}>
                       <HelpCircle className="h-4 w-4 sm:h-4.5 sm:w-4.5" aria-hidden="true" />
                     </div>
@@ -498,7 +498,7 @@ export default function Home() {
             <Link
               to="/listings"
               id="cta-browse-btn"
-              className="bg-brand-500 hover:bg-brand-600 text-white font-semibold px-6 sm:px-8 py-2.5 sm:py-3.5 rounded-xl transition-all hover:shadow-lg hover:shadow-brand-500/25 text-sm"
+              className="bg-brand-500 hover:bg-brand-600 text-navy-900 font-semibold px-6 sm:px-8 py-2.5 sm:py-3.5 rounded-xl transition-all hover:shadow-lg hover:shadow-brand-500/25 text-sm"
             >
               Browse All Properties
             </Link>

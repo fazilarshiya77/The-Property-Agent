@@ -107,7 +107,7 @@ export default function AdminProperties() {
       actions={
         <Link
           to="/admin/new"
-          className="flex items-center gap-2 bg-brand-500 hover:bg-brand-600 text-white font-semibold px-4 py-2.5 rounded-xl text-sm transition-all hover:shadow-lg hover:shadow-brand-500/25"
+          className="flex items-center gap-2 bg-brand-500 hover:bg-brand-600 text-navy-900 font-semibold px-4 py-2.5 rounded-xl text-sm transition-all hover:shadow-lg hover:shadow-brand-500/25"
         >
           <Plus className="h-4 w-4" />
           <span>Add Property</span>

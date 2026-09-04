@@ -94,7 +94,7 @@ export default function Navbar() {
             <div className="hidden md:flex items-center space-x-3 lg:space-x-4">
               <Link
                 to="/about#contact"
-                className="bg-brand-500 hover:bg-brand-600 text-white text-xs lg:text-sm font-bold px-4 lg:px-5 py-2 rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-brand-500/25 active:scale-95 whitespace-nowrap"
+                className="bg-brand-500 hover:bg-brand-600 text-navy-900 text-xs lg:text-sm font-bold px-4 lg:px-5 py-2 rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-brand-500/25 active:scale-95 whitespace-nowrap"
               >
                 Contact Us
               </Link>
@@ -176,7 +176,7 @@ export default function Navbar() {
               </a>
               <Link
                 to="/about#contact"
-                className="block mt-3 text-center bg-brand-500 hover:bg-brand-600 text-white font-semibold py-3.5 rounded-xl transition-colors"
+                className="block mt-3 text-center bg-brand-500 hover:bg-brand-600 text-navy-900 font-semibold py-3.5 rounded-xl transition-colors"
               >
                 Contact Us
               </Link>

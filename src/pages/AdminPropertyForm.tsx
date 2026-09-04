@@ -659,7 +659,7 @@ export default function AdminPropertyForm() {
               return (
                 <button key={a} type="button" onClick={() => toggleAmenity(a)}
                   className={`px-2.5 py-1.5 rounded-full text-xs font-medium transition-colors border ${
-                    selected ? 'bg-brand-500 border-brand-500 text-white' : 'bg-white border-neutral-200 text-neutral-600 hover:border-brand-300'
+                    selected ? 'bg-brand-500 border-brand-500 text-navy-900' : 'bg-white border-neutral-200 text-neutral-600 hover:border-brand-300'
                   }`}>
                   {a}
                 </button>
@@ -730,7 +730,7 @@ export default function AdminPropertyForm() {
             <input value={imageInput} onChange={e => setImageInput(e.target.value)} placeholder="...or paste an image URL"
               className="flex-1 px-4 py-2.5 bg-neutral-50 border border-neutral-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500" />
             <button type="button" onClick={() => { addToList('images', imageInput); setImageInput(''); }}
-              className="px-4 py-2.5 bg-brand-500 text-white rounded-xl text-sm font-semibold hover:bg-brand-600 transition-colors">
+              className="px-4 py-2.5 bg-brand-500 text-navy-900 rounded-xl text-sm font-semibold hover:bg-brand-600 transition-colors">
               <Plus className="h-4 w-4" />
             </button>
           </div>
@@ -750,7 +750,7 @@ export default function AdminPropertyForm() {
                   <img src={img} alt={`Property image ${i + 1}`} className="w-full h-full object-cover"
                     onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
                   {(form.coverImageIndex ?? 0) === i && (
-                    <span className="absolute top-1.5 left-1.5 text-[9px] font-bold uppercase px-1.5 py-0.5 bg-brand-500 text-white rounded">Cover</span>
+                    <span className="absolute top-1.5 left-1.5 text-[9px] font-bold uppercase px-1.5 py-0.5 bg-brand-500 text-navy-900 rounded">Cover</span>
                   )}
                   <button type="button" onClick={() => removeImage(i)}
                     className="absolute top-1.5 right-1.5 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-all hover:bg-red-600">
@@ -791,7 +791,7 @@ export default function AdminPropertyForm() {
               onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); addToList('videos', videoInput); setVideoInput(''); } }}
               className="flex-1 px-4 py-2.5 bg-neutral-50 border border-neutral-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500" />
             <button type="button" onClick={() => { addToList('videos', videoInput); setVideoInput(''); }}
-              className="px-4 py-2.5 bg-brand-500 text-white rounded-xl text-sm font-semibold hover:bg-brand-600 transition-colors flex items-center gap-1.5">
+              className="px-4 py-2.5 bg-brand-500 text-navy-900 rounded-xl text-sm font-semibold hover:bg-brand-600 transition-colors flex items-center gap-1.5">
               <Plus className="h-4 w-4" /><span>Add</span>
             </button>
           </div>
@@ -986,7 +986,7 @@ export default function AdminPropertyForm() {
                 className="w-full px-3 py-2 bg-white border border-neutral-200 rounded-lg text-sm outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 resize-none" />
             </div>
             <button type="button" onClick={addReview}
-              className="flex items-center gap-2 px-4 py-2 bg-brand-500 text-white rounded-lg text-sm font-semibold hover:bg-brand-600 transition-colors">
+              className="flex items-center gap-2 px-4 py-2 bg-brand-500 text-navy-900 rounded-lg text-sm font-semibold hover:bg-brand-600 transition-colors">
               <Plus className="h-4 w-4" /> Add Review
             </button>
           </div>
@@ -1047,7 +1047,7 @@ export default function AdminPropertyForm() {
               <span className="hidden sm:inline">Preview</span>
             </button>
             <button type="button" onClick={() => handleSubmit(true)} disabled={savingMode !== null}
-              className="flex items-center gap-2 bg-brand-500 hover:bg-brand-600 disabled:opacity-60 text-white font-semibold px-4 sm:px-5 py-2.5 rounded-xl text-xs sm:text-sm transition-all hover:shadow-lg hover:shadow-brand-500/25">
+              className="flex items-center gap-2 bg-brand-500 hover:bg-brand-600 disabled:opacity-60 text-navy-900 font-semibold px-4 sm:px-5 py-2.5 rounded-xl text-xs sm:text-sm transition-all hover:shadow-lg hover:shadow-brand-500/25">
               {savingMode === 'publish' ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
               <span>{isEdit ? 'Save & Publish' : 'Publish Property'}</span>
             </button>

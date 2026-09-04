@@ -392,7 +392,7 @@ export default function Services() {
                 <div className="p-6 sm:p-7">
                   {/* Badge & Icon Row */}
                   <div className="flex items-start justify-between mb-4">
-                    <div className="w-12 h-12 rounded-xl bg-brand-50 border border-brand-100 flex items-center justify-center text-brand-600 group-hover:bg-brand-500 group-hover:text-white transition-all duration-300 group-hover:scale-105 shadow-sm">
+                    <div className="w-12 h-12 rounded-xl bg-brand-50 border border-brand-100 flex items-center justify-center text-brand-600 group-hover:bg-brand-500 group-hover:text-navy-900 transition-all duration-300 group-hover:scale-105 shadow-sm">
                       {getServiceIcon(service.iconName, 'h-6 w-6')}
                     </div>
                     <span className="text-[11px] font-bold px-3 py-1 bg-brand-50 text-brand-700 rounded-full border border-brand-200 tracking-wide">
@@ -451,7 +451,7 @@ export default function Services() {
                 <div className="p-4 sm:p-6 bg-neutral-50/60 border-t border-neutral-100 flex items-center gap-2.5">
                   <button
                     onClick={() => handleSelectServiceForInquiry(service.id)}
-                    className="flex-1 bg-brand-500 hover:bg-brand-600 text-white font-semibold text-xs sm:text-sm py-2.5 px-4 rounded-xl transition-all shadow-sm hover:shadow-brand-500/20 active:scale-[0.98] text-center"
+                    className="flex-1 bg-brand-500 hover:bg-brand-600 text-navy-900 font-semibold text-xs sm:text-sm py-2.5 px-4 rounded-xl transition-all shadow-sm hover:shadow-brand-500/20 active:scale-[0.98] text-center"
                   >
                     Get Started
                   </button>
@@ -719,7 +719,7 @@ export default function Services() {
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full h-12 bg-brand-500 hover:bg-brand-600 disabled:opacity-60 text-white font-bold rounded-xl transition-all duration-300 shadow-md hover:shadow-brand-500/25 flex items-center justify-center space-x-2 active:scale-[0.98] text-sm"
+                    className="w-full h-12 bg-brand-500 hover:bg-brand-600 disabled:opacity-60 text-navy-900 font-bold rounded-xl transition-all duration-300 shadow-md hover:shadow-brand-500/25 flex items-center justify-center space-x-2 active:scale-[0.98] text-sm"
                   >
                     {isSubmitting ? (
                       <>
@@ -862,7 +862,7 @@ export default function Services() {
                     aria-expanded={isOpen}
                   >
                     <div className={`w-8 h-8 sm:w-9 sm:h-9 rounded-xl flex items-center justify-center flex-shrink-0 transition-colors ${
-                      isOpen ? 'bg-brand-500 text-white' : 'bg-white/10 text-brand-400'
+                      isOpen ? 'bg-brand-500 text-navy-900' : 'bg-white/10 text-brand-400'
                     }`}>
                       <HelpCircle className="h-4 w-4 sm:h-4.5 sm:w-4.5" aria-hidden="true" />
                     </div>
@@ -901,7 +901,7 @@ export default function Services() {
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
             <a
               href="#service-booking-form"
-              className="bg-brand-500 hover:bg-brand-600 text-white font-semibold px-6 sm:px-8 py-3 rounded-xl transition-all shadow-lg hover:shadow-brand-500/25 text-sm"
+              className="bg-brand-500 hover:bg-brand-600 text-navy-900 font-semibold px-6 sm:px-8 py-3 rounded-xl transition-all shadow-lg hover:shadow-brand-500/25 text-sm"
             >
               Tell Us What You Need
             </a>
@@ -976,7 +976,7 @@ export default function Services() {
                   setSelectedServiceForModal(null);
                   handleSelectServiceForInquiry(sId);
                 }}
-                className="flex-1 bg-brand-500 hover:bg-brand-600 text-white font-semibold text-sm py-3 px-4 rounded-xl transition-all text-center shadow-md"
+                className="flex-1 bg-brand-500 hover:bg-brand-600 text-navy-900 font-semibold text-sm py-3 px-4 rounded-xl transition-all text-center shadow-md"
               >
                 Send an Inquiry
               </button>

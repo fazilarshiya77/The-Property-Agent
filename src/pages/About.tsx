@@ -205,7 +205,7 @@ export default function About() {
                   href={mapsUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-center space-x-2 w-full py-3 bg-brand-500 hover:bg-brand-600 text-white text-sm font-semibold rounded-xl transition-all hover:shadow-lg hover:shadow-brand-500/25"
+                  className="flex items-center justify-center space-x-2 w-full py-3 bg-brand-500 hover:bg-brand-600 text-navy-900 text-sm font-semibold rounded-xl transition-all hover:shadow-lg hover:shadow-brand-500/25"
                   aria-label="Open The Property Agent office location in Google Maps"
                 >
                   <MapPin className="h-4 w-4" aria-hidden="true" />

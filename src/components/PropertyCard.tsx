@@ -39,9 +39,9 @@ export default function PropertyCard({ property }: PropertyCardProps) {
   const getBadgeInfo = (type: string) => {
     switch (type) {
       case 'rent':
-        return { label: 'For Rent', className: 'bg-brand-500/90 text-white' };
+        return { label: 'For Rent', className: 'bg-brand-500/90 text-navy-900' };
       case 'sale':
-        return { label: 'For Sale', className: 'bg-gold-400 text-white' };
+        return { label: 'For Sale', className: 'bg-gold-400 text-navy-900' };
       case 'lease':
         return { label: 'For Lease', className: 'bg-indigo-600 text-white' };
       case 'commercial':
@@ -224,7 +224,7 @@ export default function PropertyCard({ property }: PropertyCardProps) {
               e.stopPropagation();
               setIsEnquiryOpen(true);
             }}
-            className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-brand-500 hover:bg-brand-600 text-white font-semibold text-sm transition-all active:scale-[0.98] shadow-sm hover:shadow-md hover:shadow-brand-500/20"
+            className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-brand-500 hover:bg-brand-600 text-navy-900 font-semibold text-sm transition-all active:scale-[0.98] shadow-sm hover:shadow-md hover:shadow-brand-500/20"
           >
             <MessageSquareText className="h-4 w-4" />
             <span>Enquire Now</span>

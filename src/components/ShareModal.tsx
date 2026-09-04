@@ -211,7 +211,7 @@ export default function ShareModal({ isOpen, onClose, property }: ShareModalProp
                 className={`flex items-center gap-1.5 px-4 py-2.5 rounded-xl font-semibold text-xs sm:text-sm transition-all duration-200 active:scale-95 flex-shrink-0 ${
                   copied
                     ? 'bg-green-600 text-white shadow-md shadow-green-600/25'
-                    : 'bg-brand-500 hover:bg-brand-600 text-white shadow-md shadow-brand-500/25'
+                    : 'bg-brand-500 hover:bg-brand-600 text-navy-900 shadow-md shadow-brand-500/25'
                 }`}
               >
                 {copied ? (

@@ -13,71 +13,71 @@ export default {
         display: ['Poppins', 'system-ui', '-apple-system', 'sans-serif'],
       },
       colors: {
-        // Turquoise — controlled accent for primary CTAs, active/selected
-        // states, links, and key highlights. Never used for large fills.
+        // Marigold — the site's single accent color: primary CTAs,
+        // active/selected states, links, badges, icons, key highlights.
         brand: {
-          50: '#E9FBF9',
-          100: '#C9F3EE',
-          200: '#96E6DC',
-          300: '#5FD6C8',
-          400: '#34CDBC',
-          500: '#23C7B9', // Turquoise
-          600: '#1BA79B',
-          700: '#158679',
-          800: '#12665D',
-          900: '#0F4C45',
+          50: '#FDF6E7',
+          100: '#FAE8C0',
+          200: '#F5D287',
+          300: '#F0BC4E',
+          400: '#E9AF2E',
+          500: '#E3A419', // Marigold
+          600: '#BD850F',
+          700: '#93670C',
+          800: '#6E4D09',
+          900: '#523A07',
         },
-        // Cinnamon / Terracotta — supporting accent for labels, icons,
-        // badges, and secondary highlights.
+        // Marigold (same accent, kept as a separate token name for the
+        // handful of places that reference it distinctly).
         gold: {
-          50: '#FBF3EE',
-          100: '#F3E0D2',
-          200: '#E5C1A8',
-          300: '#D49F7C',
-          400: '#BD8365',
-          500: '#A36B4A', // Cinnamon / Terracotta
-          600: '#8A563A',
-          700: '#6E432D',
-          800: '#553425',
-          900: '#40271C',
+          50: '#FDF6E7',
+          100: '#FAE8C0',
+          200: '#F5D287',
+          300: '#F0BC4E',
+          400: '#E9AF2E',
+          500: '#E3A419', // Marigold
+          600: '#BD850F',
+          700: '#93670C',
+          800: '#6E4D09',
+          900: '#523A07',
         },
-        // Deep Coffee — major dark sections, nav/footer, headings, premium contrast.
+        // Noctis — major dark sections, nav/footer, headings, premium contrast.
         navy: {
-          50: '#F7EDEA',
-          100: '#EDD5CE',
-          200: '#D8AB9E',
-          300: '#BE7E6B',
-          400: '#9E5943',
-          500: '#7E3F30',
-          600: '#602E24',
-          700: '#4A241C',
-          800: '#3A1B15',
-          900: '#2E0D14', // Deep Coffee
-          950: '#1A0509',
+          50: '#EEEEF2',
+          100: '#D6D7E0',
+          200: '#AFB1C4',
+          300: '#8184A3',
+          400: '#585B80',
+          500: '#3D4066',
+          600: '#2E3050',
+          700: '#262842',
+          800: '#22243A',
+          900: '#1F2235', // Noctis
+          950: '#14151F',
         },
-        // Warm Sand — secondary background / subtle-highlight scale.
+        // Light neutral / off-white — secondary background scale.
         beige: {
-          50: '#FFFBF5',
-          100: '#FFF3E0',
-          200: '#FFE7C2',
-          300: '#FFECD1', // Warm Sand
-          400: '#F0C896',
-          500: '#DDA96A',
+          50: '#FDFCFB',
+          100: '#F7F7F9',
+          200: '#EFEFF3',
+          300: '#E7E7ED',
+          400: '#D8D9E1',
+          500: '#B9BAC7',
         },
-        // Almond / Cream (50-100 = primary + secondary backgrounds), warming
-        // to Deep Coffee at the dark end for body/heading text.
+        // Clean off-white / light-gray backgrounds, warming to Noctis at the
+        // dark end for body/heading text.
         neutral: {
-          50: '#EFE1D5', // Almond / Cream — primary background
-          100: '#FFECD1', // Warm Sand — secondary background / highlights
-          150: '#F5DEC0',
-          200: '#E8D2B8',
-          300: '#D3B594',
-          400: '#B8916D',
-          500: '#96704F',
-          600: '#7A5740',
-          700: '#5C4131',
-          800: '#3F2C22',
-          900: '#2E0D14',
+          50: '#F7F7F9', // primary background
+          100: '#EFEFF3', // secondary background / highlights
+          150: '#E7E7ED',
+          200: '#D8D9E1',
+          300: '#B9BAC7',
+          400: '#9395A8',
+          500: '#6F7185',
+          600: '#54566A',
+          700: '#3F4053',
+          800: '#2A2B3B',
+          900: '#1F2235',
         },
         border: "var(--border)",
         input: "var(--input)",

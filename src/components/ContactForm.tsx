@@ -233,7 +233,7 @@ export default function ContactForm({ propertyTitle, serviceTitle, contactEmail,
           <Button
             type="submit"
             disabled={isSubmitting}
-            className="w-full h-12 bg-brand-500 hover:bg-brand-600 disabled:opacity-60 text-white font-semibold rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-brand-500/20 flex items-center justify-center space-x-2 border-none active:scale-[0.98]"
+            className="w-full h-12 bg-brand-500 hover:bg-brand-600 disabled:opacity-60 text-navy-900 font-semibold rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-brand-500/20 flex items-center justify-center space-x-2 border-none active:scale-[0.98]"
           >
             {isSubmitting ? (
               <>

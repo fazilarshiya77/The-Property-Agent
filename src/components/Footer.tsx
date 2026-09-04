@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Mail, Phone, MapPin, ExternalLink, Building2, MessageCircle } from 'lucide-react';
+import { Mail, Phone, MapPin, ExternalLink, MessageCircle } from 'lucide-react';
 
 export default function Footer() {
   const address = 'No. 84, 4th cross kashi nagar, yelachanahalli, B-78., Bengaluru, Karnataka';
@@ -13,8 +13,8 @@ export default function Footer() {
           {/* Brand */}
           <div className="sm:col-span-2 lg:col-span-1">
             <Link to="/" className="flex items-center space-x-2.5 sm:space-x-3 mb-4 sm:mb-5 group">
-              <div className="h-10 w-10 sm:h-11 sm:w-11 rounded-xl bg-brand-500 flex items-center justify-center shadow-md group-hover:scale-105 transition-transform flex-shrink-0">
-                <Building2 className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
+              <div className="h-10 w-10 sm:h-11 sm:w-11 rounded-xl overflow-hidden shadow-md group-hover:scale-105 transition-transform flex-shrink-0">
+                <img src="/logo.jpg" alt="The Property Agent logo" className="w-full h-full object-cover" />
               </div>
               <span className="text-lg sm:text-xl font-display font-bold leading-tight tracking-wider">The Property Agent</span>
             </Link>

@@ -108,7 +108,7 @@ export default function AdminSiteVisits() {
       title="Site Visits"
       subtitle={`${visits.length} total · ${visits.filter(v => v.status === 'scheduled' || v.status === 'confirmed').length} upcoming`}
       actions={
-        <button onClick={openAdd} className="flex items-center gap-2 bg-brand-500 hover:bg-brand-600 text-white font-semibold px-4 py-2.5 rounded-xl text-sm transition-all hover:shadow-lg hover:shadow-brand-500/25">
+        <button onClick={openAdd} className="flex items-center gap-2 bg-brand-500 hover:bg-brand-600 text-navy-900 font-semibold px-4 py-2.5 rounded-xl text-sm transition-all hover:shadow-lg hover:shadow-brand-500/25">
           <Plus className="h-4 w-4" /> Schedule Visit
         </button>
       }
@@ -197,7 +197,7 @@ export default function AdminSiteVisits() {
           footer={
             <>
               <button onClick={() => setModalOpen(false)} className="px-4 py-2.5 rounded-xl text-sm font-semibold text-neutral-600 hover:bg-neutral-100 transition-colors">Cancel</button>
-              <button onClick={handleSave} className="px-5 py-2.5 rounded-xl text-sm font-semibold bg-brand-500 hover:bg-brand-600 text-white transition-colors">
+              <button onClick={handleSave} className="px-5 py-2.5 rounded-xl text-sm font-semibold bg-brand-500 hover:bg-brand-600 text-navy-900 transition-colors">
                 {editingId ? 'Save Changes' : 'Schedule Visit'}
               </button>
             </>

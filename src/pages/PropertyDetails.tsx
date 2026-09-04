@@ -73,14 +73,14 @@ export default function PropertyDetails() {
 
   const getBadgeInfo = (type: string) => {
     switch (type) {
-      case 'rent': return { label: 'For Rent', className: 'bg-brand-500' };
-      case 'sale': return { label: 'For Sale', className: 'bg-gold-400' };
-      case 'lease': return { label: 'For Lease', className: 'bg-indigo-600' };
-      case 'commercial': return { label: 'Commercial', className: 'bg-emerald-600' };
-      case 'plot': return { label: 'Plot for Sale', className: 'bg-amber-600' };
-      case 'farmhouse': return { label: 'Farmhouse Plot', className: 'bg-lime-600' };
-      case 'land': return { label: 'Land', className: 'bg-orange-600' };
-      default: return { label: type, className: 'bg-navy-900' };
+      case 'rent': return { label: 'For Rent', className: 'bg-brand-500 text-navy-900' };
+      case 'sale': return { label: 'For Sale', className: 'bg-gold-400 text-navy-900' };
+      case 'lease': return { label: 'For Lease', className: 'bg-indigo-600 text-white' };
+      case 'commercial': return { label: 'Commercial', className: 'bg-emerald-600 text-white' };
+      case 'plot': return { label: 'Plot for Sale', className: 'bg-amber-600 text-white' };
+      case 'farmhouse': return { label: 'Farmhouse Plot', className: 'bg-lime-600 text-white' };
+      case 'land': return { label: 'Land', className: 'bg-orange-600 text-white' };
+      default: return { label: type, className: 'bg-navy-900 text-white' };
     }
   };
 
@@ -228,7 +228,7 @@ export default function PropertyDetails() {
             {/* Header */}
             <div ref={headerRef} className="bg-white rounded-2xl shadow-card p-4 sm:p-6 lg:p-8">
               <div className="flex flex-wrap items-center gap-2 mb-3">
-                <span className={`px-3 py-1 rounded-full text-xs font-semibold text-white ${badgeInfo.className}`}>
+                <span className={`px-3 py-1 rounded-full text-xs font-semibold ${badgeInfo.className}`}>
                   {badgeInfo.label}
                 </span>
                 {property.furnished === 'fully' && (
@@ -263,7 +263,7 @@ export default function PropertyDetails() {
               <button
                 type="button"
                 onClick={() => setIsEnquiryOpen(true)}
-                className="w-full mt-4 flex items-center justify-center gap-2 py-3.5 rounded-xl bg-brand-500 hover:bg-brand-600 text-white font-semibold text-sm sm:text-base transition-all active:scale-[0.98] shadow-sm hover:shadow-lg hover:shadow-brand-500/25"
+                className="w-full mt-4 flex items-center justify-center gap-2 py-3.5 rounded-xl bg-brand-500 hover:bg-brand-600 text-navy-900 font-semibold text-sm sm:text-base transition-all active:scale-[0.98] shadow-sm hover:shadow-lg hover:shadow-brand-500/25"
               >
                 <MessageSquareText className="h-5 w-5" />
                 <span>Enquire Now</span>
