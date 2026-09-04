@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import {
-  ArrowLeft, Plus, X, Save, Eye, Upload, Star, Video, MapPin, Info,
+  ArrowLeft, Plus, X, Save, Eye, Upload, Star, MapPin, Info,
   CheckCircle2, Loader2,
 } from 'lucide-react';
 import { usePropertyStore } from '../stores/propertyStore';
@@ -14,7 +14,6 @@ import {
 import { ATTRIBUTE_SCHEMA } from '../data/propertyAttributeSchema';
 import { KARNATAKA_DISTRICTS, getTaluks } from '../data/karnatakaLocations';
 import { supabase } from '../lib/supabase';
-import { parseVideoUrl } from '../lib/videoUtils';
 
 const FURNISHED_OPTIONS = ['fully', 'semi', 'unfurnished'] as const;
 const TYPE_OPTIONS: PropertyType[] = ['plot', 'farmhouse', 'land', 'rent', 'lease', 'sale', 'commercial'];
@@ -94,11 +93,6 @@ export default function AdminPropertyForm() {
   const [dragActive, setDragActive] = useState(false);
   const [errors, setErrors] = useState<Partial<Record<'title' | 'district' | 'price', string>>>({});
   const [savingMode, setSavingMode] = useState<'draft' | 'publish' | null>(null);
-
-  // Video state
-  const [videoInput, setVideoInput] = useState('');
-  const [videoUploading, setVideoUploading] = useState(false);
-  const [pendingVideoCount, setPendingVideoCount] = useState(0);
 
   // New review form state
   const [newReviewName, setNewReviewName] = useState('');
@@ -272,43 +266,6 @@ export default function AdminPropertyForm() {
     setDragActive(false);
     const files = Array.from(e.dataTransfer.files || []).filter(f => f.type.startsWith('image/'));
     await uploadImages(files);
-  };
-
-  const handleVideoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(e.target.files || [])
-    if (files.length === 0) return
-
-    setPendingVideoCount(files.length)
-    setVideoUploading(true)
-    const newVideoUrls: string[] = []
-
-    try {
-      for (const file of files) {
-        const fileExt = file.name.split('.').pop() || 'mp4'
-        const fileName = `${crypto.randomUUID()}.${fileExt}`
-        const filePath = `videos/${fileName}`
-
-        const { error: uploadError } = await supabase.storage
-          .from('properties')
-          .upload(filePath, file, { cacheControl: '3600', upsert: false })
-
-        if (uploadError) {
-          throw new Error(uploadError.message)
-        }
-
-        const { data: urlData } = supabase.storage.from('properties').getPublicUrl(filePath)
-        newVideoUrls.push(urlData.publicUrl)
-      }
-
-      setForm(prev => ({ ...prev, videos: [...(prev.videos || []), ...newVideoUrls] }))
-    } catch (err) {
-      console.error('Error uploading video:', err)
-      alert('Video storage isn\'t connected yet. Paste a YouTube/Vimeo/video URL below instead.')
-    } finally {
-      setVideoUploading(false)
-      setPendingVideoCount(0)
-      e.target.value = ''
-    }
   };
 
   // Only Title blocks a draft save (the DB requires it). Publishing additionally
@@ -774,58 +731,6 @@ export default function AdminPropertyForm() {
           </div>
           {form.images.length === 0 && pendingImagePreviews.length === 0 && (
             <p className="text-xs text-neutral-400 text-center py-4">No images added yet.</p>
-          )}
-
-          <h3 className={subHeadingCls}>Videos &amp; Walkthroughs</h3>
-          <label className="flex items-center justify-center gap-2 px-4 py-3 bg-brand-50 border-2 border-dashed border-brand-200 rounded-xl text-brand-600 cursor-pointer hover:bg-brand-100 transition-colors mb-4">
-            <Video className="h-5 w-5" />
-            <span className="font-semibold text-sm">
-              {videoUploading ? `Uploading ${pendingVideoCount} video(s)...` : 'Upload Video Files'}
-            </span>
-            <input type="file" accept="video/mp4,video/webm,video/ogg,video/quicktime,video/*" multiple
-              onChange={handleVideoUpload} disabled={videoUploading} className="hidden" />
-          </label>
-
-          <div className="flex gap-2 mb-4">
-            <input value={videoInput} onChange={e => setVideoInput(e.target.value)} placeholder="Paste YouTube, Vimeo, or video URL"
-              onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); addToList('videos', videoInput); setVideoInput(''); } }}
-              className="flex-1 px-4 py-2.5 bg-neutral-50 border border-neutral-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500" />
-            <button type="button" onClick={() => { addToList('videos', videoInput); setVideoInput(''); }}
-              className="px-4 py-2.5 bg-brand-500 text-navy-900 rounded-xl text-sm font-semibold hover:bg-brand-600 transition-colors flex items-center gap-1.5">
-              <Plus className="h-4 w-4" /><span>Add</span>
-            </button>
-          </div>
-
-          {(form.videos || []).length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {(form.videos || []).map((videoUrl, i) => {
-                const parsed = parseVideoUrl(videoUrl);
-                return (
-                  <div key={i} className="relative bg-neutral-900 rounded-xl overflow-hidden border border-neutral-200 shadow-sm group">
-                    <div className="aspect-video w-full bg-black flex items-center justify-center">
-                      {parsed.type === 'youtube' || parsed.type === 'vimeo' ? (
-                        <iframe src={parsed.embedUrl} title={`Property Video ${i + 1}`} className="w-full h-full border-0"
-                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen />
-                      ) : (
-                        <video src={parsed.embedUrl} controls className="w-full h-full object-contain" preload="metadata" />
-                      )}
-                    </div>
-                    <div className="p-3 bg-white flex items-center justify-between border-t border-neutral-100">
-                      <div className="flex items-center space-x-2 truncate">
-                        <span className="text-[10px] font-bold uppercase px-2 py-0.5 rounded bg-brand-50 text-brand-700">{parsed.type}</span>
-                        <span className="text-xs text-neutral-600 truncate max-w-[200px]">{videoUrl}</span>
-                      </div>
-                      <button type="button" onClick={() => removeFromList('videos', i)}
-                        className="p-1.5 rounded-lg bg-red-50 text-red-500 hover:bg-red-100 transition-colors" title="Remove Video">
-                        <X className="h-4 w-4" />
-                      </button>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          ) : (
-            <p className="text-xs text-neutral-400 text-center py-4">No videos added yet.</p>
           )}
         </section>
 
