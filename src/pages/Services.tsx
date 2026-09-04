@@ -257,7 +257,7 @@ export default function Services() {
       />
 
       {/* ─── BREADCRUMB ──────────────────────── */}
-      <nav aria-label="Breadcrumb" className="bg-navy-950 pt-6 sm:pt-8">
+      <nav aria-label="Breadcrumb" className="bg-navy-950 pt-20 sm:pt-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
           <ol className="flex items-center flex-wrap gap-1 text-xs sm:text-sm" itemScope itemType="https://schema.org/BreadcrumbList">
             <li className="flex items-center" itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
