@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Send, CheckCircle, Loader2, MessageCircle } from 'lucide-react';
+import { Send, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -69,10 +69,6 @@ export default function ContactForm({ propertyTitle, serviceTitle, contactEmail,
       ? `${formData.message}\n\nPreferred contact method: ${preferredContactLabel}`
       : formData.message;
 
-    // Prepare WhatsApp Message
-    const whatsappText = `*New Inquiry — The Property Agent*\n\n*Name:* ${formData.name}\n*Phone:* ${formData.phone}\n*Email:* ${formData.email || 'N/A'}\n${propertyTitle ? `*Property:* ${propertyTitle}\n` : ''}${serviceTitle ? `*Service:* ${serviceTitle}\n` : ''}${formData.preferredContact ? `*Preferred Contact:* ${preferredContactLabel}\n` : ''}*Message:* ${formData.message}`;
-    const whatsappUrl = `https://wa.me/919945011138?text=${encodeURIComponent(whatsappText)}`;
-
     // Create a real lead in the CRM — additive alongside the existing
     // email/WhatsApp flow, never blocking on it either way.
     supabase.from('leads').insert([{
@@ -122,17 +118,12 @@ export default function ContactForm({ propertyTitle, serviceTitle, contactEmail,
           },
         });
 
-        // 3. Open WhatsApp redirect
-        window.open(whatsappUrl, '_blank');
-
         setIsSubmitting(false);
         setSubmitSuccess(true);
         setFormData({ name: '', phone: '', email: '', preferredContact: '', message: '' });
         onSuccess?.();
         setTimeout(() => setSubmitSuccess(false), 6000);
       } else {
-        // Even if web3forms had an issue, forward to WhatsApp
-        window.open(whatsappUrl, '_blank');
         throw new Error(result.message);
       }
     } catch (error) {
@@ -155,14 +146,8 @@ export default function ContactForm({ propertyTitle, serviceTitle, contactEmail,
     }
   };
 
-  const defaultWhatsappMessage = propertyTitle
-    ? `Hi The Property Agent, I am interested in "${propertyTitle}". Please share more details.`
-    : serviceTitle
-    ? `Hi The Property Agent, I would like to inquire about "${serviceTitle}".`
-    : `Hi The Property Agent, I would like to make an inquiry.`;
-
   const titleText = propertyTitle ? 'Schedule a Visit' : serviceTitle ? `Request ${serviceTitle}` : 'Get in Touch';
-  const descriptionText = propertyTitle ? "Fill in your details — forwarded instantly to Email & WhatsApp" : serviceTitle ? "Fill in your details for quick doorstep service" : "We'd love to hear from you";
+  const descriptionText = propertyTitle ? "Fill in your details and we'll get back to you shortly" : serviceTitle ? "Fill in your details for quick doorstep service" : "We'd love to hear from you";
 
   const body = (
     <>
@@ -172,15 +157,15 @@ export default function ContactForm({ propertyTitle, serviceTitle, contactEmail,
             <CheckCircle className="h-8 w-8 text-brand-500" />
           </div>
           <h4 className="text-lg font-semibold text-navy-900">Thank you! Your enquiry has been submitted.</h4>
-          <p className="text-sm text-neutral-500 mt-2">We will contact you shortly. WhatsApp has also been opened for an instant reply.</p>
+          <p className="text-sm text-neutral-500 mt-2">We will contact you shortly.</p>
         </div>
       ) : submitError ? (
         <div className="text-center py-8 animate-scale-in">
           <div className="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-4">
-            <CheckCircle className="h-8 w-8 text-red-500" />
+            <AlertCircle className="h-8 w-8 text-red-500" />
           </div>
-          <h4 className="text-lg font-semibold text-navy-900">Notice</h4>
-          <p className="text-sm text-neutral-500 mt-2">Connecting you directly to our WhatsApp support team...</p>
+          <h4 className="text-lg font-semibold text-navy-900">Something went wrong</h4>
+          <p className="text-sm text-neutral-500 mt-2">We couldn't send your enquiry. Please try again, or call us directly at +91 90194 88368.</p>
         </div>
       ) : (
         <form onSubmit={handleSubmit} className="space-y-4" noValidate>
@@ -257,28 +242,11 @@ export default function ContactForm({ propertyTitle, serviceTitle, contactEmail,
               </>
             ) : (
               <>
-                <span>{propertyTitle ? 'Send Enquiry' : 'Send Message & WhatsApp'}</span>
+                <span>Send Enquiry</span>
                 <Send className="h-4 w-4 text-white" />
               </>
             )}
           </Button>
-
-          {/* Direct WhatsApp Option */}
-          <div className="relative flex py-1 items-center">
-            <div className="flex-grow border-t border-neutral-200"></div>
-            <span className="flex-shrink mx-2 text-[10px] text-neutral-400 uppercase font-bold tracking-wider">Or</span>
-            <div className="flex-grow border-t border-neutral-200"></div>
-          </div>
-
-          <a
-            href={`https://wa.me/919945011138?text=${encodeURIComponent(defaultWhatsappMessage)}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="w-full h-11 bg-[#25D366] hover:bg-[#20bd5a] text-white font-semibold rounded-xl transition-all duration-300 hover:shadow-md flex items-center justify-center space-x-2 active:scale-[0.98] text-sm"
-          >
-            <MessageCircle className="h-4 w-4" />
-            <span>Direct WhatsApp Chat</span>
-          </a>
         </form>
       )}
     </>
