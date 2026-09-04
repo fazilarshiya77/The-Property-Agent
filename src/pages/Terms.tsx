@@ -208,17 +208,29 @@ export default function Terms() {
       />
 
       {/* ─── HERO ─── */}
-      <section className="relative overflow-hidden bg-navy-950 py-16 sm:py-24 lg:py-28" aria-label="Terms and Conditions hero">
+      <section className="relative overflow-hidden bg-navy-950 py-16 sm:py-24 lg:py-28 min-h-[380px] sm:min-h-[460px] flex items-center" aria-label="Terms and Conditions hero">
+        {/* Video background — object-contain so the entire frame stays
+            visible at all times (no cropping/zooming); the navy section
+            background doubles as a seamless letterbox for any space the
+            video doesn't fill. */}
         <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            preload="auto"
+            className="absolute inset-0 w-full h-full object-contain"
+          >
+            <source src="/terms.mp4" type="video/mp4" />
+          </video>
           <div className="absolute -top-24 -right-16 w-72 h-72 sm:w-96 sm:h-96 bg-brand-500/15 rounded-full blur-3xl" />
           <div className="absolute -bottom-24 -left-16 w-72 h-72 sm:w-96 sm:h-96 bg-brand-500/10 rounded-full blur-3xl" />
-          <div
-            className="absolute inset-0 opacity-[0.05]"
-            style={{ backgroundImage: 'radial-gradient(circle, #ffffff 1px, transparent 1px)', backgroundSize: '26px 26px' }}
-          />
+          {/* Gradient overlay for text legibility — the video itself carries no filter */}
+          <div className="absolute inset-0 bg-gradient-to-b from-navy-950/80 via-navy-950/55 to-navy-950/85" />
         </div>
 
-        <div className="relative max-w-4xl mx-auto px-3 sm:px-6 lg:px-8 text-center animate-fade-in-up">
+        <div className="relative max-w-4xl mx-auto px-3 sm:px-6 lg:px-8 text-center animate-fade-in-up w-full">
           <h1 className="font-display font-bold leading-tight tracking-wide text-white text-3xl sm:text-5xl lg:text-6xl">
             <span className="gradient-text">TERMS AND CONDITIONS</span>
           </h1>
