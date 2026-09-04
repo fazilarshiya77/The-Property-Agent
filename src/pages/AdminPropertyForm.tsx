@@ -14,6 +14,7 @@ import {
 import { ATTRIBUTE_SCHEMA } from '../data/propertyAttributeSchema';
 import { KARNATAKA_DISTRICTS, getTaluks } from '../data/karnatakaLocations';
 import { supabase } from '../lib/supabase';
+import { getAmenityIcon } from '../lib/amenityIcons';
 
 const FURNISHED_OPTIONS = ['fully', 'semi', 'unfurnished'] as const;
 const TYPE_OPTIONS: PropertyType[] = ['plot', 'farmhouse', 'land', 'rent', 'lease', 'sale', 'commercial'];
@@ -391,8 +392,13 @@ export default function AdminPropertyForm() {
               </select>
             </div>
             <div>
-              <label className={labelCls}>Asking Price (₹) *</label>
-              <input type="number" value={form.price || ''} onChange={e => { update('price', Number(e.target.value)); if (errors.price) setErrors(p => ({ ...p, price: undefined })); }}
+              <label className={labelCls}>Asking Price *</label>
+              <input type="text" inputMode="decimal" value={form.price || ''} onChange={e => {
+                  const numeric = e.target.value.replace(/[^0-9.]/g, '');
+                  update('price', numeric ? Number(numeric) : 0);
+                  if (errors.price) setErrors(p => ({ ...p, price: undefined }));
+                }}
+                placeholder="e.g. 4500000"
                 className={errors.price ? errorInputCls : inputCls} />
               {form.price > 0 && !errors.price && <p className="text-[11px] text-brand-600 font-semibold mt-1">{formatINR(form.price)}</p>}
               <FieldError message={errors.price} />
@@ -613,11 +619,13 @@ export default function AdminPropertyForm() {
           <div className="flex flex-wrap gap-1.5 mb-4">
             {AMENITY_PRESETS.map(a => {
               const selected = form.amenities.includes(a);
+              const AmenityIcon = getAmenityIcon(a);
               return (
                 <button key={a} type="button" onClick={() => toggleAmenity(a)}
-                  className={`px-2.5 py-1.5 rounded-full text-xs font-medium transition-colors border ${
+                  className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-xs font-medium transition-colors border ${
                     selected ? 'bg-brand-500 border-brand-500 text-navy-900' : 'bg-white border-neutral-200 text-neutral-600 hover:border-brand-300'
                   }`}>
+                  <AmenityIcon className="h-3.5 w-3.5" />
                   {a}
                 </button>
               );
@@ -826,19 +834,26 @@ export default function AdminPropertyForm() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
             <div>
               <label className={labelCls}>Owner Name</label>
-              <input value={form.source?.ownerName || ''} onChange={e => updateSource('ownerName', e.target.value)} className={inputCls} />
+              <input value={form.source?.ownerName || ''}
+                onChange={e => updateSource('ownerName', e.target.value.replace(/[^a-zA-Z\s.'-]/g, ''))}
+                placeholder="e.g. Ramesh Kumar" className={inputCls} />
             </div>
             <div>
               <label className={labelCls}>Owner Phone</label>
-              <input value={form.source?.ownerPhone || ''} onChange={e => updateSource('ownerPhone', e.target.value)} className={inputCls} />
+              <input type="tel" inputMode="numeric" value={form.source?.ownerPhone || ''}
+                onChange={e => updateSource('ownerPhone', e.target.value.replace(/[^0-9]/g, ''))}
+                placeholder="e.g. 9876543210" maxLength={10} className={inputCls} />
             </div>
             <div>
               <label className={labelCls}>Owner WhatsApp</label>
-              <input value={form.source?.ownerWhatsApp || ''} onChange={e => updateSource('ownerWhatsApp', e.target.value)} className={inputCls} />
+              <input type="tel" inputMode="numeric" value={form.source?.ownerWhatsApp || ''}
+                onChange={e => updateSource('ownerWhatsApp', e.target.value.replace(/[^0-9]/g, ''))}
+                placeholder="e.g. 9876543210" maxLength={10} className={inputCls} />
             </div>
             <div>
               <label className={labelCls}>Owner Email</label>
-              <input value={form.source?.ownerEmail || ''} onChange={e => updateSource('ownerEmail', e.target.value)} className={inputCls} />
+              <input type="email" value={form.source?.ownerEmail || ''} onChange={e => updateSource('ownerEmail', e.target.value)}
+                placeholder="e.g. ramesh123@gmail.com" className={inputCls} />
             </div>
             <div>
               <label className={labelCls}>Source Type</label>
