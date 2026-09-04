@@ -522,8 +522,20 @@ export default function Home() {
       </section>
 
       {/* ─── CTA BANNER ────────────────────────── */}
-      <section className="py-12 sm:py-16 lg:py-20 bg-gradient-to-br from-navy-900 to-navy-950 relative overflow-hidden" aria-label="Contact The Property Agent">
-        <div className="absolute inset-0 opacity-5">
+      <section className="py-12 sm:py-16 lg:py-20 bg-navy-950 relative overflow-hidden" aria-label="Contact The Property Agent">
+        <div className="absolute inset-0">
+          <img
+            src="/home2.jpg"
+            alt=""
+            className="absolute inset-0 w-full h-full object-cover"
+            aria-hidden="true"
+            loading="lazy"
+            decoding="async"
+          />
+          {/* Gradient overlay for text legibility — the photo itself is untouched */}
+          <div className="absolute inset-0 bg-gradient-to-br from-navy-900/95 via-navy-950/90 to-navy-950/95" />
+        </div>
+        <div className="absolute inset-0 opacity-10 pointer-events-none">
           <div className="absolute top-0 right-0 w-96 h-96 bg-brand-500 rounded-full blur-3xl" />
           <div className="absolute bottom-0 left-0 w-64 h-64 bg-brand-400 rounded-full blur-3xl" />
         </div>
