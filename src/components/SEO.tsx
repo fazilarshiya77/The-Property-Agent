@@ -5,7 +5,7 @@ import { useLocation } from 'react-router-dom';
 // ─── CONSTANTS ──────────────────────────────────────────
 const SITE_URL = 'https://www.thepropertyagent.in';
 const SITE_NAME = 'The Property Agent';
-const DEFAULT_OG_IMAGE = `${SITE_URL}/favicon.svg`;
+const DEFAULT_OG_IMAGE = `${SITE_URL}/logo.jpg`;
 const PHONE = '+91 90194 88368';
 const EMAIL = 'trishnaproperties78@gmail.com';
 const ADDRESS = 'No. 84, 4th cross kashi nagar, yelachanahalli, B-78., Bengaluru, Karnataka';
@@ -393,8 +393,8 @@ export const SEO: React.FC<SEOProps> = (props) => {
       */}
 
       {/* ─── Favicon ─── */}
-      <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-      <link rel="apple-touch-icon" href="/favicon.svg" />
+      <link rel="icon" type="image/jpeg" href="/logo.jpg" />
+      <link rel="apple-touch-icon" href="/logo.jpg" />
 
       {/* ─── Structured Data: WebSite (Home page only) ─── */}
       {isHomePage && (

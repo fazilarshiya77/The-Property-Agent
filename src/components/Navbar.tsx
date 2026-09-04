@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { Home, Building, Building2, Info, Menu, X, Phone, Sparkles, MessageCircle } from 'lucide-react';
+import { Home, Building, Info, Menu, X, Phone, Sparkles, MessageCircle } from 'lucide-react';
 import { useState, useEffect } from 'react';
 
 export default function Navbar() {
@@ -52,8 +52,8 @@ export default function Navbar() {
           <div className="flex justify-between items-center h-14 lg:h-16">
             {/* Logo */}
             <Link to="/" className="flex items-center space-x-2.5 group flex-shrink-0" aria-label="The Property Agent - Home">
-              <div className="h-8 w-8 sm:h-9 sm:w-9 rounded-lg bg-brand-500 flex items-center justify-center shadow-sm group-hover:shadow-md transition-all duration-300 group-hover:scale-105 flex-shrink-0">
-                <Building2 className="h-4 w-4 sm:h-4.5 sm:w-4.5 text-white" />
+              <div className="h-8 w-8 sm:h-9 sm:w-9 rounded-lg overflow-hidden shadow-sm group-hover:shadow-md transition-all duration-300 group-hover:scale-105 flex-shrink-0">
+                <img src="/logo.jpg" alt="The Property Agent logo" className="w-full h-full object-cover" />
               </div>
               <div className="flex flex-col">
                 <span className="text-base sm:text-lg font-display font-bold text-navy-900 leading-tight tracking-wider transition-colors duration-300 group-hover:text-brand-500">
@@ -125,8 +125,8 @@ export default function Navbar() {
         }`}>
           {/* Mobile menu header with logo */}
           <div className="p-5 border-b border-neutral-100 flex items-center space-x-3">
-            <div className="h-10 w-10 rounded-lg bg-brand-500 flex items-center justify-center flex-shrink-0">
-              <Building2 className="h-5 w-5 text-white" />
+            <div className="h-10 w-10 rounded-lg overflow-hidden flex-shrink-0">
+              <img src="/logo.jpg" alt="The Property Agent logo" className="w-full h-full object-cover" />
             </div>
             <div className="text-sm font-bold text-navy-900">The Property Agent</div>
           </div>

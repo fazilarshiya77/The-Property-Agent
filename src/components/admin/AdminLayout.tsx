@@ -31,8 +31,8 @@ export default function AdminLayout({ title, subtitle, actions, children }: Admi
       {/* Sidebar */}
       <aside className="w-60 flex-shrink-0 bg-white border-r border-neutral-100 flex flex-col h-screen sticky top-0">
         <div className="px-5 py-5 flex items-center gap-2.5 border-b border-neutral-100">
-          <div className="w-9 h-9 rounded-xl bg-brand-500 flex items-center justify-center flex-shrink-0">
-            <Building2 className="h-5 w-5 text-white" />
+          <div className="w-9 h-9 rounded-xl overflow-hidden flex-shrink-0">
+            <img src="/logo.jpg" alt="The Property Agent logo" className="w-full h-full object-cover" />
           </div>
           <div className="min-w-0">
             <div className="text-sm font-display font-bold text-navy-900 leading-tight truncate">The Property Agent</div>
