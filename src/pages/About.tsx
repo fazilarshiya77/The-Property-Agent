@@ -56,7 +56,7 @@ export default function About() {
       />
 
       {/* ─── BREADCRUMB NAVIGATION ─── */}
-      <nav aria-label="Breadcrumb" className="bg-navy-900 pt-20">
+      <nav aria-label="Breadcrumb" className="bg-navy-900 pt-6 sm:pt-8">
         <div className="max-w-4xl mx-auto px-3 sm:px-6 lg:px-8">
           <ol className="flex items-center flex-wrap gap-1 text-sm" itemScope itemType="https://schema.org/BreadcrumbList">
             <li className="flex items-center" itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
