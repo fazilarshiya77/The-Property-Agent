@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { Home, Building, Info, Menu, X, Phone, Sparkles, MessageCircle } from 'lucide-react';
+import { Home, Building, Info, Menu, X, Phone, Sparkles, MessageCircle, ScrollText } from 'lucide-react';
 import { useState, useEffect } from 'react';
 
 export default function Navbar() {
@@ -34,7 +34,8 @@ export default function Navbar() {
     { name: 'Home', path: '/', icon: Home },
     { name: 'Properties', path: '/listings', icon: Building },
     { name: 'Services', path: '/services', icon: Sparkles },
-    { name: 'About', path: '/about', icon: Info }
+    { name: 'About', path: '/about', icon: Info },
+    { name: 'Terms', path: '/terms', icon: ScrollText }
   ];
 
   return (
