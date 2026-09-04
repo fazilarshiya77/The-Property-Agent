@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Search, Shield, Clock, Star, ArrowRight, ChevronDown, ChevronUp, Tag, Key, Sparkles, Check, Phone, MapPinned, RefreshCw, MessageCircle, FileText, Building2, HelpCircle } from 'lucide-react';
+import { Search, Shield, Clock, Star, ArrowRight, ChevronDown, ChevronUp, Tag, Key, Sparkles, Check, Phone, MapPinned, RefreshCw, MessageCircle, HelpCircle } from 'lucide-react';
 import PropertyCard from '../components/PropertyCard';
 import { servicesData } from '../data/services';
 import { usePropertyStore } from '../stores/propertyStore';
@@ -191,17 +191,6 @@ export default function Home() {
                   </button>
                 </div>
               </form>
-
-              {/* Quick Category Badges */}
-              <div className="flex items-center flex-wrap gap-2 mt-3.5 text-xs text-neutral-300">
-                <span className="text-neutral-400 font-medium hidden sm:inline">Quick links:</span>
-                <Link to="/listings?type=lease" className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-white backdrop-blur-sm transition-all border border-white/10 hover:border-white/25">
-                  <FileText className="h-3.5 w-3.5" aria-hidden="true" /> Long-Term Lease
-                </Link>
-                <Link to="/listings?type=commercial" className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-white backdrop-blur-sm transition-all border border-white/10 hover:border-white/25">
-                  <Building2 className="h-3.5 w-3.5" aria-hidden="true" /> Commercial Space
-                </Link>
-              </div>
             </div>
           </div>
         </div>
