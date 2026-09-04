@@ -205,9 +205,9 @@ export default function AdminSiteVisits() {
         >
           <div className="space-y-4">
             <div>
-              <label className={labelCls}>Link to Existing Lead (Optional)</label>
+              <label className={labelCls}>Link to Existing Enquiry (Optional)</label>
               <select value={form.leadId} onChange={e => handleLeadSelect(e.target.value)} className={inputCls}>
-                <option value="">No lead selected — enter name manually</option>
+                <option value="">No enquiry selected — enter name manually</option>
                 {leads.map(l => <option key={l.id} value={l.id}>{l.name} ({l.leadCode})</option>)}
               </select>
             </div>

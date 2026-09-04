@@ -104,11 +104,11 @@ export default function AdminLeads() {
 
   return (
     <AdminLayout
-      title="Leads & Enquiries"
+      title="Enquiries"
       subtitle={`${leads.length} total · ${leads.filter(l => l.status === 'new').length} new · ${leads.filter(l => l.temperature === 'hot').length} hot`}
       actions={
         <button onClick={openAdd} className="flex items-center gap-2 bg-brand-500 hover:bg-brand-600 text-white font-semibold px-4 py-2.5 rounded-xl text-sm transition-all hover:shadow-lg hover:shadow-brand-500/25">
-          <Plus className="h-4 w-4" /> Add Lead
+          <Plus className="h-4 w-4" /> Add Enquiry
         </button>
       }
     >
@@ -141,7 +141,7 @@ export default function AdminLeads() {
           <table className="w-full">
             <thead>
               <tr className="bg-neutral-50 border-b border-neutral-100">
-                <th className="text-left px-4 py-3 text-xs font-semibold text-neutral-500 uppercase tracking-wider">Lead</th>
+                <th className="text-left px-4 py-3 text-xs font-semibold text-neutral-500 uppercase tracking-wider">Enquiry</th>
                 <th className="text-left px-4 py-3 text-xs font-semibold text-neutral-500 uppercase tracking-wider hidden md:table-cell">Looking For</th>
                 <th className="text-left px-4 py-3 text-xs font-semibold text-neutral-500 uppercase tracking-wider hidden sm:table-cell">Source</th>
                 <th className="text-left px-4 py-3 text-xs font-semibold text-neutral-500 uppercase tracking-wider">Temp</th>
@@ -191,20 +191,20 @@ export default function AdminLeads() {
         </div>
         {filtered.length === 0 && (
           <div className="text-center py-12 text-neutral-500 text-sm">
-            {leads.length === 0 ? 'No leads yet — add one, or wait for enquiries to come in from the website.' : 'No leads match your search.'}
+            {leads.length === 0 ? 'No enquiries yet — add one, or wait for enquiries to come in from the website.' : 'No enquiries match your search.'}
           </div>
         )}
       </div>
 
       {modalOpen && (
         <AdminModal
-          title={editingId ? 'Edit Lead' : 'Add New Lead'}
+          title={editingId ? 'Edit Enquiry' : 'Add New Enquiry'}
           onClose={() => setModalOpen(false)}
           footer={
             <>
               <button onClick={() => setModalOpen(false)} className="px-4 py-2.5 rounded-xl text-sm font-semibold text-neutral-600 hover:bg-neutral-100 transition-colors">Cancel</button>
               <button onClick={handleSave} className="px-5 py-2.5 rounded-xl text-sm font-semibold bg-brand-500 hover:bg-brand-600 text-white transition-colors">
-                {editingId ? 'Save Changes' : 'Add Lead'}
+                {editingId ? 'Save Changes' : 'Add Enquiry'}
               </button>
             </>
           }

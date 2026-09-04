@@ -128,8 +128,8 @@ export default function AdminDashboard() {
       {/* KPI Cards — Pipeline */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6">
         {[
-          { label: 'New Leads', value: stats.newLeads, icon: Users, tone: 'text-blue-700 bg-blue-50', to: '/admin/leads' },
-          { label: 'Hot Leads', value: stats.hotLeads, icon: Flame, tone: 'text-red-700 bg-red-50', to: '/admin/leads' },
+          { label: 'New Enquiries', value: stats.newLeads, icon: Users, tone: 'text-blue-700 bg-blue-50', to: '/admin/leads' },
+          { label: 'Hot Enquiries', value: stats.hotLeads, icon: Flame, tone: 'text-red-700 bg-red-50', to: '/admin/leads' },
           { label: 'Upcoming Visits', value: stats.upcomingVisits, icon: CalendarCheck, tone: 'text-brand-700 bg-brand-50', to: '/admin/site-visits' },
           { label: 'Sold / Rented', value: stats.closed, icon: CheckCircle2, tone: 'text-emerald-700 bg-emerald-50', to: '/admin/properties' },
         ].map(kpi => (

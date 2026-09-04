@@ -6,7 +6,7 @@ import type { ReactNode } from 'react';
 const NAV_ITEMS = [
   { to: '/admin/dashboard', label: 'Dashboard', icon: LayoutDashboard, exact: true },
   { to: '/admin/properties', label: 'Properties', icon: Building2 },
-  { to: '/admin/leads', label: 'Leads', icon: Users },
+  { to: '/admin/leads', label: 'Enquiries', icon: Users },
   { to: '/admin/site-visits', label: 'Site Visits', icon: CalendarCheck },
   { to: '/admin/reports', label: 'Reports', icon: BarChart3, comingSoon: true },
 ];
