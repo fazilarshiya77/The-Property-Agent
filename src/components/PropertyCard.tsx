@@ -1,11 +1,12 @@
 import { Link } from 'react-router-dom';
-import { Bed, Bath, Maximize, MapPin, Camera, Video, Share2, Building, ImageOff, Trees } from 'lucide-react';
+import { Bed, Bath, Maximize, MapPin, Camera, Video, Share2, Building, ImageOff, Trees, MessageSquareText } from 'lucide-react';
 import { useState } from 'react';
 import type { Property } from '../data/properties';
 import { PROPERTY_TYPE_LABELS } from '../data/properties';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import ShareModal from './ShareModal';
+import EnquiryModal from './EnquiryModal';
 
 interface PropertyCardProps {
   property: Property;
@@ -14,6 +15,7 @@ interface PropertyCardProps {
 export default function PropertyCard({ property }: PropertyCardProps) {
   const [imageLoaded, setImageLoaded] = useState(false);
   const [isShareOpen, setIsShareOpen] = useState(false);
+  const [isEnquiryOpen, setIsEnquiryOpen] = useState(false);
 
   const formatPrice = (price: number, type: string) => {
     if (type === 'rent') {
@@ -212,12 +214,35 @@ export default function PropertyCard({ property }: PropertyCardProps) {
             </div>
           </div>
         </Link>
+
+        {/* Enquire Now — opens the enquiry modal directly, no navigation */}
+        <div className="px-5 pb-5 -mt-1">
+          <button
+            type="button"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              setIsEnquiryOpen(true);
+            }}
+            className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-brand-500 hover:bg-brand-600 text-white font-semibold text-sm transition-all active:scale-[0.98] shadow-sm hover:shadow-md hover:shadow-brand-500/20"
+          >
+            <MessageSquareText className="h-4 w-4" />
+            <span>Enquire Now</span>
+          </button>
+        </div>
       </Card>
 
       {/* Share Modal */}
       <ShareModal
         isOpen={isShareOpen}
         onClose={() => setIsShareOpen(false)}
+        property={property}
+      />
+
+      {/* Enquiry Modal */}
+      <EnquiryModal
+        isOpen={isEnquiryOpen}
+        onClose={() => setIsEnquiryOpen(false)}
         property={property}
       />
     </>

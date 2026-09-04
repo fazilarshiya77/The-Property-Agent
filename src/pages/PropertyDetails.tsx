@@ -3,7 +3,7 @@ import { usePropertyStore } from '../stores/propertyStore';
 import ImageCarousel from '../components/ImageCarousel';
 import ContactForm from '../components/ContactForm';
 import PropertyCard from '../components/PropertyCard';
-import { Bed, Bath, Maximize, MapPin, CheckCircle, ArrowLeft, Mail, Phone, Share2, MessageCircle, Building, Layers, Compass, Home, ChevronRight, Video, Play } from 'lucide-react';
+import { Bed, Bath, Maximize, MapPin, CheckCircle, ArrowLeft, Mail, Phone, Share2, MessageCircle, MessageSquareText, Building, Layers, Compass, Home, ChevronRight, Video, Play } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useScrollReveal } from '../hooks/useScrollReveal';
 import { getAmenityIcon } from '../lib/amenityIcons';
@@ -11,6 +11,7 @@ import { parseVideoUrl } from '../lib/videoUtils';
 import { SEO } from '../components/SEO';
 import type { BreadcrumbItem, PropertySchemaData } from '../components/SEO';
 import ShareModal from '../components/ShareModal';
+import EnquiryModal from '../components/EnquiryModal';
 
 export default function PropertyDetails() {
   const { id } = useParams<{ id: string }>();
@@ -23,6 +24,7 @@ export default function PropertyDetails() {
   
   const property = getPropertyById(id || '');
   const [isShareOpen, setIsShareOpen] = useState(false);
+  const [isEnquiryOpen, setIsEnquiryOpen] = useState(false);
   const [activeVideoIndex, setActiveVideoIndex] = useState(0);
 
   // Scroll reveal refs
@@ -254,6 +256,14 @@ export default function PropertyDetails() {
                   </div>
                 )}
               </div>
+              <button
+                type="button"
+                onClick={() => setIsEnquiryOpen(true)}
+                className="w-full mt-4 flex items-center justify-center gap-2 py-3.5 rounded-xl bg-brand-500 hover:bg-brand-600 text-white font-semibold text-sm sm:text-base transition-all active:scale-[0.98] shadow-sm hover:shadow-lg hover:shadow-brand-500/25"
+              >
+                <MessageSquareText className="h-5 w-5" />
+                <span>Enquire Now</span>
+              </button>
             </div>
 
             {/* Key Specs */}
@@ -488,6 +498,13 @@ export default function PropertyDetails() {
       <ShareModal
         isOpen={isShareOpen}
         onClose={() => setIsShareOpen(false)}
+        property={property}
+      />
+
+      {/* Enquiry Modal */}
+      <EnquiryModal
+        isOpen={isEnquiryOpen}
+        onClose={() => setIsEnquiryOpen(false)}
         property={property}
       />
 
