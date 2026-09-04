@@ -135,43 +135,35 @@ export default function Listings() {
       </Helmet>
 
       {/* ─── HERO ─────────────────────────────── */}
-      <section className="relative overflow-hidden bg-navy-950 py-16 sm:py-24 lg:py-28" aria-label="Properties hero">
-        {/* Decorative glow */}
-        <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
-          <div className="absolute -top-24 -right-16 w-72 h-72 sm:w-96 sm:h-96 bg-brand-500/15 rounded-full blur-3xl" />
-          <div className="absolute -bottom-24 -left-16 w-72 h-72 sm:w-96 sm:h-96 bg-brand-500/10 rounded-full blur-3xl" />
-          {/* Subtle dot grid texture */}
-          <div
-            className="absolute inset-0 opacity-[0.05]"
-            style={{ backgroundImage: 'radial-gradient(circle, #ffffff 1px, transparent 1px)', backgroundSize: '26px 26px' }}
+      <section className="relative overflow-hidden bg-navy-950 min-h-[420px] sm:min-h-[480px] lg:min-h-[560px] flex items-center" aria-label="Properties hero">
+        {/* Background photo — height is kept close to the photo's own
+            proportions (rather than an oversized viewport-height banner) so
+            object-cover only trims the far edges instead of zooming deep
+            into the composition. */}
+        <div className="absolute inset-0">
+          <img
+            src="/property-hero.jpg"
+            alt="Modern commercial towers and city skyline representing properties across Karnataka"
+            className="absolute inset-0 w-full h-full object-cover object-center"
+            loading="eager"
+            decoding="async"
           />
+          {/* Gradient overlay for text legibility — applied as a separate layer
+              so the photo itself is never darkened, filtered, or degraded. */}
+          <div className="absolute inset-0 bg-gradient-to-t from-navy-950/90 via-navy-950/55 to-navy-950/35" />
+          <div className="absolute inset-0 bg-gradient-to-r from-navy-950/70 via-transparent to-navy-950/40" />
         </div>
 
-        <div className="relative max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 text-center animate-fade-in-up">
-          <span className="inline-block px-3 sm:px-4 py-1.5 bg-brand-500/15 border border-brand-500/25 text-brand-300 text-[10px] sm:text-xs font-semibold uppercase tracking-widest rounded-full mb-5 sm:mb-6 backdrop-blur-md">
+        <div className="relative max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-16 text-center w-full animate-fade-in-up">
+          <span className="inline-block px-3 sm:px-4 py-1.5 bg-brand-500/20 border border-brand-500/30 text-brand-300 text-[10px] sm:text-xs font-semibold uppercase tracking-widest rounded-full mb-5 sm:mb-6 backdrop-blur-md">
             Across Karnataka
           </span>
           <h1 className="font-display font-bold leading-none tracking-wide text-white text-5xl sm:text-7xl lg:text-8xl">
             <span className="gradient-text">PROPERTIES</span>
           </h1>
-          <p className="mt-5 sm:mt-6 text-neutral-300 text-sm sm:text-base max-w-xl mx-auto font-light">
+          <p className="mt-5 sm:mt-6 text-neutral-200 text-sm sm:text-base max-w-xl mx-auto font-light">
             Plots, farmhouse plots, agricultural land, rental &amp; lease homes, and commercial spaces — sourced and listed as they become available, anywhere in Karnataka.
           </p>
-
-          {/* Property/city photo — shown at its natural aspect ratio (no crop, no
-              stretch) and capped near its native width so it's never upscaled
-              past its own resolution. The navy section background doubles as
-              a seamless "letterbox" for whatever space the photo doesn't fill. */}
-          <div className="mt-8 sm:mt-10 flex justify-center">
-            <img
-              src="/property-hero.jpg"
-              alt="Modern commercial towers and city skyline representing properties across Karnataka"
-              className="w-full h-auto rounded-2xl shadow-2xl border border-white/10"
-              style={{ maxWidth: '760px' }}
-              loading="eager"
-              decoding="async"
-            />
-          </div>
         </div>
       </section>
 
