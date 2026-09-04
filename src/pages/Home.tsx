@@ -441,7 +441,7 @@ export default function Home() {
               { icon: Shield, title: 'Personally Verified', desc: 'Every listing we put up is personally checked before going live. No surprises, no hidden issues — what you see is what you get.' },
               { icon: Star, title: 'Direct, Personal Service', desc: 'You deal directly with us — no call centers, no middlemen. Reach out on WhatsApp or by phone and get a straight answer.' },
             ].map((item) => (
-              <article key={item.title} className="group p-4 sm:p-6 lg:p-8 rounded-2xl bg-neutral-50 hover:bg-white hover:shadow-card-hover transition-all duration-300">
+              <article key={item.title} className="group p-4 sm:p-6 lg:p-8 rounded-2xl bg-white border border-neutral-200/80 shadow-card hover:shadow-card-hover hover:border-brand-500/30 transition-all duration-300">
                 <div className="w-10 h-10 sm:w-12 sm:h-12 bg-brand-50 rounded-xl flex items-center justify-center mb-4 sm:mb-5 group-hover:bg-brand-100 transition-colors">
                   <item.icon className="h-5 w-5 sm:h-6 sm:w-6 text-brand-500" aria-hidden="true" />
                 </div>
