@@ -81,9 +81,6 @@ export default function About() {
           <div className="absolute top-10 right-10 w-96 h-96 bg-brand-500 rounded-full blur-3xl" />
         </div>
         <div className="relative max-w-4xl mx-auto px-3 sm:px-6 lg:px-8 text-center">
-          <span className="inline-block px-3 py-1 bg-brand-500/20 text-brand-300 text-sm font-medium rounded-full mb-6">
-            About Us
-          </span>
           <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-display font-bold text-white mb-4 sm:mb-6 leading-tight">
             Your Direct Contact for<br className="hidden sm:block" />
             <span className="gradient-text">Properties Across Karnataka</span>
