@@ -22,6 +22,17 @@ const TEMP_CLASS: Record<LeadTemperature, string> = {
   cold: 'bg-blue-50 text-blue-600',
 };
 
+const SOURCE_TONE_CLASS: Record<LeadSource, string> = {
+  website: 'bg-brand-50 text-brand-700 border border-brand-200',
+  whatsapp: 'bg-emerald-50 text-emerald-700 border border-emerald-200',
+  instagram: 'bg-pink-50 text-pink-700 border border-pink-200',
+  facebook: 'bg-blue-50 text-blue-700 border border-blue-200',
+  google: 'bg-amber-50 text-amber-700 border border-amber-200',
+  referral: 'bg-purple-50 text-purple-700 border border-purple-200',
+  direct: 'bg-neutral-100 text-neutral-700 border border-neutral-200',
+  other: 'bg-neutral-100 text-neutral-700 border border-neutral-200',
+};
+
 const STATUS_OPTIONS: LeadStatus[] = ['new', 'contacted', 'interested', 'site_visit_planned', 'site_visit_completed', 'negotiation', 'converted', 'lost'];
 const TEMP_OPTIONS: LeadTemperature[] = ['hot', 'warm', 'cold'];
 const SOURCE_OPTIONS: LeadSource[] = ['website', 'whatsapp', 'instagram', 'facebook', 'google', 'referral', 'direct', 'other'];
@@ -42,6 +53,7 @@ export default function AdminLeads() {
   const { properties, fetchProperties } = usePropertyStore();
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState<'all' | LeadStatus>('all');
+  const [groupBy, setGroupBy] = useState<'status' | 'source'>('status');
   const [modalOpen, setModalOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState(emptyLead);
@@ -63,13 +75,29 @@ export default function AdminLeads() {
     }).sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
   }, [leads, search, statusFilter]);
 
-  // Grouped by status (pipeline order) so enquiries at the same stage sit
-  // together under a clear section heading, instead of one flat list.
-  const groupedByStatus = useMemo(() => {
+  // Grouped by status (pipeline order) or by source, so enquiries in the
+  // same category sit together under a clear section heading instead of
+  // one flat list. Toggle between the two via the pills below.
+  const groupedRows = useMemo(() => {
+    if (groupBy === 'source') {
+      return SOURCE_OPTIONS
+        .map(source => ({
+          key: source,
+          label: LEAD_SOURCE_LABELS[source],
+          toneClass: SOURCE_TONE_CLASS[source],
+          items: filtered.filter(l => l.source === source),
+        }))
+        .filter(g => g.items.length > 0);
+    }
     return STATUS_OPTIONS
-      .map(status => ({ status, items: filtered.filter(l => l.status === status) }))
+      .map(status => ({
+        key: status,
+        label: LEAD_STATUS_LABELS[status],
+        toneClass: STATUS_TONE_CLASS[LEAD_STATUS_TONE[status]],
+        items: filtered.filter(l => l.status === status),
+      }))
       .filter(g => g.items.length > 0);
-  }, [filtered]);
+  }, [filtered, groupBy]);
 
   const openAdd = () => { setEditingId(null); setForm(emptyLead); setModalOpen(true); };
   const openEdit = (lead: Lead) => {
@@ -143,6 +171,21 @@ export default function AdminLeads() {
         </div>
       </div>
 
+      {/* Group-by toggle */}
+      <div className="flex items-center gap-2 mb-3">
+        <span className="text-xs font-semibold text-neutral-500">Group by:</span>
+        <div className="inline-flex items-center gap-1 bg-neutral-100 rounded-lg p-1">
+          {(['status', 'source'] as const).map(g => (
+            <button key={g} onClick={() => setGroupBy(g)}
+              className={`px-3 py-1.5 rounded-md text-xs font-semibold capitalize transition-all ${
+                groupBy === g ? 'bg-white text-navy-900 shadow-sm' : 'text-neutral-500 hover:text-navy-900'
+              }`}>
+              {g}
+            </button>
+          ))}
+        </div>
+      </div>
+
       {/* Table */}
       <div className="bg-white rounded-2xl shadow-sm border border-neutral-100 overflow-hidden">
         <div className="overflow-x-auto">
@@ -157,13 +200,13 @@ export default function AdminLeads() {
                 <th className="text-right px-4 py-3 text-xs font-semibold text-neutral-500 uppercase tracking-wider">Actions</th>
               </tr>
             </thead>
-            {groupedByStatus.map(group => (
-              <tbody key={group.status} className="divide-y divide-neutral-50">
+            {groupedRows.map(group => (
+              <tbody key={group.key} className="divide-y divide-neutral-50">
                 <tr className="bg-neutral-50/70">
                   <td colSpan={6} className="px-4 py-2">
                     <div className="flex items-center gap-2">
-                      <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${STATUS_TONE_CLASS[LEAD_STATUS_TONE[group.status]]}`}>
-                        {LEAD_STATUS_LABELS[group.status]}
+                      <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${group.toneClass}`}>
+                        {group.label}
                       </span>
                       <span className="text-[11px] text-neutral-400 font-medium">{group.items.length} {group.items.length === 1 ? 'enquiry' : 'enquiries'}</span>
                     </div>
