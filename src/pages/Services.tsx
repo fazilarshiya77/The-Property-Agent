@@ -121,8 +121,6 @@ export default function Services() {
     setSubmitError(false);
 
     const serviceTitle = currentServiceItem ? currentServiceItem.title : 'General Property Inquiry';
-    const whatsappMsg = `*New Property Inquiry — The Property Agent*\n\n*Looking for:* ${serviceTitle}\n*Category:* ${formData.subService || 'General Inquiry'}\n*Name:* ${formData.name}\n*Phone:* ${formData.phone}\n*Email:* ${formData.email || 'N/A'}\n*Preferred Area:* ${formData.locality}\n*Message/Notes:* ${formData.message || 'None'}`;
-    const whatsappUrl = `https://wa.me/919945011138?text=${encodeURIComponent(whatsappMsg)}`;
 
     // Create a real lead in the CRM — additive alongside the existing
     // email/WhatsApp flow, never blocking on it either way.
@@ -175,9 +173,6 @@ export default function Services() {
           },
         });
 
-        // Redirect / Open WhatsApp
-        window.open(whatsappUrl, '_blank');
-
         setIsSubmitting(false);
         setSubmitSuccess(true);
         setFormData({
@@ -190,7 +185,6 @@ export default function Services() {
         });
         setTimeout(() => setSubmitSuccess(false), 8000);
       } else {
-        window.open(whatsappUrl, '_blank');
         throw new Error(result.message);
       }
     } catch (error) {
