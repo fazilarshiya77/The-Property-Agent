@@ -284,10 +284,6 @@ export default function Services() {
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl">
-            <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 bg-brand-500/20 border border-brand-500/30 text-brand-300 rounded-full text-xs font-semibold uppercase tracking-widest mb-4 sm:mb-6 backdrop-blur-md">
-              <Sparkles className="h-3.5 w-3.5" />
-              <span>Independent Property Agent · All of Karnataka</span>
-            </div>
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-display font-bold leading-tight tracking-wide mb-4 sm:mb-6">
               How We Help You<br />
               <span className="gradient-text">Buy, Sell & Rent Property</span>
@@ -295,32 +291,6 @@ export default function Services() {
             <p className="text-sm sm:text-base lg:text-lg text-neutral-300 font-light leading-relaxed mb-8 max-w-2xl">
               We don't hold fixed inventory. As an active agent, we help <strong>buyers</strong> find and purchase plots, farmhouse plots, agricultural land, and homes; help <strong>owners</strong> sell or list their property; and help <strong>tenants</strong> find rental or lease homes — anywhere in Karnataka.
             </p>
-
-            <div className="flex flex-wrap gap-3 sm:gap-4">
-              <a
-                href="#service-booking-form"
-                className="bg-brand-500 hover:bg-brand-600 text-white text-sm font-semibold px-6 py-3.5 rounded-xl transition-all shadow-lg shadow-brand-500/20 hover:shadow-brand-500/30 active:scale-[0.98] inline-flex items-center space-x-2"
-              >
-                <span>Tell Us What You Need</span>
-                <ArrowRight className="h-4 w-4" />
-              </a>
-              <a
-                href="https://wa.me/919945011138?text=Hello%20The%20Property%20Agent,%20I%20would%20like%20to%20inquire%20about%20buying%2C%20selling%2C%20or%20renting%20a%20property."
-                target="_blank"
-                rel="noopener noreferrer"
-                className="bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold px-6 py-3.5 rounded-xl transition-all inline-flex items-center space-x-2 shadow-md active:scale-[0.98]"
-              >
-                <MessageSquare className="h-4 w-4" />
-                <span>WhatsApp Us</span>
-              </a>
-              <a
-                href="tel:+919019488368"
-                className="bg-white/10 hover:bg-white/20 text-white text-sm font-semibold px-5 py-3.5 rounded-xl transition-all border border-white/10 inline-flex items-center space-x-2"
-              >
-                <Phone className="h-4 w-4 text-brand-400" />
-                <span>+91 90194 88368</span>
-              </a>
-            </div>
           </div>
         </div>
       </section>
