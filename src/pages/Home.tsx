@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Search, Shield, Clock, Star, ArrowRight, ChevronDown, ChevronUp, Tag, Key, Sparkles, Check, Phone, MapPinned, RefreshCw, MessageCircle, FileText, Building2 } from 'lucide-react';
+import { Search, Shield, Clock, Star, ArrowRight, ChevronDown, ChevronUp, Tag, Key, Sparkles, Check, Phone, MapPinned, RefreshCw, MessageCircle, FileText, Building2, HelpCircle } from 'lucide-react';
 import PropertyCard from '../components/PropertyCard';
 import { servicesData } from '../data/services';
 import { usePropertyStore } from '../stores/propertyStore';
@@ -477,36 +477,46 @@ export default function Home() {
           </div>
 
           <div className="space-y-3 sm:space-y-4" role="list" aria-label="FAQ list">
-            {faqData.map((faq, idx) => (
-              <div
-                key={idx}
-                className="bg-neutral-50 rounded-xl border border-neutral-100 overflow-hidden transition-all duration-300"
-                role="listitem"
-              >
-                <button
-                  id={`faq-toggle-${idx}`}
-                  onClick={() => setOpenFaqIndex(openFaqIndex === idx ? null : idx)}
-                  className="w-full flex items-center justify-between p-4 sm:p-6 lg:p-7 text-left hover:bg-neutral-100/50 transition-colors"
-                  aria-expanded={openFaqIndex === idx}
-                  aria-controls={`faq-answer-${idx}`}
-                >
-                  <h3 className="text-base sm:text-lg font-semibold text-navy-900 pr-4">{faq.question}</h3>
-                  {openFaqIndex === idx ? (
-                    <ChevronUp className="h-5 w-5 text-brand-500 flex-shrink-0" aria-hidden="true" />
-                  ) : (
-                    <ChevronDown className="h-5 w-5 text-neutral-400 flex-shrink-0" aria-hidden="true" />
-                  )}
-                </button>
+            {faqData.map((faq, idx) => {
+              const isOpen = openFaqIndex === idx;
+              return (
                 <div
-                  id={`faq-answer-${idx}`}
-                  className={`overflow-hidden transition-all duration-300 ${openFaqIndex === idx ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}
-                  role="region"
-                  aria-labelledby={`faq-toggle-${idx}`}
+                  key={idx}
+                  className={`rounded-2xl overflow-hidden transition-all duration-300 bg-gradient-to-br from-navy-900 to-navy-950 shadow-md ${
+                    isOpen ? 'ring-1 ring-brand-500/40 shadow-lg' : 'hover:shadow-lg'
+                  }`}
+                  role="listitem"
                 >
-                  <p className="px-4 sm:px-6 lg:px-7 pb-4 sm:pb-6 lg:pb-7 text-neutral-600 text-xs sm:text-sm leading-relaxed">{faq.answer}</p>
+                  <button
+                    id={`faq-toggle-${idx}`}
+                    onClick={() => setOpenFaqIndex(isOpen ? null : idx)}
+                    className="w-full flex items-center gap-3 sm:gap-4 p-4 sm:p-6 lg:p-7 text-left hover:bg-white/5 transition-colors"
+                    aria-expanded={isOpen}
+                    aria-controls={`faq-answer-${idx}`}
+                  >
+                    <div className={`w-8 h-8 sm:w-9 sm:h-9 rounded-xl flex items-center justify-center flex-shrink-0 transition-colors ${
+                      isOpen ? 'bg-brand-500 text-white' : 'bg-white/10 text-brand-400'
+                    }`}>
+                      <HelpCircle className="h-4 w-4 sm:h-4.5 sm:w-4.5" aria-hidden="true" />
+                    </div>
+                    <h3 className="flex-1 text-base sm:text-lg font-semibold text-white pr-2">{faq.question}</h3>
+                    {isOpen ? (
+                      <ChevronUp className="h-5 w-5 text-brand-400 flex-shrink-0" aria-hidden="true" />
+                    ) : (
+                      <ChevronDown className="h-5 w-5 text-neutral-400 flex-shrink-0" aria-hidden="true" />
+                    )}
+                  </button>
+                  <div
+                    id={`faq-answer-${idx}`}
+                    className={`overflow-hidden transition-all duration-300 ${isOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}
+                    role="region"
+                    aria-labelledby={`faq-toggle-${idx}`}
+                  >
+                    <p className="pl-16 sm:pl-20 pr-4 sm:pr-6 lg:pr-7 pb-4 sm:pb-6 lg:pb-7 text-neutral-300 text-xs sm:text-sm leading-relaxed">{faq.answer}</p>
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>
