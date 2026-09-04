@@ -56,6 +56,7 @@ export default function Footer() {
               <li><Link to="/about" className="text-neutral-400 hover:text-brand-400 transition-colors">About Us</Link></li>
               <li><Link to="/listings" className="text-neutral-400 hover:text-brand-400 transition-colors">All Properties</Link></li>
               <li><Link to="/about#contact" className="text-neutral-400 hover:text-brand-400 transition-colors">Contact</Link></li>
+              <li><Link to="/terms" className="text-neutral-400 hover:text-brand-400 transition-colors">Terms &amp; Conditions</Link></li>
             </ul>
           </div>
 
@@ -124,7 +125,9 @@ export default function Footer() {
           >
             Designed and Developed by Naaz AI Labs
           </a>
-          <div className="hidden sm:block" aria-hidden="true" />
+          <Link to="/terms" className="text-neutral-500 hover:text-brand-400 text-sm font-light transition-colors sm:text-right">
+            Terms &amp; Conditions
+          </Link>
         </div>
       </div>
     </footer>
