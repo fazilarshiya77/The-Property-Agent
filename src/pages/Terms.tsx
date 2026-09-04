@@ -209,10 +209,7 @@ export default function Terms() {
 
       {/* ─── HERO ─── */}
       <section className="relative overflow-hidden bg-navy-950 py-16 sm:py-24 lg:py-28 min-h-[380px] sm:min-h-[460px] flex items-center" aria-label="Terms and Conditions hero">
-        {/* Video background — object-contain so the entire frame stays
-            visible at all times (no cropping/zooming); the navy section
-            background doubles as a seamless letterbox for any space the
-            video doesn't fill. */}
+        {/* Video background — covers the full hero section edge to edge */}
         <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
           <video
             autoPlay
@@ -220,7 +217,7 @@ export default function Terms() {
             muted
             playsInline
             preload="auto"
-            className="absolute inset-0 w-full h-full object-contain"
+            className="absolute inset-0 w-full h-full object-cover"
           >
             <source src="/terms.mp4" type="video/mp4" />
           </video>
