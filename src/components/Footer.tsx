@@ -65,8 +65,8 @@ export default function Footer() {
             <ul className="space-y-2.5 sm:space-y-3 text-sm" aria-label="Contact information">
               <li className="flex items-start space-x-2.5 sm:space-x-3">
                 <Mail className="h-4 w-4 text-brand-400 mt-0.5 flex-shrink-0" />
-                <a href="mailto:trishnaproperties78@gmail.com" className="text-neutral-400 hover:text-brand-400 transition-colors break-all">
-                  trishnaproperties78@gmail.com
+                <a href="mailto:thepropertyagent129@gmail.com" className="text-neutral-400 hover:text-brand-400 transition-colors whitespace-nowrap text-[13px] sm:text-sm">
+                  thepropertyagent129@gmail.com
                 </a>
               </li>
               <li className="flex items-start space-x-2.5 sm:space-x-3">
