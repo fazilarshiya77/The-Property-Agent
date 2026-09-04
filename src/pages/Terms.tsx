@@ -207,46 +207,47 @@ export default function Terms() {
         breadcrumbs={breadcrumbs}
       />
 
-      {/* ─── HEADER ─── */}
-      <section className="relative overflow-hidden bg-navy-950 pt-24 pb-14 sm:pt-28 sm:pb-16" aria-label="Terms and Conditions header">
+      {/* ─── HERO ─── */}
+      <section className="relative overflow-hidden bg-navy-950 py-16 sm:py-24 lg:py-28" aria-label="Terms and Conditions hero">
         <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
-          <div className="absolute -top-20 -right-10 w-72 h-72 bg-brand-500/15 rounded-full blur-3xl" />
+          <div className="absolute -top-24 -right-16 w-72 h-72 sm:w-96 sm:h-96 bg-brand-500/15 rounded-full blur-3xl" />
+          <div className="absolute -bottom-24 -left-16 w-72 h-72 sm:w-96 sm:h-96 bg-brand-500/10 rounded-full blur-3xl" />
           <div
             className="absolute inset-0 opacity-[0.05]"
             style={{ backgroundImage: 'radial-gradient(circle, #ffffff 1px, transparent 1px)', backgroundSize: '26px 26px' }}
           />
         </div>
 
-        <div className="relative max-w-4xl mx-auto px-3 sm:px-6 lg:px-8">
-          <nav aria-label="Breadcrumb" className="mb-6">
-            <ol className="flex items-center flex-wrap gap-1 text-sm" itemScope itemType="https://schema.org/BreadcrumbList">
-              <li className="flex items-center" itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
-                <Link to="/" className="text-neutral-400 hover:text-brand-400 transition-colors flex items-center" itemProp="item">
-                  <Home className="h-3.5 w-3.5 mr-1" aria-hidden="true" />
-                  <span itemProp="name">Home</span>
-                </Link>
-                <meta itemProp="position" content="1" />
-              </li>
-              <ChevronRight className="h-3 w-3 text-neutral-500 mx-1" aria-hidden="true" />
-              <li className="flex items-center" itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
-                <span className="text-white font-medium" itemProp="name">Terms &amp; Conditions</span>
-                <meta itemProp="position" content="2" />
-              </li>
-            </ol>
-          </nav>
-
-          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-brand-500/20 border border-brand-500/30 text-brand-300 text-[10px] sm:text-xs font-semibold uppercase tracking-widest rounded-full mb-5 backdrop-blur-md">
-            <ScrollText className="h-3.5 w-3.5" /> Legal
-          </span>
-          <h1 className="font-display font-bold text-white text-3xl sm:text-5xl tracking-wide">
-            Terms &amp; Conditions
+        <div className="relative max-w-4xl mx-auto px-3 sm:px-6 lg:px-8 text-center animate-fade-in-up">
+          <h1 className="font-display font-bold leading-tight tracking-wide text-white text-3xl sm:text-5xl lg:text-6xl">
+            <span className="gradient-text">TERMS AND CONDITIONS</span>
           </h1>
-          <p className="mt-3 text-neutral-300 text-sm sm:text-base max-w-2xl font-light">
+          <p className="mt-5 sm:mt-6 text-neutral-300 text-sm sm:text-base max-w-xl mx-auto font-light">
             Please read these terms carefully before using our website or engaging our services.
           </p>
           <p className="mt-4 text-neutral-500 text-xs">Last updated: {LAST_UPDATED}</p>
         </div>
       </section>
+
+      {/* ─── BREADCRUMB ─── */}
+      <nav aria-label="Breadcrumb" className="bg-white border-b border-neutral-100">
+        <div className="max-w-4xl mx-auto px-3 sm:px-6 lg:px-8 py-3">
+          <ol className="flex items-center flex-wrap gap-1 text-sm" itemScope itemType="https://schema.org/BreadcrumbList">
+            <li className="flex items-center" itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
+              <Link to="/" className="text-neutral-500 hover:text-brand-500 transition-colors flex items-center" itemProp="item">
+                <Home className="h-3.5 w-3.5 mr-1" aria-hidden="true" />
+                <span itemProp="name">Home</span>
+              </Link>
+              <meta itemProp="position" content="1" />
+            </li>
+            <ChevronRight className="h-3 w-3 text-neutral-400 mx-1" aria-hidden="true" />
+            <li className="flex items-center" itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
+              <span className="text-navy-900 font-medium" itemProp="name">Terms &amp; Conditions</span>
+              <meta itemProp="position" content="2" />
+            </li>
+          </ol>
+        </div>
+      </nav>
 
       {/* ─── CONTENTS + SECTIONS ─── */}
       <div className="max-w-4xl mx-auto px-3 sm:px-6 lg:px-8 py-10 sm:py-14">
