@@ -32,28 +32,28 @@ export default function MiniAreaChart({ data, height = 200 }: MiniAreaChartProps
     <svg viewBox={`0 0 ${width} ${height}`} className="w-full" style={{ height }} preserveAspectRatio="none" role="img" aria-label="Properties added over time">
       <defs>
         <linearGradient id="miniAreaFill" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#E3A419" stopOpacity="0.28" />
-          <stop offset="100%" stopColor="#E3A419" stopOpacity="0" />
+          <stop offset="0%" stopColor="#AC8563" stopOpacity="0.28" />
+          <stop offset="100%" stopColor="#AC8563" stopOpacity="0" />
         </linearGradient>
       </defs>
 
       {gridLines.map((g, i) => {
         const y = padding.top + innerH * (1 - g);
-        return <line key={i} x1={padding.left} x2={width - padding.right} y1={y} y2={y} stroke="#E7E7ED" strokeWidth="1" />;
+        return <line key={i} x1={padding.left} x2={width - padding.right} y1={y} y2={y} stroke="#C3DECB" strokeWidth="1" />;
       })}
 
       {points.length > 0 && <path d={areaPath} fill="url(#miniAreaFill)" />}
-      {points.length > 1 && <path d={linePath} fill="none" stroke="#E3A419" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />}
+      {points.length > 1 && <path d={linePath} fill="none" stroke="#AC8563" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />}
 
       {points.map((p, i) => (
         <g key={i}>
-          <circle cx={p.x} cy={p.y} r="3.5" fill="#FFFFFF" stroke="#E3A419" strokeWidth="2" />
-          <text x={p.x} y={height - 6} textAnchor="middle" fontSize="10" fill="#54566A" fontFamily="Nunito, sans-serif">{p.label}</text>
+          <circle cx={p.x} cy={p.y} r="3.5" fill="#FFFFFF" stroke="#AC8563" strokeWidth="2" />
+          <text x={p.x} y={height - 6} textAnchor="middle" fontSize="10" fill="#3D654E" fontFamily="Nunito, sans-serif">{p.label}</text>
         </g>
       ))}
 
       {points.length === 0 && (
-        <text x={width / 2} y={height / 2} textAnchor="middle" fontSize="13" fill="#54566A" fontFamily="Nunito, sans-serif">
+        <text x={width / 2} y={height / 2} textAnchor="middle" fontSize="13" fill="#3D654E" fontFamily="Nunito, sans-serif">
           No data yet
         </text>
       )}

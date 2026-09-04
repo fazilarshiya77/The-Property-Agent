@@ -377,8 +377,8 @@ export const SEO: React.FC<SEOProps> = (props) => {
       <meta name="author" content={SITE_NAME} />
       <meta name="publisher" content={SITE_NAME} />
       <meta name="copyright" content={`© ${new Date().getFullYear()} ${SITE_NAME}`} />
-      <meta name="theme-color" content="#1F2235" />
-      <meta name="msapplication-TileColor" content="#1F2235" />
+      <meta name="theme-color" content="#0C2320" />
+      <meta name="msapplication-TileColor" content="#0C2320" />
       <meta name="application-name" content={SITE_NAME} />
       <meta name="apple-mobile-web-app-title" content={SITE_NAME} />
       <meta name="format-detection" content="telephone=no" />

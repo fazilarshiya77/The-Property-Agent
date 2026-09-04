@@ -13,71 +13,71 @@ export default {
         display: ['Poppins', 'system-ui', '-apple-system', 'sans-serif'],
       },
       colors: {
-        // Marigold — the site's single accent color: primary CTAs,
+        // Faded Copper — the site's single accent color: primary CTAs,
         // active/selected states, links, badges, icons, key highlights.
         brand: {
-          50: '#FDF6E7',
-          100: '#FAE8C0',
-          200: '#F5D287',
-          300: '#F0BC4E',
-          400: '#E9AF2E',
-          500: '#E3A419', // Marigold
-          600: '#BD850F',
-          700: '#93670C',
-          800: '#6E4D09',
-          900: '#523A07',
+          50: '#FAF4EF',
+          100: '#F3E5D9',
+          200: '#E5CBB4',
+          300: '#D3AD8C',
+          400: '#C0996F',
+          500: '#AC8563', // Faded Copper
+          600: '#8F6C4E',
+          700: '#71553D',
+          800: '#57412F',
+          900: '#413021',
         },
-        // Marigold (same accent, kept as a separate token name for the
+        // Faded Copper (same accent, kept as a separate token name for the
         // handful of places that reference it distinctly).
         gold: {
-          50: '#FDF6E7',
-          100: '#FAE8C0',
-          200: '#F5D287',
-          300: '#F0BC4E',
-          400: '#E9AF2E',
-          500: '#E3A419', // Marigold
-          600: '#BD850F',
-          700: '#93670C',
-          800: '#6E4D09',
-          900: '#523A07',
+          50: '#FAF4EF',
+          100: '#F3E5D9',
+          200: '#E5CBB4',
+          300: '#D3AD8C',
+          400: '#C0996F',
+          500: '#AC8563', // Faded Copper
+          600: '#8F6C4E',
+          700: '#71553D',
+          800: '#57412F',
+          900: '#413021',
         },
-        // Noctis — major dark sections, nav/footer, headings, premium contrast.
+        // Evergreen — major dark sections, nav/footer, headings, premium contrast.
         navy: {
-          50: '#EEEEF2',
-          100: '#D6D7E0',
-          200: '#AFB1C4',
-          300: '#8184A3',
-          400: '#585B80',
-          500: '#3D4066',
-          600: '#2E3050',
-          700: '#262842',
-          800: '#22243A',
-          900: '#1F2235', // Noctis
-          950: '#14151F',
+          50: '#EAF3F1',
+          100: '#CCE3DE',
+          200: '#9BC7BE',
+          300: '#699F94',
+          400: '#437D72',
+          500: '#2C5C53',
+          600: '#1F463F',
+          700: '#173530',
+          800: '#122A26',
+          900: '#0C2320', // Evergreen
+          950: '#081714',
         },
-        // Light neutral / off-white — secondary background scale.
+        // Light honeydew-adjacent secondary background scale.
         beige: {
-          50: '#FDFCFB',
-          100: '#F7F7F9',
-          200: '#EFEFF3',
-          300: '#E7E7ED',
-          400: '#D8D9E1',
-          500: '#B9BAC7',
+          50: '#FBFDFC',
+          100: '#F2F8F4',
+          200: '#E4F1E8',
+          300: '#D2E7D9',
+          400: '#AFD1B9',
+          500: '#8FBC9C',
         },
-        // Clean off-white / light-gray backgrounds, warming to Noctis at the
-        // dark end for body/heading text.
+        // Honeydew (50-100 = primary + secondary backgrounds), warming to
+        // Evergreen at the dark end for body/heading text.
         neutral: {
-          50: '#F7F7F9', // primary background
-          100: '#EFEFF3', // secondary background / highlights
-          150: '#E7E7ED',
-          200: '#D8D9E1',
-          300: '#B9BAC7',
-          400: '#9395A8',
-          500: '#6F7185',
-          600: '#54566A',
-          700: '#3F4053',
-          800: '#2A2B3B',
-          900: '#1F2235',
+          50: '#E4F1E8', // Honeydew — primary background
+          100: '#D2E7D9', // secondary background / highlights
+          150: '#C3DECB',
+          200: '#AFD1B9',
+          300: '#8FBC9C',
+          400: '#6B9E7E',
+          500: '#4F7F62',
+          600: '#3D654E',
+          700: '#2E4D3C',
+          800: '#20362A',
+          900: '#0C2320',
         },
         border: "var(--border)",
         input: "var(--input)",
