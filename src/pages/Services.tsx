@@ -518,7 +518,7 @@ export default function Services() {
                 </div>
 
                 <div className="flex items-start space-x-3.5 p-3.5 bg-neutral-50 rounded-xl border border-neutral-100">
-                  <div className="w-9 h-9 rounded-lg bg-blue-100 flex items-center justify-center text-blue-600 flex-shrink-0 mt-0.5">
+                  <div className="w-9 h-9 rounded-lg bg-gold-100 flex items-center justify-center text-gold-600 flex-shrink-0 mt-0.5">
                     <Headphones className="h-4 w-4" />
                   </div>
                   <div>

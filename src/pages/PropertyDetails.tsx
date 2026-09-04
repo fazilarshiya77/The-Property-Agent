@@ -152,6 +152,10 @@ export default function PropertyDetails() {
 
   return (
     <div className="min-h-screen bg-neutral-50 pb-24 lg:pb-8">
+      {/* Dark backdrop strip so the transparent floating navbar stays legible
+          at the very top of this page (every other page opens on a dark
+          hero already; this one doesn't). */}
+      <div className="h-14 lg:h-16 bg-navy-900" />
       <SEO
         title={`${property.title} — ${property.areaName}, Karnataka`}
         description={metaDescription}
@@ -231,7 +235,7 @@ export default function PropertyDetails() {
                   <span className="px-3 py-1 rounded-full text-xs font-semibold bg-green-50 text-green-700">Fully Furnished</span>
                 )}
                 {(property.availability === 'Immediate' || property.availability === 'Ready to Move') && (
-                  <span className="px-3 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-700">Ready to Move</span>
+                  <span className="px-3 py-1 rounded-full text-xs font-semibold bg-gold-50 text-gold-700">Ready to Move</span>
                 )}
               </div>
 

@@ -45,8 +45,8 @@ export default function Navbar() {
         role="navigation"
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
           isScrolled
-            ? 'bg-white/80 backdrop-blur-md border-b border-neutral-100 shadow-sm'
-            : 'bg-white/95 backdrop-blur-sm'
+            ? 'bg-neutral-50/95 backdrop-blur-md border-b border-neutral-200 shadow-sm'
+            : 'bg-transparent'
         }`}
       >
         <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
@@ -57,7 +57,9 @@ export default function Navbar() {
                 <img src="/logo.jpg" alt="The Property Agent logo" className="w-full h-full object-cover" />
               </div>
               <div className="flex flex-col">
-                <span className="text-base sm:text-lg font-display font-bold text-navy-900 leading-tight tracking-wider transition-colors duration-300 group-hover:text-brand-500">
+                <span className={`text-base sm:text-lg font-display font-extrabold leading-tight tracking-wide transition-colors duration-300 group-hover:text-brand-400 ${
+                  isScrolled ? 'text-navy-900' : 'text-white [text-shadow:0_1px_6px_rgba(0,0,0,0.45)]'
+                }`}>
                   The Property Agent
                 </span>
               </div>
@@ -73,15 +75,15 @@ export default function Navbar() {
                   <Link
                     key={link.path}
                     to={link.path}
-                    className={`relative px-3.5 py-1.5 rounded-lg text-sm font-semibold tracking-wide transition-all duration-300 ${
-                      isActive
-                        ? 'text-brand-500 bg-brand-50/50'
-                        : 'text-neutral-700 hover:text-brand-500 hover:bg-neutral-50/80'
+                    className={`relative px-3.5 py-1.5 rounded-lg text-sm font-bold tracking-wide transition-all duration-300 ${
+                      isScrolled
+                        ? isActive ? 'text-brand-600 bg-brand-50' : 'text-navy-900 hover:text-brand-600 hover:bg-neutral-100'
+                        : `[text-shadow:0_1px_6px_rgba(0,0,0,0.45)] ${isActive ? 'text-brand-300' : 'text-white hover:text-brand-200'}`
                     }`}
                   >
                     <span>{link.name}</span>
                     {isActive && (
-                      <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-6 h-0.5 bg-brand-500 rounded-full" />
+                      <span className={`absolute bottom-0 left-1/2 -translate-x-1/2 w-6 h-0.5 rounded-full ${isScrolled ? 'bg-brand-600' : 'bg-brand-300'}`} />
                     )}
                   </Link>
                 );
@@ -92,7 +94,7 @@ export default function Navbar() {
             <div className="hidden md:flex items-center space-x-3 lg:space-x-4">
               <Link
                 to="/about#contact"
-                className="bg-brand-500 hover:bg-brand-600 text-white text-xs lg:text-sm font-bold px-4 lg:px-5 py-2 rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-brand-500/20 active:scale-95 whitespace-nowrap"
+                className="bg-brand-500 hover:bg-brand-600 text-white text-xs lg:text-sm font-bold px-4 lg:px-5 py-2 rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-brand-500/25 active:scale-95 whitespace-nowrap"
               >
                 Contact Us
               </Link>
@@ -101,7 +103,9 @@ export default function Navbar() {
             {/* Mobile Menu Toggle */}
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="md:hidden p-2 rounded-lg text-neutral-700 hover:bg-neutral-50 transition-colors"
+              className={`md:hidden p-2 rounded-lg transition-colors ${
+                isScrolled ? 'text-navy-900 hover:bg-neutral-100' : 'text-white hover:bg-white/10 [text-shadow:0_1px_6px_rgba(0,0,0,0.45)]'
+              }`}
               aria-label={isMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
               aria-expanded={isMenuOpen}
               aria-controls="mobile-menu"
@@ -180,9 +184,6 @@ export default function Navbar() {
           </div>
         </div>
       </div>
-
-      {/* Spacer for fixed navbar */}
-      <div className="h-14 lg:h-16" />
     </>
   );
 }

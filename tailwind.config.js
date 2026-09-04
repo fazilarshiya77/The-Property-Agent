@@ -9,67 +9,75 @@ export default {
     },
     extend: {
       fontFamily: {
-        sans: ['Roboto', 'system-ui', '-apple-system', 'sans-serif'],
-        display: ['"Playfair Display"', 'Georgia', 'serif'],
+        sans: ['Nunito', 'system-ui', '-apple-system', 'sans-serif'],
+        display: ['Poppins', 'system-ui', '-apple-system', 'sans-serif'],
       },
       colors: {
+        // Turquoise — controlled accent for primary CTAs, active/selected
+        // states, links, and key highlights. Never used for large fills.
         brand: {
-          50: '#FBF7EE',
-          100: '#F5EBD3',
-          200: '#EAD7A8',
-          300: '#DEC17F',
-          400: '#D3B26B',
-          500: '#C6A75E', // Soft Gold
-          600: '#AD8F4C',
-          700: '#8C743D',
-          800: '#6D5A30',
-          900: '#544526',
+          50: '#E9FBF9',
+          100: '#C9F3EE',
+          200: '#96E6DC',
+          300: '#5FD6C8',
+          400: '#34CDBC',
+          500: '#23C7B9', // Turquoise
+          600: '#1BA79B',
+          700: '#158679',
+          800: '#12665D',
+          900: '#0F4C45',
         },
+        // Cinnamon / Terracotta — supporting accent for labels, icons,
+        // badges, and secondary highlights.
         gold: {
-          50: '#FBF7EE',
-          100: '#F5EBD3',
-          200: '#EAD7A8',
-          300: '#DEC17F',
-          400: '#D3B26B',
-          500: '#C6A75E', // Soft Gold
-          600: '#AD8F4C',
-          700: '#8C743D',
-          800: '#6D5A30',
-          900: '#544526',
+          50: '#FBF3EE',
+          100: '#F3E0D2',
+          200: '#E5C1A8',
+          300: '#D49F7C',
+          400: '#BD8365',
+          500: '#A36B4A', // Cinnamon / Terracotta
+          600: '#8A563A',
+          700: '#6E432D',
+          800: '#553425',
+          900: '#40271C',
         },
+        // Deep Coffee — major dark sections, nav/footer, headings, premium contrast.
         navy: {
-          50: '#EEF1F6',
-          100: '#DDE3EC',
-          200: '#BFC9DA',
-          300: '#97A5C0',
-          400: '#6C7CA0',
-          500: '#4B5A80',
-          600: '#374468',
-          700: '#2A3454',
-          800: '#232C48',
-          900: '#1F2A44', // Navy
-          950: '#141B2E',
+          50: '#F7EDEA',
+          100: '#EDD5CE',
+          200: '#D8AB9E',
+          300: '#BE7E6B',
+          400: '#9E5943',
+          500: '#7E3F30',
+          600: '#602E24',
+          700: '#4A241C',
+          800: '#3A1B15',
+          900: '#2E0D14', // Deep Coffee
+          950: '#1A0509',
         },
+        // Warm Sand — secondary background / subtle-highlight scale.
         beige: {
-          50: '#FDFBF7',
-          100: '#F8F3EA',
-          200: '#F1E8D6',
-          300: '#E8DCC8', // Warm Beige
-          400: '#DBC8A8',
-          500: '#C9AF83',
+          50: '#FFFBF5',
+          100: '#FFF3E0',
+          200: '#FFE7C2',
+          300: '#FFECD1', // Warm Sand
+          400: '#F0C896',
+          500: '#DDA96A',
         },
+        // Almond / Cream (50-100 = primary + secondary backgrounds), warming
+        // to Deep Coffee at the dark end for body/heading text.
         neutral: {
-          50: '#FAF7F1',
-          100: '#F3EDE2',
-          150: '#EBE3D3',
-          200: '#DFD5C0',
-          300: '#C1B7A3',
-          400: '#A59D8B',
-          500: '#8A8272',
-          600: '#6B655A',
-          700: '#504C44',
-          800: '#34302B',
-          900: '#1F2A44',
+          50: '#EFE1D5', // Almond / Cream — primary background
+          100: '#FFECD1', // Warm Sand — secondary background / highlights
+          150: '#F5DEC0',
+          200: '#E8D2B8',
+          300: '#D3B594',
+          400: '#B8916D',
+          500: '#96704F',
+          600: '#7A5740',
+          700: '#5C4131',
+          800: '#3F2C22',
+          900: '#2E0D14',
         },
         border: "var(--border)",
         input: "var(--input)",

@@ -2,13 +2,13 @@
 @import "shadcn/tailwind.css";
 @import "@fontsource-variable/geist";
 @import "lenis/dist/lenis.css";
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600;1,700&family=Roboto:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Nunito:wght@300;400;500;600;700;800&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  font-family: 'Roboto', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  font-family: 'Nunito', system-ui, -apple-system, 'Segoe UI', sans-serif;
   line-height: 1.6;
   font-weight: 400;
   font-synthesis: none;
@@ -16,11 +16,11 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
-  --brand-500: #C6A75E;
-  --brand-600: #AD8F4C;
-  --navy-900: #1F2A44;
-  --navy-950: #141B2E;
-  --gold-400: #C6A75E;
+  --brand-500: #23C7B9;
+  --brand-600: #1BA79B;
+  --navy-900: #2E0D14;
+  --navy-950: #1A0509;
+  --gold-400: #BD8365;
 }
 
 html {
@@ -29,8 +29,8 @@ html {
 }
 
 body {
-  color: #1F2A44;
-  background: #FAF7F1;
+  color: #2E0D14;
+  background: #EFE1D5;
 }
 
 /* Custom scrollbar */
@@ -38,14 +38,14 @@ body {
   width: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: #F3EDE2;
+  background: #FFECD1;
 }
 ::-webkit-scrollbar-thumb {
-  background: #DFD5C0;
+  background: #E8D2B8;
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #C1B7A3;
+  background: #D3B594;
 }
 
 /* Hide scrollbar utility */
@@ -90,7 +90,7 @@ body {
 
 /* Gradient text */
 .gradient-text {
-  background: linear-gradient(135deg, #C6A75E 0%, #E8DCC8 50%, #C6A75E 100%);
+  background: linear-gradient(135deg, #A36B4A 0%, #FFECD1 50%, #A36B4A 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -118,7 +118,7 @@ body {
 
 /* Image loading skeleton */
 .skeleton {
-  background: linear-gradient(90deg, #F3EDE2 25%, #E8DCC8 50%, #F3EDE2 75%);
+  background: linear-gradient(90deg, #FFECD1 25%, #F5DEC0 50%, #FFECD1 75%);
   background-size: 200% 100%;
   animation: shimmer 1.5s ease-in-out infinite;
 }
@@ -130,7 +130,7 @@ img {
 
 /* Focus ring utility */
 .focus-ring:focus-visible {
-  outline: 2px solid #C6A75E;
+  outline: 2px solid #23C7B9;
   outline-offset: 2px;
   border-radius: 4px;
 }
@@ -194,28 +194,28 @@ html, body {
 
 @layer base {
   .theme {
-    --font-heading: 'Playfair Display', Georgia, serif;
-    --font-sans: 'Roboto', sans-serif;
+    --font-heading: 'Poppins', system-ui, sans-serif;
+    --font-sans: 'Nunito', sans-serif;
   }
   :root {
-    --background: #FDFBF7;
-    --foreground: #1F2A44;
+    --background: #EFE1D5;
+    --foreground: #2E0D14;
     --card: #FFFFFF;
-    --card-foreground: #1F2A44;
+    --card-foreground: #2E0D14;
     --popover: #FFFFFF;
-    --popover-foreground: #1F2A44;
-    --primary: #C6A75E;
-    --primary-foreground: #1F2A44;
-    --secondary: #F3EDE2;
-    --secondary-foreground: #1F2A44;
-    --muted: #F3EDE2;
-    --muted-foreground: #6B655A;
-    --accent: #F5EBD3;
-    --accent-foreground: #1F2A44;
+    --popover-foreground: #2E0D14;
+    --primary: #23C7B9;
+    --primary-foreground: #FFFFFF;
+    --secondary: #FFECD1;
+    --secondary-foreground: #2E0D14;
+    --muted: #FFECD1;
+    --muted-foreground: #7A5740;
+    --accent: #F3E0D2;
+    --accent-foreground: #2E0D14;
     --destructive: oklch(0.577 0.245 27.325);
-    --border: #DFD5C0;
-    --input: #DFD5C0;
-    --ring: #C6A75E;
+    --border: #E8D2B8;
+    --input: #E8D2B8;
+    --ring: #23C7B9;
     --chart-1: oklch(0.87 0 0);
     --chart-2: oklch(0.556 0 0);
     --chart-3: oklch(0.439 0 0);

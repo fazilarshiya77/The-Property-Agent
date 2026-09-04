@@ -347,19 +347,19 @@ export default function Home() {
             {servicesData.map((service) => (
               <article
                 key={service.id}
-                className="shimmer-sweep p-6 rounded-2xl bg-blue-50 border border-blue-200/80 hover:bg-blue-100/60 hover:shadow-card-hover hover:border-blue-400/40 transition-all duration-300 flex flex-col justify-between group"
+                className="p-6 rounded-2xl bg-white border border-neutral-200/80 hover:shadow-card-hover hover:border-gold-300/60 transition-all duration-300 flex flex-col justify-between group"
               >
                 <div>
                   <div className="flex items-start justify-between mb-4">
-                    <div className="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center text-blue-600 group-hover:bg-blue-500 group-hover:text-white transition-all duration-300">
+                    <div className="w-12 h-12 rounded-xl bg-gold-50 flex items-center justify-center text-gold-600 group-hover:bg-gold-500 group-hover:text-white transition-all duration-300">
                       {getHomeServiceIcon(service.iconName)}
                     </div>
-                    <span className="text-[10px] font-bold px-2.5 py-0.5 bg-blue-100 text-blue-700 rounded-full border border-blue-200 uppercase tracking-wider">
+                    <span className="text-[10px] font-bold px-2.5 py-0.5 bg-gold-50 text-gold-700 rounded-full border border-gold-200 uppercase tracking-wider">
                       {service.badge}
                     </span>
                   </div>
 
-                  <h3 className="text-lg font-display font-bold text-navy-900 group-hover:text-blue-700 transition-colors mb-2">
+                  <h3 className="text-lg font-display font-bold text-navy-900 group-hover:text-gold-700 transition-colors mb-2">
                     {service.title}
                   </h3>
                   <p className="text-neutral-600 text-xs sm:text-sm leading-relaxed mb-4 font-light">
@@ -369,21 +369,21 @@ export default function Home() {
                   <div className="space-y-1.5 mb-5">
                     {service.features.slice(0, 3).map((feat, idx) => (
                       <div key={idx} className="flex items-start text-xs text-neutral-600">
-                        <Check className="h-3.5 w-3.5 text-blue-500 mr-2 mt-0.5 flex-shrink-0" />
+                        <Check className="h-3.5 w-3.5 text-gold-500 mr-2 mt-0.5 flex-shrink-0" />
                         <span className="line-clamp-1">{feat}</span>
                       </div>
                     ))}
                   </div>
                 </div>
 
-                <div className="pt-4 border-t border-blue-200/60 flex items-center justify-between">
+                <div className="pt-4 border-t border-neutral-200/60 flex items-center justify-between">
                   <span className="text-xs font-semibold text-neutral-500 flex items-center">
-                    <Clock className="h-3.5 w-3.5 mr-1 text-blue-500" />
+                    <Clock className="h-3.5 w-3.5 mr-1 text-gold-500" />
                     <span>{service.turnaroundTime}</span>
                   </span>
                   <Link
                     to={`/services?service=${service.id}#service-booking-form`}
-                    className="inline-flex items-center space-x-1 text-xs font-bold text-blue-700 hover:text-blue-800 bg-blue-100 hover:bg-blue-200 px-3 py-1.5 rounded-lg transition-colors"
+                    className="inline-flex items-center space-x-1 text-xs font-bold text-brand-700 hover:text-brand-800 bg-brand-50 hover:bg-brand-100 px-3 py-1.5 rounded-lg transition-colors"
                   >
                     <span>Get Started</span>
                     <ArrowRight className="h-3 w-3" />
