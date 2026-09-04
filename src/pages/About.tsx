@@ -112,8 +112,8 @@ export default function About() {
                 </p>
               </div>
             </article>
-            <div className="rounded-2xl overflow-hidden shadow-card-hover h-64 sm:h-80 bg-gradient-to-br from-navy-900 to-navy-950 flex items-center justify-center">
-              <Building2 className="h-16 w-16 text-white/20" strokeWidth={1} />
+            <div className="rounded-2xl overflow-hidden shadow-card-hover h-64 sm:h-80 bg-navy-950">
+              <img src="/about.jpg" alt="The Property Agent — our story" className="w-full h-full object-cover" loading="lazy" decoding="async" />
             </div>
           </div>
         </div>
