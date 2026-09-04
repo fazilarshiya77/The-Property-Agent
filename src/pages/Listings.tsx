@@ -134,6 +134,32 @@ export default function Listings() {
         </script>
       </Helmet>
 
+      {/* ─── HERO ─────────────────────────────── */}
+      <section className="relative overflow-hidden bg-navy-950 py-16 sm:py-24 lg:py-28" aria-label="Properties hero">
+        {/* Decorative glow */}
+        <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
+          <div className="absolute -top-24 -right-16 w-72 h-72 sm:w-96 sm:h-96 bg-brand-500/15 rounded-full blur-3xl" />
+          <div className="absolute -bottom-24 -left-16 w-72 h-72 sm:w-96 sm:h-96 bg-brand-500/10 rounded-full blur-3xl" />
+          {/* Subtle dot grid texture */}
+          <div
+            className="absolute inset-0 opacity-[0.05]"
+            style={{ backgroundImage: 'radial-gradient(circle, #ffffff 1px, transparent 1px)', backgroundSize: '26px 26px' }}
+          />
+        </div>
+
+        <div className="relative max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 text-center animate-fade-in-up">
+          <span className="inline-block px-3 sm:px-4 py-1.5 bg-brand-500/15 border border-brand-500/25 text-brand-300 text-[10px] sm:text-xs font-semibold uppercase tracking-widest rounded-full mb-5 sm:mb-6 backdrop-blur-md">
+            Across Karnataka
+          </span>
+          <h1 className="font-display font-bold leading-none tracking-wide text-white text-5xl sm:text-7xl lg:text-8xl">
+            <span className="gradient-text">PROPERTIES</span>
+          </h1>
+          <p className="mt-5 sm:mt-6 text-neutral-300 text-sm sm:text-base max-w-xl mx-auto font-light">
+            Plots, farmhouse plots, agricultural land, rental &amp; lease homes, and commercial spaces — sourced and listed as they become available, anywhere in Karnataka.
+          </p>
+        </div>
+      </section>
+
       {/* ─── BREADCRUMB NAVIGATION ─── */}
       <div className="bg-white border-b border-neutral-100">
         <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-3">
