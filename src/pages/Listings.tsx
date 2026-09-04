@@ -157,6 +157,21 @@ export default function Listings() {
           <p className="mt-5 sm:mt-6 text-neutral-300 text-sm sm:text-base max-w-xl mx-auto font-light">
             Plots, farmhouse plots, agricultural land, rental &amp; lease homes, and commercial spaces — sourced and listed as they become available, anywhere in Karnataka.
           </p>
+
+          {/* Property/city photo — shown at its natural aspect ratio (no crop, no
+              stretch) and capped near its native width so it's never upscaled
+              past its own resolution. The navy section background doubles as
+              a seamless "letterbox" for whatever space the photo doesn't fill. */}
+          <div className="mt-8 sm:mt-10 flex justify-center">
+            <img
+              src="/property-hero.jpg"
+              alt="Modern commercial towers and city skyline representing properties across Karnataka"
+              className="w-full h-auto rounded-2xl shadow-2xl border border-white/10"
+              style={{ maxWidth: '760px' }}
+              loading="eager"
+              decoding="async"
+            />
+          </div>
         </div>
       </section>
 
