@@ -1,5 +1,5 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, Building2, Users, CalendarCheck, BarChart3, Settings, LogOut, Search, Bell, Home } from 'lucide-react';
+import { LayoutDashboard, Building2, Users, CalendarCheck, Settings, LogOut, Search, Bell, Home } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import type { ReactNode } from 'react';
 
@@ -8,7 +8,6 @@ const NAV_ITEMS = [
   { to: '/admin/properties', label: 'Properties', icon: Building2 },
   { to: '/admin/leads', label: 'Enquiries', icon: Users },
   { to: '/admin/site-visits', label: 'Site Visits', icon: CalendarCheck },
-  { to: '/admin/reports', label: 'Reports', icon: BarChart3, comingSoon: true },
 ];
 
 interface AdminLayoutProps {
@@ -49,17 +48,12 @@ export default function AdminLayout({ title, subtitle, actions, children }: Admi
               <Link
                 key={item.to}
                 to={item.to}
-                className={`flex items-center justify-between gap-2 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors ${
+                className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors ${
                   isActive ? 'bg-brand-50 text-brand-700' : 'text-neutral-600 hover:bg-neutral-50 hover:text-navy-900'
                 }`}
               >
-                <span className="flex items-center gap-2.5">
-                  <Icon className={`h-4 w-4 ${isActive ? 'text-brand-600' : 'text-neutral-400'}`} />
-                  {item.label}
-                </span>
-                {item.comingSoon && (
-                  <span className="text-[9px] font-bold uppercase tracking-wide text-neutral-400 bg-neutral-100 px-1.5 py-0.5 rounded">Soon</span>
-                )}
+                <Icon className={`h-4 w-4 ${isActive ? 'text-brand-600' : 'text-neutral-400'}`} />
+                {item.label}
               </Link>
             );
           })}

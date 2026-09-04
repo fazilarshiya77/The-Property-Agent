@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
-import { BarChart3, Settings } from "lucide-react";
+import { Settings } from "lucide-react";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import ScrollToTop from "./components/ScrollToTop";
@@ -32,7 +32,6 @@ function AppLayout() {
         <Route path="/admin/edit/:id" element={<AdminPropertyForm />} />
         <Route path="/admin/leads" element={<AdminLeads />} />
         <Route path="/admin/site-visits" element={<AdminSiteVisits />} />
-        <Route path="/admin/reports" element={<AdminComingSoon title="Reports" icon={BarChart3} description="Inventory, source, and conversion analytics once there's enough real activity to report on." />} />
         <Route path="/admin/settings" element={<AdminComingSoon title="Settings" icon={Settings} description="Manage the Karnataka location list, amenities master, and site defaults from here." />} />
       </Routes>
     );
