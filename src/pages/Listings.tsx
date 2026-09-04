@@ -134,29 +134,6 @@ export default function Listings() {
         </script>
       </Helmet>
 
-      {/* ─── HERO ─────────────────────────────── */}
-      <section className="relative h-[52vh] sm:h-[60vh] min-h-[380px] flex items-end overflow-hidden bg-navy-950" aria-label="Properties hero">
-        <div className="absolute inset-0">
-          <img
-            src="/properties-hero.jpg"
-            alt=""
-            className="absolute -inset-x-[8%] -inset-y-[8%] w-[116%] h-[116%] object-cover"
-            aria-hidden="true"
-          />
-          {/* Gradient overlay for text legibility over the image */}
-          <div className="absolute inset-0 bg-gradient-to-t from-navy-950/90 via-navy-950/40 to-navy-950/20" />
-        </div>
-
-        <div className="relative max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 pb-8 sm:pb-12 w-full animate-fade-in-up">
-          <span className="inline-block px-3 sm:px-4 py-1.5 bg-brand-500/25 border border-brand-500/25 text-brand-300 text-[10px] sm:text-xs font-semibold uppercase tracking-widest rounded-full mb-3 sm:mb-4 backdrop-blur-md">
-            Properties Across Karnataka
-          </span>
-          <h1 className="text-2xl sm:text-4xl lg:text-5xl font-display font-bold text-white leading-tight tracking-wide">
-            {typeLabel} in {locationLabel}
-          </h1>
-        </div>
-      </section>
-
       {/* ─── BREADCRUMB NAVIGATION ─── */}
       <div className="bg-white border-b border-neutral-100">
         <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-3">
