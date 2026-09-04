@@ -96,6 +96,26 @@ body {
   background-clip: text;
 }
 
+/* Periodic shimmer sweep — a light diagonal highlight that passes across
+   the element every 1.5s, independent of the loading-skeleton shimmer above. */
+@keyframes shimmerSweep {
+  0% { transform: translateX(-120%) skewX(-15deg); }
+  60%, 100% { transform: translateX(220%) skewX(-15deg); }
+}
+.shimmer-sweep {
+  position: relative;
+  overflow: hidden;
+}
+.shimmer-sweep::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  width: 40%;
+  background: linear-gradient(115deg, transparent, rgba(255, 255, 255, 0.55), transparent);
+  animation: shimmerSweep 1.5s ease-in-out infinite;
+  pointer-events: none;
+}
+
 /* Image loading skeleton */
 .skeleton {
   background: linear-gradient(90deg, #F3EDE2 25%, #E8DCC8 50%, #F3EDE2 75%);
