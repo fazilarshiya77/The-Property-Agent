@@ -95,7 +95,6 @@ export default function Home() {
 
   // Scroll-triggered reveal refs
   const statsRef = useScrollReveal({ direction: 'up', stagger: 0.12 });
-  const coverageRef = useSectionReveal();
   const servicesHeaderRef = useSectionReveal();
   const servicesGridRef = useScrollReveal({ direction: 'up', stagger: 0.1 });
   const featuredHeaderRef = useSectionReveal();
@@ -277,46 +276,6 @@ export default function Home() {
           </div>
         </section>
       )}
-
-      {/* ─── KARNATAKA COVERAGE BANNER ─────────────────── */}
-      <section className="py-10 sm:py-16 lg:py-20 bg-neutral-50" aria-label="Statewide coverage across Karnataka">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div ref={coverageRef} className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-navy-900 to-navy-950 text-white p-8 sm:p-12 lg:p-16 text-center">
-            <div className="absolute inset-0 opacity-10 pointer-events-none">
-              <div className="absolute -top-10 -left-10 w-72 h-72 bg-brand-500 rounded-full blur-3xl" />
-              <div className="absolute -bottom-10 -right-10 w-72 h-72 bg-brand-400 rounded-full blur-3xl" />
-            </div>
-            <div className="relative">
-              <div className="w-14 h-14 rounded-2xl bg-brand-500/20 flex items-center justify-center mx-auto mb-5">
-                <MapPinned className="h-7 w-7 text-brand-400" />
-              </div>
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-display font-bold mb-3 sm:mb-4">
-                We Serve Properties Across All of Karnataka
-              </h2>
-              <p className="text-neutral-300 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
-                We're not tied to one neighborhood or city — plots, farmhouse plots, agricultural land, rental homes, and commercial spaces can come up anywhere in the state. Tell us the area and category you're looking for, and we'll let you know what's currently available.
-              </p>
-              <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
-                <a
-                  href="https://wa.me/919945011138?text=Hi%20The%20Property%20Agent%2C%20I%27d%20like%20to%20know%20what%20properties%20are%20currently%20available."
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="bg-brand-500 hover:bg-brand-600 text-white font-semibold px-6 py-2.5 sm:py-3 rounded-xl transition-all hover:shadow-lg hover:shadow-brand-500/25 text-sm inline-flex items-center justify-center gap-2"
-                >
-                  <MessageCircle className="h-4 w-4" />
-                  <span>Ask on WhatsApp</span>
-                </a>
-                <Link
-                  to="/listings"
-                  className="bg-white/10 hover:bg-white/20 backdrop-blur-md text-white font-semibold px-6 py-2.5 sm:py-3 rounded-xl transition-all border border-white/10 text-sm"
-                >
-                  Browse Current Listings
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* ─── HOW WE HELP ────── */}
       <section className="py-12 sm:py-16 lg:py-20 bg-white" aria-label="How The Property Agent helps you">
