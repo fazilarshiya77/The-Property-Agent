@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Search, Shield, Clock, Star, ArrowRight, ChevronDown, ChevronUp, Tag, Key, Sparkles, Check, Phone, MapPinned, RefreshCw, MessageCircle, HelpCircle } from 'lucide-react';
+import { Search, Shield, Clock, Star, ArrowRight, ChevronDown, ChevronUp, Tag, Key, Sparkles, Check, Phone, MapPinned, RefreshCw, MessageCircle, HelpCircle, Play } from 'lucide-react';
 import PropertyCard from '../components/PropertyCard';
 import { servicesData } from '../data/services';
 import { usePropertyStore } from '../stores/propertyStore';
@@ -231,18 +231,45 @@ export default function Home() {
       </section>
 
       {/* ─── ABOUT THE PROPERTY AGENT (AIEO/GEO Content Block) ─── */}
-      <section className="py-8 sm:py-12 bg-white" aria-label="About The Property Agent">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <h2 className="text-xl sm:text-2xl lg:text-3xl font-display font-bold text-navy-900 mb-3 sm:mb-4">
-              Karnataka's Independent Property Agent
-            </h2>
-            <p className="text-neutral-600 text-sm sm:text-base leading-relaxed max-w-3xl mx-auto">
-              <strong>The Property Agent</strong> operates as an independent real estate agent based in <strong>Bengaluru, Karnataka</strong>. We don't hold a fixed inventory — as plots, farmhouse plots, agricultural land, rental homes, lease properties, and commercial spaces become available across Karnataka, we list them here, and remove them once sold or taken.
-            </p>
-            <p className="text-neutral-500 text-xs sm:text-sm leading-relaxed max-w-3xl mx-auto mt-3">
-              Whether you're looking to <strong>buy a plot or farmhouse</strong>, <strong>invest in agricultural land</strong>, <strong>rent or lease a home</strong>, or need expert <strong>property services</strong> — The Property Agent is your direct point of contact across the state.
-            </p>
+      <section className="py-12 sm:py-16 lg:py-20 bg-brand-50/40" aria-label="About The Property Agent">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col lg:flex-row items-stretch gap-8 lg:gap-x-12">
+            {/* LEFT — content, in a premium editorial card */}
+            <div className="lg:w-[45%]">
+              <div className="h-full bg-white rounded-3xl border border-brand-200/60 shadow-card p-7 sm:p-9 lg:p-10 flex flex-col justify-center">
+                <span className="inline-block text-[11px] font-bold uppercase tracking-[0.2em] text-brand-600 mb-3">
+                  Who We Are
+                </span>
+                <h2 className="text-xl sm:text-2xl lg:text-3xl font-display font-bold text-navy-900 mb-4 sm:mb-5 text-left">
+                  Karnataka's Independent Property Agent
+                </h2>
+                <p className="text-neutral-600 text-sm sm:text-base leading-relaxed text-left">
+                  <strong>The Property Agent</strong> operates as an independent real estate agent based in <strong>Bengaluru, Karnataka</strong>. We don't hold a fixed inventory — as plots, farmhouse plots, agricultural land, rental homes, lease properties, and commercial spaces become available across Karnataka, we list them here, and remove them once sold or taken.
+                </p>
+                <p className="text-neutral-500 text-xs sm:text-sm leading-relaxed text-left mt-4">
+                  Whether you're looking to <strong>buy a plot or farmhouse</strong>, <strong>invest in agricultural land</strong>, <strong>rent or lease a home</strong>, or need expert <strong>property services</strong> — The Property Agent is your direct point of contact across the state.
+                </p>
+              </div>
+            </div>
+
+            {/* RIGHT — reserved media area, ready to hold a <video> element later */}
+            <div className="lg:w-[50%]">
+              <div className="relative w-full aspect-video rounded-3xl overflow-hidden border border-brand-200/60 shadow-card bg-gradient-to-br from-navy-900 via-navy-800 to-brand-800">
+                {/* TODO: replace this placeholder with a <video> (or embed) element covering this same container */}
+                <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-6">
+                  <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-white/10 border border-white/25 backdrop-blur-sm flex items-center justify-center mb-4 group cursor-default">
+                    <Play className="h-7 w-7 sm:h-8 sm:w-8 text-white ml-1" fill="currentColor" />
+                  </div>
+                  <p className="text-white font-display font-semibold text-base sm:text-lg tracking-wide">
+                    Property Video
+                  </p>
+                  <p className="text-white/60 text-xs sm:text-sm mt-1">
+                    Real estate insights — coming soon
+                  </p>
+                </div>
+                <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_top_right,_rgba(172,133,99,0.6),_transparent_60%)]" aria-hidden="true" />
+              </div>
+            </div>
           </div>
         </div>
       </section>
