@@ -278,8 +278,14 @@ export default function Home() {
       )}
 
       {/* ─── HOW WE HELP ────── */}
-      <section className="py-12 sm:py-16 lg:py-20 bg-white" aria-label="How The Property Agent helps you">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="relative py-12 sm:py-16 lg:py-20 bg-white overflow-hidden" aria-label="How The Property Agent helps you">
+        <div
+          className="absolute inset-0 bg-cover bg-center opacity-[0.06]"
+          style={{ backgroundImage: "url('/h2.jfif')" }}
+          aria-hidden="true"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-white via-white/90 to-white" aria-hidden="true" />
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div ref={servicesHeaderRef} className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-8 sm:mb-12 gap-4">
             <div>
               <div className="inline-flex items-center space-x-2 px-3 py-1 bg-brand-50 border border-brand-200 text-brand-700 rounded-full text-xs font-bold uppercase tracking-wider mb-3">
