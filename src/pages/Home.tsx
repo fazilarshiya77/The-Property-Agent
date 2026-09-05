@@ -286,8 +286,8 @@ export default function Home() {
           aria-hidden="true"
         />
         {/* Soft overlay for text/card contrast — light enough to keep the houses, road and composition clearly visible */}
-        <div className="absolute inset-0 bg-white/55 sm:bg-white/50" aria-hidden="true" />
-        <div className="absolute inset-0 bg-gradient-to-b from-white/70 via-white/35 to-white/70" aria-hidden="true" />
+        <div className="absolute inset-0 bg-white/35 sm:bg-white/30" aria-hidden="true" />
+        <div className="absolute inset-0 bg-gradient-to-b from-white/55 via-white/20 to-white/55" aria-hidden="true" />
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div
