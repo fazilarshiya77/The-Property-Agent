@@ -463,7 +463,7 @@ export default function Services() {
                     Details
                   </button>
                   <a
-                    href={`https://wa.me/919945011138?text=${encodeURIComponent(`Hello The Property Agent, I'd like help with "${service.title}". Please share more details.`)}`}
+                    href={`https://wa.me/919019488368?text=${encodeURIComponent(`Hello The Property Agent, I'd like help with "${service.title}". Please share more details.`)}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 p-2.5 rounded-xl transition-colors"
@@ -552,7 +552,7 @@ export default function Services() {
                   </p>
                   <div className="mt-6 flex justify-center gap-3">
                     <a
-                      href="https://wa.me/919945011138?text=Hello%20The%20Property%20Agent,%20I%20just%20submitted%20an%20inquiry%20online."
+                      href="https://wa.me/919019488368?text=Hello%20The%20Property%20Agent,%20I%20just%20submitted%20an%20inquiry%20online."
                       target="_blank"
                       rel="noopener noreferrer"
                       className="inline-flex items-center space-x-2 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs sm:text-sm px-5 py-2.5 rounded-xl transition-all"
@@ -981,7 +981,7 @@ export default function Services() {
                 Send an Inquiry
               </button>
               <a
-                href={`https://wa.me/919945011138?text=${encodeURIComponent(`Hello The Property Agent, I'd like help with "${selectedServiceForModal.title}".`)}`}
+                href={`https://wa.me/919019488368?text=${encodeURIComponent(`Hello The Property Agent, I'd like help with "${selectedServiceForModal.title}".`)}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-sm py-3 px-5 rounded-xl transition-all text-center inline-flex items-center justify-center space-x-2"

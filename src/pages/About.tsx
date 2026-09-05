@@ -9,7 +9,7 @@ import type { BreadcrumbItem, FAQItem } from '../components/SEO';
 const aboutFaqData: FAQItem[] = [
   {
     question: "How can I contact The Property Agent?",
-    answer: "You can reach The Property Agent by phone at +91 90194 88368, WhatsApp at +91 99450 11138, email at trishnaproperties78@gmail.com, or visit our office at No. 84, 4th cross kashi nagar, yelachanahalli, B-78., Bengaluru, Karnataka. We are open Monday to Saturday, 9 AM to 7 PM."
+    answer: "You can reach The Property Agent by phone at +91 90194 88368, WhatsApp at +91 90194 88368, email at trishnaproperties78@gmail.com, or visit our office at No. 84, 4th cross kashi nagar, yelachanahalli, B-78., Bengaluru, Karnataka. We are open Monday to Saturday, 9 AM to 7 PM."
   },
   {
     question: "What services does The Property Agent offer across Karnataka?",
@@ -247,7 +247,7 @@ export default function About() {
                     <p className="text-sm text-neutral-500 mt-1">
                       <a href="tel:+919019488368" className="hover:text-brand-500 transition-colors">+91 90194 88368</a>
                       {' · '}
-                      <a href="https://wa.me/919945011138" target="_blank" rel="noopener noreferrer" className="hover:text-brand-500 transition-colors">+91 99450 11138 (WhatsApp)</a>
+                      <a href="https://wa.me/919019488368" target="_blank" rel="noopener noreferrer" className="hover:text-brand-500 transition-colors">+91 90194 88368 (WhatsApp)</a>
                     </p>
                   </div>
                 </div>

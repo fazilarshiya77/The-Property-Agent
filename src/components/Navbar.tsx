@@ -166,7 +166,7 @@ export default function Navbar() {
                 <span className="text-sm font-medium">+91 90194 88368</span>
               </a>
               <a
-                href="https://wa.me/919945011138?text=Hi%20The%20Property%20Agent%2C%20I%20would%20like%20to%20inquire%20about%20your%20properties%20and%20services."
+                href="https://wa.me/919019488368?text=Hi%20The%20Property%20Agent%2C%20I%20would%20like%20to%20inquire%20about%20your%20properties%20and%20services."
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center space-x-3 px-4 py-3 text-emerald-700 bg-emerald-50 hover:bg-emerald-100 rounded-xl transition-colors font-medium text-sm"

@@ -78,8 +78,8 @@ export default function Footer() {
               </li>
               <li className="flex items-start space-x-2.5 sm:space-x-3">
                 <MessageCircle className="h-4 w-4 text-brand-400 mt-0.5 flex-shrink-0" />
-                <a href="https://wa.me/919945011138" target="_blank" rel="noopener noreferrer" className="text-neutral-400 hover:text-brand-400 transition-colors">
-                  +91 99450 11138 (WhatsApp)
+                <a href="https://wa.me/919019488368" target="_blank" rel="noopener noreferrer" className="text-neutral-400 hover:text-brand-400 transition-colors">
+                  +91 90194 88368 (WhatsApp)
                 </a>
               </li>
               <li className="flex items-start space-x-2.5 sm:space-x-3">

@@ -374,7 +374,7 @@ export default function Listings() {
                     className="text-brand-500 hover:text-brand-600 font-medium text-sm transition-colors">
                     Clear all filters
                   </button>
-                  <a href="https://wa.me/919945011138" target="_blank" rel="noopener noreferrer"
+                  <a href="https://wa.me/919019488368" target="_blank" rel="noopener noreferrer"
                     className="bg-brand-500 hover:bg-brand-600 text-navy-900 font-semibold text-sm px-5 py-2.5 rounded-xl transition-all">
                     Ask on WhatsApp
                   </a>

@@ -522,7 +522,7 @@ export default function PropertyDetails() {
           <span>Call Now</span>
         </a>
         <a
-          href={`https://wa.me/919945011138?text=${encodeURIComponent(
+          href={`https://wa.me/919019488368?text=${encodeURIComponent(
             `Hi The Property Agent, I am interested in "${property.title}" in ${property.location}. Please share more details.`
           )}`}
           target="_blank"

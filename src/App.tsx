@@ -4,6 +4,8 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import ScrollToTop from "./components/ScrollToTop";
 import SmoothScrollProvider from "./components/SmoothScrollProvider";
+import FloatingContactButtons from "./components/FloatingContactButtons";
+import WelcomePopup from "./components/WelcomePopup";
 import Home from "./pages/Home";
 import Listings from "./pages/Listings";
 import PropertyDetails from "./pages/PropertyDetails";
@@ -55,6 +57,8 @@ function AppLayout() {
         <Footer />
       </SmoothScrollProvider>
       <ScrollToTop />
+      <FloatingContactButtons />
+      <WelcomePopup />
     </div>
   );
 }

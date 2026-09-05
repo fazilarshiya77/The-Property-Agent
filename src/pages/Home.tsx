@@ -63,7 +63,7 @@ const faqData: FAQItem[] = [
   },
   {
     question: "Can you help with the rental agreement or e-stamp paperwork?",
-    answer: "Yes — when you rent or lease a property through us, we assist with drafting and e-stamping the rental/lease agreement so everything is properly documented. Reach out via WhatsApp (+91 99450 11138) or the contact form to get started."
+    answer: "Yes — when you rent or lease a property through us, we assist with drafting and e-stamping the rental/lease agreement so everything is properly documented. Reach out via WhatsApp (+91 90194 88368) or the contact form to get started."
   }
 ];
 
