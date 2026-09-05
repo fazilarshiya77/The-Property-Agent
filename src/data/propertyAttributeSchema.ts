@@ -53,22 +53,16 @@ export const ATTRIBUTE_SCHEMA: Record<PropertyType, AttributeField[]> = {
   // Rent / Sale / Lease are used generically for houses & apartments — a shared
   // residential attribute set covers both without over-fitting to one sub-type.
   rent: [
-    { key: 'carpetArea', label: 'Carpet Area', input: 'number', unit: 'sqft' },
-    { key: 'superBuiltUpArea', label: 'Super Built-up Area', input: 'number', unit: 'sqft' },
     { key: 'totalFloors', label: 'Total Floors in Building', input: 'number' },
     { key: 'ageOfProperty', label: 'Age of Property', input: 'text', placeholder: 'e.g. 5 years' },
     { key: 'balcony', label: 'Balcony', input: 'boolean' },
   ],
   sale: [
-    { key: 'carpetArea', label: 'Carpet Area', input: 'number', unit: 'sqft' },
-    { key: 'superBuiltUpArea', label: 'Super Built-up Area', input: 'number', unit: 'sqft' },
     { key: 'totalFloors', label: 'Total Floors in Building', input: 'number' },
     { key: 'ageOfProperty', label: 'Age of Property', input: 'text', placeholder: 'e.g. 5 years' },
     { key: 'balcony', label: 'Balcony', input: 'boolean' },
   ],
   lease: [
-    { key: 'carpetArea', label: 'Carpet Area', input: 'number', unit: 'sqft' },
-    { key: 'superBuiltUpArea', label: 'Super Built-up Area', input: 'number', unit: 'sqft' },
     { key: 'totalFloors', label: 'Total Floors in Building', input: 'number' },
     { key: 'ageOfProperty', label: 'Age of Property', input: 'text', placeholder: 'e.g. 5 years' },
     { key: 'balcony', label: 'Balcony', input: 'boolean' },

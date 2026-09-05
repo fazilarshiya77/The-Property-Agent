@@ -512,16 +512,6 @@ export default function AdminPropertyForm() {
           <h3 className={subHeadingCls}>Map &amp; Coordinates</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label className={labelCls}>Latitude</label>
-              <input value={form.latitude || ''} onChange={e => update('latitude', e.target.value)} placeholder="e.g. 12.9141"
-                className={inputCls} />
-            </div>
-            <div>
-              <label className={labelCls}>Longitude</label>
-              <input value={form.longitude || ''} onChange={e => update('longitude', e.target.value)} placeholder="e.g. 75.7852"
-                className={inputCls} />
-            </div>
-            <div>
               <label className={labelCls}>Location Visibility</label>
               <select value={form.locationVisibility} onChange={e => update('locationVisibility', e.target.value as 'exact' | 'approximate')}
                 className={inputCls}>
