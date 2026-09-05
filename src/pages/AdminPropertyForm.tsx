@@ -627,11 +627,13 @@ export default function AdminPropertyForm() {
               const AmenityIcon = getAmenityIcon(a);
               return (
                 <button key={a} type="button" onClick={() => toggleAmenity(a)}
+                  title={selected ? `Remove ${a}` : `Add ${a}`}
                   className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-xs font-medium transition-colors border ${
                     selected ? 'bg-brand-500 border-brand-500 text-navy-900' : 'bg-white border-neutral-200 text-neutral-600 hover:border-brand-300'
                   }`}>
                   <AmenityIcon className="h-3.5 w-3.5" />
                   {a}
+                  {selected && <X className="h-3.5 w-3.5" />}
                 </button>
               );
             })}
