@@ -89,8 +89,8 @@ export default function AdminLayout({ title, subtitle, actions, children }: Admi
 
   return (
     <div className="min-h-screen bg-neutral-50 flex">
-      {/* Sidebar */}
-      <aside className="w-60 flex-shrink-0 bg-white border-r border-neutral-100 flex flex-col h-screen sticky top-0">
+      {/* Sidebar — fixed to the viewport so it never scrolls with the page */}
+      <aside className="w-60 flex-shrink-0 bg-white border-r border-neutral-100 flex flex-col h-screen fixed top-0 left-0 z-40">
         <div className="px-5 py-5 flex items-center gap-2.5 border-b border-neutral-100">
           <div className="w-9 h-9 rounded-xl overflow-hidden flex-shrink-0">
             <img src="/logo.jpg" alt="The Property Agent logo" className="w-full h-full object-cover" />
@@ -133,8 +133,8 @@ export default function AdminLayout({ title, subtitle, actions, children }: Admi
         </div>
       </aside>
 
-      {/* Main */}
-      <div className="flex-1 min-w-0">
+      {/* Main — offset by the fixed sidebar's width */}
+      <div className="flex-1 min-w-0 ml-60">
         {/* Topbar */}
         <div className="bg-white border-b border-neutral-100 sticky top-0 z-30">
           <div className="px-6 lg:px-8 py-3.5 flex items-center justify-between gap-4">
