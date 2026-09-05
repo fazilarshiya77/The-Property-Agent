@@ -278,15 +278,22 @@ export default function Home() {
       )}
 
       {/* ─── HOW WE HELP ────── */}
-      <section className="relative py-12 sm:py-16 lg:py-20 bg-white overflow-hidden" aria-label="How The Property Agent helps you">
+      <section className="relative py-12 sm:py-16 lg:py-20 overflow-hidden" aria-label="How The Property Agent helps you">
+        {/* Backdrop photo — a real residential development, kept as the visual backdrop for this section */}
         <div
-          className="absolute inset-0 bg-cover bg-center opacity-[0.06]"
+          className="absolute inset-0 bg-cover bg-center sm:bg-[center_35%]"
           style={{ backgroundImage: "url('/h2.jfif')" }}
           aria-hidden="true"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-white via-white/90 to-white" aria-hidden="true" />
+        {/* Soft overlay for text/card contrast — light enough to keep the houses, road and composition clearly visible */}
+        <div className="absolute inset-0 bg-white/55 sm:bg-white/50" aria-hidden="true" />
+        <div className="absolute inset-0 bg-gradient-to-b from-white/70 via-white/35 to-white/70" aria-hidden="true" />
+
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div ref={servicesHeaderRef} className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-8 sm:mb-12 gap-4">
+          <div
+            ref={servicesHeaderRef}
+            className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-8 sm:mb-12 gap-4 bg-white/80 backdrop-blur-sm rounded-2xl px-4 py-4 sm:px-6 sm:py-5 border border-white/60 shadow-sm"
+          >
             <div>
               <div className="inline-flex items-center space-x-2 px-3 py-1 bg-brand-50 border border-brand-200 text-brand-700 rounded-full text-xs font-bold uppercase tracking-wider mb-3">
                 <Sparkles className="h-3.5 w-3.5" />
@@ -312,7 +319,7 @@ export default function Home() {
             {servicesData.map((service) => (
               <article
                 key={service.id}
-                className="p-6 rounded-2xl bg-white border border-neutral-200/80 hover:shadow-card-hover hover:border-gold-300/60 transition-all duration-300 flex flex-col justify-between group"
+                className="p-6 rounded-2xl bg-white/95 backdrop-blur-sm border border-white/60 hover:shadow-card-hover hover:border-gold-300/60 transition-all duration-300 flex flex-col justify-between group"
               >
                 <div>
                   <div className="flex items-start justify-between mb-4">
