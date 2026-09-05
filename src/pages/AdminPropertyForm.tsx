@@ -50,13 +50,6 @@ const emptyForm: Omit<Property, 'id' | 'propertyCode'> = {
   legal: {}, source: {},
 };
 
-function formatINR(n: number): string {
-  if (!n) return '';
-  if (n >= 10000000) return `₹${(n / 10000000).toFixed(2)} Cr`;
-  if (n >= 100000) return `₹${(n / 100000).toFixed(2)} L`;
-  return `₹${n.toLocaleString('en-IN')}`;
-}
-
 function Toggle({ checked, onChange, label, hint }: { checked: boolean; onChange: (v: boolean) => void; label: string; hint?: string }) {
   return (
     <div className="flex items-center justify-between gap-3 py-1">
@@ -392,7 +385,7 @@ export default function AdminPropertyForm() {
               </select>
             </div>
             <div>
-              <label className={labelCls}>Asking Price *</label>
+              <label className={labelCls}>Price *</label>
               <input type="text" inputMode="decimal" value={form.price || ''} onChange={e => {
                   const numeric = e.target.value.replace(/[^0-9.]/g, '');
                   update('price', numeric ? Number(numeric) : 0);
@@ -400,7 +393,6 @@ export default function AdminPropertyForm() {
                 }}
                 placeholder="e.g. 4500000"
                 className={errors.price ? errorInputCls : inputCls} />
-              {form.price > 0 && !errors.price && <p className="text-[11px] text-brand-600 font-semibold mt-1">{formatINR(form.price)}</p>}
               <FieldError message={errors.price} />
             </div>
           </div>
