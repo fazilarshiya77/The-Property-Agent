@@ -54,8 +54,9 @@ export default function EnquiryModal({ isOpen, onClose, property }: EnquiryModal
       aria-labelledby="enquiry-modal-title"
     >
       <div
-        className="relative w-full max-w-lg max-h-[90vh] overflow-y-auto bg-white rounded-3xl shadow-2xl border border-neutral-100 transform transition-all duration-300 scale-100"
+        className="relative w-full max-w-lg max-h-[90vh] overflow-y-auto overscroll-contain bg-white rounded-3xl shadow-2xl border border-neutral-100 transform transition-all duration-300 scale-100"
         onClick={(e) => e.stopPropagation()}
+        data-lenis-prevent
       >
         {/* Header */}
         <div className="sticky top-0 z-10 flex items-center justify-between px-6 py-4 border-b border-neutral-100 bg-white/95 backdrop-blur-sm rounded-t-3xl">
