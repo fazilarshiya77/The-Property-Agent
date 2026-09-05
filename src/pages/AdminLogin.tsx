@@ -33,7 +33,7 @@ export default function AdminLogin() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-navy-900 to-navy-950 px-4">
+    <div className="admin-crm min-h-screen flex items-center justify-center bg-gradient-to-br from-navy-900 to-navy-950 px-4">
       <SEO
         title="Admin Login - The Property Agent"
         description="Admin login for The Property Agent dashboard"

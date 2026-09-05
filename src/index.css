@@ -2,7 +2,7 @@
 @import "shadcn/tailwind.css";
 @import "@fontsource-variable/geist";
 @import "lenis/dist/lenis.css";
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Nunito:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Nunito:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -190,6 +190,16 @@ html, body {
   .font-display {
     letter-spacing: -0.02em;
   }
+}
+
+/* ─── Admin CRM font ───────────────────────────────────────
+   Scoped to .admin-crm (the CRM root wrapper) only — the public website
+   keeps its Poppins/Nunito pairing untouched. !important is needed
+   because plenty of admin markup uses the site-wide .font-display /
+   .font-sans utility classes directly, which this must override. */
+.admin-crm,
+.admin-crm * {
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', sans-serif !important;
 }
 
 @layer base {

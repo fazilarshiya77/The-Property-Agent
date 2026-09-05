@@ -88,7 +88,7 @@ export default function AdminLayout({ title, subtitle, actions, children }: Admi
   };
 
   return (
-    <div className="min-h-screen bg-neutral-50 flex">
+    <div className="admin-crm min-h-screen bg-neutral-50 flex">
       {/* Sidebar — fixed to the viewport so it never scrolls with the page */}
       <aside className="w-60 flex-shrink-0 bg-white border-r border-neutral-100 flex flex-col h-screen fixed top-0 left-0 z-40">
         <div className="px-5 py-5 flex items-center gap-2.5 border-b border-neutral-100">
