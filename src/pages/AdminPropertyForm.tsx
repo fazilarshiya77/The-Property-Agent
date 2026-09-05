@@ -50,6 +50,22 @@ const emptyForm: Omit<Property, 'id' | 'propertyCode'> = {
   legal: {}, source: {},
 };
 
+// Understands "67 Lakhs", "1.2 Cr", "45000 Thousand", plain "4500000", etc.
+// so the admin can type the way they naturally think about price, while the
+// stored value stays a plain number for sorting/filtering/display.
+function parsePriceInput(raw: string): number {
+  const text = raw.trim().toLowerCase();
+  const match = text.match(/^([\d,]*\.?\d+)\s*(cr|crore|crores|l|lakh|lakhs|k|thousand|thousands)?/);
+  if (!match) return 0;
+  const value = parseFloat(match[1].replace(/,/g, ''));
+  if (isNaN(value)) return 0;
+  const unit = match[2];
+  if (unit && /^cr/.test(unit)) return value * 10000000;
+  if (unit && /^l/.test(unit)) return value * 100000;
+  if (unit && /^(k|thousand)/.test(unit)) return value * 1000;
+  return value;
+}
+
 function Toggle({ checked, onChange, label, hint }: { checked: boolean; onChange: (v: boolean) => void; label: string; hint?: string }) {
   return (
     <div className="flex items-center justify-between gap-3 py-1">
@@ -78,6 +94,11 @@ export default function AdminPropertyForm() {
   const { properties, fetchProperties, addProperty, updateProperty } = usePropertyStore();
 
   const [form, setForm] = useState<Omit<Property, 'id' | 'propertyCode'>>(emptyForm);
+  // What the admin actually typed into the Price field (e.g. "67 Lakhs",
+  // "1.2 Cr") — kept separate from form.price (a plain number, used for
+  // sorting/filtering/display everywhere else) so typing is never blocked
+  // or silently rewritten while you're still typing it.
+  const [priceInput, setPriceInput] = useState('');
   const [propertyCode, setPropertyCode] = useState<string>('Generated on save');
   const [amenityInput, setAmenityInput] = useState('');
   const [highlightInput, setHighlightInput] = useState('');
@@ -114,6 +135,7 @@ export default function AdminPropertyForm() {
           source: rest.source || {},
         });
         setPropertyCode(pc);
+        setPriceInput(rest.price ? String(rest.price) : '');
       } else if (properties.length > 0) navigate('/admin/properties');
     }
   }, [id, isEdit, ready, navigate, properties]);
@@ -386,13 +408,14 @@ export default function AdminPropertyForm() {
             </div>
             <div>
               <label className={labelCls}>Price *</label>
-              <input type="text" inputMode="decimal" value={form.price || ''} onChange={e => {
-                  const numeric = e.target.value.replace(/[^0-9.]/g, '');
-                  update('price', numeric ? Number(numeric) : 0);
+              <input type="text" value={priceInput} onChange={e => {
+                  setPriceInput(e.target.value);
+                  update('price', parsePriceInput(e.target.value));
                   if (errors.price) setErrors(p => ({ ...p, price: undefined }));
                 }}
-                placeholder="e.g. 4500000"
+                placeholder="e.g. 45 Lakhs, 1.2 Cr, or 4500000"
                 className={errors.price ? errorInputCls : inputCls} />
+              {form.price > 0 && <p className="text-[11px] text-neutral-400 mt-1">Stored as ₹{form.price.toLocaleString('en-IN')}</p>}
               <FieldError message={errors.price} />
             </div>
           </div>
