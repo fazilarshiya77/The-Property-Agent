@@ -3,6 +3,10 @@ import { Mail, Phone, MapPin, ExternalLink, MessageCircle } from 'lucide-react';
 import { useSettingsStore } from '../stores/settingsStore';
 import { formatPhoneDisplay, toTelHref, toWhatsAppHref } from '../lib/phone';
 
+// A second WhatsApp number shown alongside the admin-configured one
+// (Admin -> Settings -> Contact & Communication).
+const SECOND_WHATSAPP_NUMBER = '+919845011138';
+
 export default function Footer() {
   const { callNumber, whatsappNumber } = useSettingsStore(s => s.settings);
   const address = 'No. 84, 4th cross kashi nagar, yelachanahalli, B-78., Bengaluru, Karnataka';
@@ -81,9 +85,16 @@ export default function Footer() {
               </li>
               <li className="flex items-start space-x-2.5 sm:space-x-3">
                 <MessageCircle className="h-4 w-4 text-brand-400 mt-0.5 flex-shrink-0" />
-                <a href={toWhatsAppHref(whatsappNumber)} target="_blank" rel="noopener noreferrer" className="text-neutral-400 hover:text-brand-400 transition-colors">
-                  {formatPhoneDisplay(whatsappNumber)} (WhatsApp)
-                </a>
+                <div className="flex flex-col">
+                  <a href={toWhatsAppHref(whatsappNumber)} target="_blank" rel="noopener noreferrer" className="text-neutral-400 hover:text-brand-400 transition-colors">
+                    {formatPhoneDisplay(whatsappNumber)} (WhatsApp)
+                  </a>
+                  {SECOND_WHATSAPP_NUMBER !== whatsappNumber && (
+                    <a href={toWhatsAppHref(SECOND_WHATSAPP_NUMBER)} target="_blank" rel="noopener noreferrer" className="text-neutral-400 hover:text-brand-400 transition-colors">
+                      {formatPhoneDisplay(SECOND_WHATSAPP_NUMBER)}
+                    </a>
+                  )}
+                </div>
               </li>
               <li className="flex items-start space-x-2.5 sm:space-x-3">
                 <MapPin className="h-4 w-4 text-brand-400 mt-0.5 flex-shrink-0" />
