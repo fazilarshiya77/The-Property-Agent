@@ -5,10 +5,14 @@ import { formatPhoneDisplay, toTelHref, toWhatsAppHref } from '../lib/phone';
 
 const WHATSAPP_MESSAGE = "Hi The Property Agent, I'd like to enquire about your properties and services.";
 
+// A second, always-available call number alongside the admin-configured
+// one (Admin -> Settings -> Contact & Communication).
+const SECOND_CALL_NUMBER = '+919845011138';
+
 // Two floating action buttons (WhatsApp + Call) fixed to the bottom-right
-// corner of every public page. Tapping either opens a small popover with
-// the admin-configured number (see Admin -> Settings -> Contact &
-// Communication) rather than a hardcoded one.
+// corner of every public page. WhatsApp opens the admin-configured number
+// (see Admin -> Settings -> Contact & Communication); Call lists that same
+// admin-configured number plus a second always-available call number.
 export default function FloatingContactButtons() {
   const [openMenu, setOpenMenu] = useState<'whatsapp' | 'call' | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -32,7 +36,7 @@ export default function FloatingContactButtons() {
   }, []);
 
   const waLink = toWhatsAppHref(whatsappNumber, WHATSAPP_MESSAGE);
-  const telLink = toTelHref(callNumber);
+  const callNumbers = Array.from(new Set([callNumber, SECOND_CALL_NUMBER]));
 
   return (
     <div
@@ -94,19 +98,24 @@ export default function FloatingContactButtons() {
                 <X className="h-3.5 w-3.5" />
               </button>
             </div>
-            <a
-              href={telLink}
-              onClick={() => setOpenMenu(null)}
-              className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-neutral-50 transition-colors"
-            >
-              <div className="p-2 rounded-full bg-brand-500/10 text-brand-600 flex-shrink-0">
-                <Phone className="h-4 w-4" />
-              </div>
-              <div className="min-w-0">
-                <p className="text-sm font-semibold text-navy-900">{formatPhoneDisplay(callNumber)}</p>
-                <p className="text-xs text-neutral-500">Tap to call now</p>
-              </div>
-            </a>
+            <div className="space-y-1">
+              {callNumbers.map((num) => (
+                <a
+                  key={num}
+                  href={toTelHref(num)}
+                  onClick={() => setOpenMenu(null)}
+                  className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-neutral-50 transition-colors"
+                >
+                  <div className="p-2 rounded-full bg-brand-500/10 text-brand-600 flex-shrink-0">
+                    <Phone className="h-4 w-4" />
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-sm font-semibold text-navy-900">{formatPhoneDisplay(num)}</p>
+                    <p className="text-xs text-neutral-500">Tap to call now</p>
+                  </div>
+                </a>
+              ))}
+            </div>
           </div>
         )}
         <button
