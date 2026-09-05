@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
-import { Settings } from "lucide-react";
+import { useEffect } from "react";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import ScrollToTop from "./components/ScrollToTop";
@@ -18,12 +18,20 @@ import AdminProperties from "./pages/AdminProperties";
 import AdminPropertyForm from "./pages/AdminPropertyForm";
 import AdminLeads from "./pages/AdminLeads";
 import AdminSiteVisits from "./pages/AdminSiteVisits";
-import AdminComingSoon from "./pages/AdminComingSoon";
+import AdminSettings from "./pages/AdminSettings";
 import { SEOProvider, SEO } from "./components/SEO";
+import { useSettingsStore } from "./stores/settingsStore";
 
 function AppLayout() {
   const location = useLocation();
   const isAdmin = location.pathname.startsWith('/admin');
+  const fetchSettings = useSettingsStore(s => s.fetchSettings);
+
+  // Load the admin-configurable Call/WhatsApp numbers once per app load —
+  // every component that needs them just reads from the store afterward.
+  useEffect(() => {
+    fetchSettings();
+  }, [fetchSettings]);
 
   if (isAdmin) {
     return (
@@ -35,7 +43,7 @@ function AppLayout() {
         <Route path="/admin/edit/:id" element={<AdminPropertyForm />} />
         <Route path="/admin/leads" element={<AdminLeads />} />
         <Route path="/admin/site-visits" element={<AdminSiteVisits />} />
-        <Route path="/admin/settings" element={<AdminComingSoon title="Settings" icon={Settings} description="Manage the Karnataka location list, amenities master, and site defaults from here." />} />
+        <Route path="/admin/settings" element={<AdminSettings />} />
       </Routes>
     );
   }

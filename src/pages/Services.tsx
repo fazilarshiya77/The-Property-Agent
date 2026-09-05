@@ -30,6 +30,8 @@ import { SEO } from '../components/SEO';
 import type { BreadcrumbItem, FAQItem } from '../components/SEO';
 import { logToGoogleSheet } from '../lib/logger';
 import { supabase } from '../lib/supabase';
+import { useSettingsStore } from '../stores/settingsStore';
+import { formatPhoneDisplay, toTelHref, toWhatsAppHref } from '../lib/phone';
 
 // Helper to get Lucide icon component by name
 function getServiceIcon(iconName: string, className: string = 'h-6 w-6') {
@@ -46,6 +48,7 @@ function getServiceIcon(iconName: string, className: string = 'h-6 w-6') {
 }
 
 export default function Services() {
+  const { callNumber, whatsappNumber } = useSettingsStore(s => s.settings);
   const location = useLocation();
   const serviceFormId = useId();
 
@@ -463,7 +466,7 @@ export default function Services() {
                     Details
                   </button>
                   <a
-                    href={`https://wa.me/919019488368?text=${encodeURIComponent(`Hello The Property Agent, I'd like help with "${service.title}". Please share more details.`)}`}
+                    href={toWhatsAppHref(whatsappNumber, `Hello The Property Agent, I'd like help with "${service.title}". Please share more details.`)}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 p-2.5 rounded-xl transition-colors"
@@ -523,7 +526,7 @@ export default function Services() {
                   </div>
                   <div>
                     <h4 className="text-sm font-bold text-navy-900">Need Immediate Help?</h4>
-                    <p className="text-xs text-neutral-500 mt-0.5">Call us directly at <a href="tel:+919019488368" className="text-brand-600 font-bold hover:underline">+91 90194 88368</a></p>
+                    <p className="text-xs text-neutral-500 mt-0.5">Call us directly at <a href={toTelHref(callNumber)} className="text-brand-600 font-bold hover:underline">{formatPhoneDisplay(callNumber)}</a></p>
                   </div>
                 </div>
               </div>
@@ -552,7 +555,7 @@ export default function Services() {
                   </p>
                   <div className="mt-6 flex justify-center gap-3">
                     <a
-                      href="https://wa.me/919019488368?text=Hello%20The%20Property%20Agent,%20I%20just%20submitted%20an%20inquiry%20online."
+                      href={toWhatsAppHref(whatsappNumber, "Hello The Property Agent, I just submitted an inquiry online.")}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="inline-flex items-center space-x-2 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs sm:text-sm px-5 py-2.5 rounded-xl transition-all"
@@ -569,7 +572,7 @@ export default function Services() {
                   </div>
                   <h3 className="text-xl font-bold text-navy-900">Submission Error</h3>
                   <p className="text-sm text-neutral-500 max-w-md mx-auto mt-2">
-                    Something went wrong submitting your form. Please call us directly at +91 90194 88368.
+                    Something went wrong submitting your form. Please call us directly at {formatPhoneDisplay(callNumber)}.
                   </p>
                 </div>
               ) : (
@@ -906,11 +909,11 @@ export default function Services() {
               Tell Us What You Need
             </a>
             <a
-              href="tel:+919019488368"
+              href={toTelHref(callNumber)}
               className="bg-white/10 hover:bg-white/20 text-white font-semibold px-6 sm:px-8 py-3 rounded-xl transition-all border border-white/10 text-sm inline-flex items-center justify-center space-x-2"
             >
               <Phone className="h-4 w-4 text-brand-400" />
-              <span>Call +91 90194 88368</span>
+              <span>Call {formatPhoneDisplay(callNumber)}</span>
             </a>
           </div>
         </div>
@@ -981,7 +984,7 @@ export default function Services() {
                 Send an Inquiry
               </button>
               <a
-                href={`https://wa.me/919019488368?text=${encodeURIComponent(`Hello The Property Agent, I'd like help with "${selectedServiceForModal.title}".`)}`}
+                href={toWhatsAppHref(whatsappNumber, `Hello The Property Agent, I'd like help with "${selectedServiceForModal.title}".`)}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-sm py-3 px-5 rounded-xl transition-all text-center inline-flex items-center justify-center space-x-2"

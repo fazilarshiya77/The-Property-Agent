@@ -1,12 +1,13 @@
 import React from 'react';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import { useLocation } from 'react-router-dom';
+import { useSettingsStore } from '../stores/settingsStore';
+import { formatPhoneDisplay } from '../lib/phone';
 
 // ─── CONSTANTS ──────────────────────────────────────────
 const SITE_URL = 'https://www.thepropertyagent.in';
 const SITE_NAME = 'The Property Agent';
 const DEFAULT_OG_IMAGE = `${SITE_URL}/logo.jpg`;
-const PHONE = '+91 90194 88368';
 const EMAIL = 'trishnaproperties78@gmail.com';
 const ADDRESS = 'No. 84, 4th cross kashi nagar, yelachanahalli, B-78., Bengaluru, Karnataka';
 
@@ -105,7 +106,7 @@ function generateWebSiteSchema(): object {
 }
 
 /** RealEstateAgent + LocalBusiness combined schema */
-function generateBusinessSchema(): object {
+function generateBusinessSchema(phone: string): object {
   return {
     '@context': 'https://schema.org',
     '@type': ['RealEstateAgent', 'LocalBusiness'],
@@ -116,7 +117,7 @@ function generateBusinessSchema(): object {
     url: SITE_URL,
     logo: DEFAULT_OG_IMAGE,
     image: DEFAULT_OG_IMAGE,
-    telephone: PHONE,
+    telephone: phone,
     email: EMAIL,
     currenciesAccepted: 'INR',
     paymentAccepted: 'Cash, Bank Transfer, UPI',
@@ -295,7 +296,8 @@ function generateItemListSchema(title: string, description: string, numberOfItem
 // ─── SEO COMPONENT ──────────────────────────────────────
 export const SEO: React.FC<SEOProps> = (props) => {
   const location = useLocation();
-  
+  const callNumber = useSettingsStore(s => s.settings.callNumber);
+
   const {
     title,
     description = defaultProps.description,
@@ -405,7 +407,7 @@ export const SEO: React.FC<SEOProps> = (props) => {
 
       {/* ─── Structured Data: Business/Organization (always) ─── */}
       <script type="application/ld+json">
-        {JSON.stringify(generateBusinessSchema())}
+        {JSON.stringify(generateBusinessSchema(formatPhoneDisplay(callNumber)))}
       </script>
 
       {/* ─── Structured Data: Breadcrumbs ─── */}

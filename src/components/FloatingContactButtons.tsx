@@ -1,22 +1,18 @@
 import { useState, useEffect, useRef } from 'react';
 import { Phone, MessageCircle, X } from 'lucide-react';
+import { useSettingsStore } from '../stores/settingsStore';
+import { formatPhoneDisplay, toTelHref, toWhatsAppHref } from '../lib/phone';
 
-const WHATSAPP_NUMBER = '919019488368';
 const WHATSAPP_MESSAGE = "Hi The Property Agent, I'd like to enquire about your properties and services.";
 
-// Both numbers accept calls; only the first one also has WhatsApp.
-const CALL_NUMBERS = [
-  { display: '+91 90194 88368', tel: 'tel:+919019488368' },
-  { display: '+91 98450 11138', tel: 'tel:+919845011138' },
-];
-
 // Two floating action buttons (WhatsApp + Call) fixed to the bottom-right
-// corner of every public page. Tapping either opens a small popover letting
-// the visitor pick which number to use (both accept calls, only the
-// WhatsApp one accepts chat) instead of jumping straight to an app.
+// corner of every public page. Tapping either opens a small popover with
+// the admin-configured number (see Admin -> Settings -> Contact &
+// Communication) rather than a hardcoded one.
 export default function FloatingContactButtons() {
   const [openMenu, setOpenMenu] = useState<'whatsapp' | 'call' | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const { callNumber, whatsappNumber } = useSettingsStore(s => s.settings);
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -35,7 +31,8 @@ export default function FloatingContactButtons() {
     };
   }, []);
 
-  const waLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(WHATSAPP_MESSAGE)}`;
+  const waLink = toWhatsAppHref(whatsappNumber, WHATSAPP_MESSAGE);
+  const telLink = toTelHref(callNumber);
 
   return (
     <div
@@ -67,7 +64,7 @@ export default function FloatingContactButtons() {
                 <MessageCircle className="h-4 w-4" />
               </div>
               <div className="min-w-0">
-                <p className="text-sm font-semibold text-navy-900">+91 90194 88368</p>
+                <p className="text-sm font-semibold text-navy-900">{formatPhoneDisplay(whatsappNumber)}</p>
                 <p className="text-xs text-neutral-500">Tap to message us</p>
               </div>
             </a>
@@ -97,24 +94,19 @@ export default function FloatingContactButtons() {
                 <X className="h-3.5 w-3.5" />
               </button>
             </div>
-            <div className="space-y-1">
-              {CALL_NUMBERS.map((n) => (
-                <a
-                  key={n.tel}
-                  href={n.tel}
-                  onClick={() => setOpenMenu(null)}
-                  className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-neutral-50 transition-colors"
-                >
-                  <div className="p-2 rounded-full bg-brand-500/10 text-brand-600 flex-shrink-0">
-                    <Phone className="h-4 w-4" />
-                  </div>
-                  <div className="min-w-0">
-                    <p className="text-sm font-semibold text-navy-900">{n.display}</p>
-                    <p className="text-xs text-neutral-500">Tap to call now</p>
-                  </div>
-                </a>
-              ))}
-            </div>
+            <a
+              href={telLink}
+              onClick={() => setOpenMenu(null)}
+              className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-neutral-50 transition-colors"
+            >
+              <div className="p-2 rounded-full bg-brand-500/10 text-brand-600 flex-shrink-0">
+                <Phone className="h-4 w-4" />
+              </div>
+              <div className="min-w-0">
+                <p className="text-sm font-semibold text-navy-900">{formatPhoneDisplay(callNumber)}</p>
+                <p className="text-xs text-neutral-500">Tap to call now</p>
+              </div>
+            </a>
           </div>
         )}
         <button

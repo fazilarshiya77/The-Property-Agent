@@ -5,6 +5,8 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { logToGoogleSheet } from '@/lib/logger';
 import { supabase } from '@/lib/supabase';
+import { useSettingsStore } from '@/stores/settingsStore';
+import { formatPhoneDisplay } from '@/lib/phone';
 
 interface ContactFormProps {
   propertyTitle?: string;
@@ -26,6 +28,7 @@ const PREFERRED_CONTACT_OPTIONS = [
 ] as const;
 
 export default function ContactForm({ propertyTitle, serviceTitle, contactEmail, propertyId, bare, onSuccess }: ContactFormProps) {
+  const callNumber = useSettingsStore(s => s.settings.callNumber);
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
@@ -165,7 +168,7 @@ export default function ContactForm({ propertyTitle, serviceTitle, contactEmail,
             <AlertCircle className="h-8 w-8 text-red-500" />
           </div>
           <h4 className="text-lg font-semibold text-navy-900">Something went wrong</h4>
-          <p className="text-sm text-neutral-500 mt-2">We couldn't send your enquiry. Please try again, or call us directly at +91 90194 88368.</p>
+          <p className="text-sm text-neutral-500 mt-2">We couldn't send your enquiry. Please try again, or call us directly at {formatPhoneDisplay(callNumber)}.</p>
         </div>
       ) : (
         <form onSubmit={handleSubmit} className="space-y-4" noValidate>

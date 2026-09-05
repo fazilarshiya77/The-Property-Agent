@@ -7,6 +7,8 @@ import { usePropertyStore } from '../stores/propertyStore';
 import { useScrollReveal, useSectionReveal } from '../hooks/useScrollReveal';
 import { SEO } from '../components/SEO';
 import type { FAQItem, BreadcrumbItem } from '../components/SEO';
+import { useSettingsStore } from '../stores/settingsStore';
+import { formatPhoneDisplay, toTelHref } from '../lib/phone';
 
 type FilterType = 'all' | 'plot' | 'farmhouse' | 'land' | 'rent' | 'lease' | 'sale' | 'commercial';
 
@@ -35,37 +37,41 @@ function getHomeServiceIcon(iconName: string) {
   }
 }
 
-// ─── FAQ DATA (used by both UI and schema) ──────────────
-const faqData: FAQItem[] = [
-  {
-    question: "What areas does The Property Agent cover?",
-    answer: "The Property Agent operates all across Karnataka. We don't hold a fixed inventory in any one location — as new plots, farmhouse plots, land, rental homes, lease properties, and commercial spaces become available anywhere in the state, we list them here. Reach out and let us know the area you're interested in."
-  },
-  {
-    question: "What kind of properties does The Property Agent deal in?",
-    answer: "We deal in plot sales, farmhouse plots, agricultural land, rental houses, lease properties, properties for sale, and commercial spaces. Listings are added and removed as they become available or get sold/rented, so check back often or contact us directly with your requirement."
-  },
-  {
-    question: "What services does The Property Agent offer?",
-    answer: "We help in three ways: 1) Buying — we actively search for plots, farmhouse plots, agricultural land, and homes matching your requirement, arrange site visits, and support negotiation and documentation. 2) Selling / Listing — if you have a property to sell or rent out, we list it and connect you with genuine buyers or tenants. 3) Renting & Leasing — we help tenants find rental or lease homes and assist with the agreement."
-  },
-  {
-    question: "What documents do I need to rent or buy a property through The Property Agent?",
-    answer: "For rentals you typically need: identity proof (Aadhaar Card, PAN Card, or Passport), address proof, income proof, passport-sized photographs, and a security deposit. For plot, land, or farmhouse purchases, our team guides you through the title verification and documentation process. Requirements vary by deal type — contact us for specifics."
-  },
-  {
-    question: "Does The Property Agent charge brokerage fees?",
-    answer: "The Property Agent maintains a transparent fee structure that is clearly communicated upfront before you commit. Charges vary by property type and deal value. We believe in honest, upfront pricing with no hidden costs. Contact our team at +91 90194 88368 for specific details."
-  },
-  {
-    question: "How do I list my property or enquire about a listing?",
-    answer: "Call or WhatsApp us directly, or use the contact form on this site. Since we work as an active agent rather than holding fixed stock, the fastest way to know what's currently available in your area of interest is to reach out directly."
-  },
-  {
-    question: "Can you help with the rental agreement or e-stamp paperwork?",
-    answer: "Yes — when you rent or lease a property through us, we assist with drafting and e-stamping the rental/lease agreement so everything is properly documented. Reach out via WhatsApp (+91 90194 88368) or the contact form to get started."
-  }
-];
+// ─── FAQ DATA (used by both UI and schema) — a function of the admin-
+// configured numbers so the brokerage-fees and e-stamp answers always
+// reflect Settings ────────────────────────────────────
+function buildHomeFaqData(callDisplay: string, whatsappDisplay: string): FAQItem[] {
+  return [
+    {
+      question: "What areas does The Property Agent cover?",
+      answer: "The Property Agent operates all across Karnataka. We don't hold a fixed inventory in any one location — as new plots, farmhouse plots, land, rental homes, lease properties, and commercial spaces become available anywhere in the state, we list them here. Reach out and let us know the area you're interested in."
+    },
+    {
+      question: "What kind of properties does The Property Agent deal in?",
+      answer: "We deal in plot sales, farmhouse plots, agricultural land, rental houses, lease properties, properties for sale, and commercial spaces. Listings are added and removed as they become available or get sold/rented, so check back often or contact us directly with your requirement."
+    },
+    {
+      question: "What services does The Property Agent offer?",
+      answer: "We help in three ways: 1) Buying — we actively search for plots, farmhouse plots, agricultural land, and homes matching your requirement, arrange site visits, and support negotiation and documentation. 2) Selling / Listing — if you have a property to sell or rent out, we list it and connect you with genuine buyers or tenants. 3) Renting & Leasing — we help tenants find rental or lease homes and assist with the agreement."
+    },
+    {
+      question: "What documents do I need to rent or buy a property through The Property Agent?",
+      answer: "For rentals you typically need: identity proof (Aadhaar Card, PAN Card, or Passport), address proof, income proof, passport-sized photographs, and a security deposit. For plot, land, or farmhouse purchases, our team guides you through the title verification and documentation process. Requirements vary by deal type — contact us for specifics."
+    },
+    {
+      question: "Does The Property Agent charge brokerage fees?",
+      answer: `The Property Agent maintains a transparent fee structure that is clearly communicated upfront before you commit. Charges vary by property type and deal value. We believe in honest, upfront pricing with no hidden costs. Contact our team at ${callDisplay} for specific details.`
+    },
+    {
+      question: "How do I list my property or enquire about a listing?",
+      answer: "Call or WhatsApp us directly, or use the contact form on this site. Since we work as an active agent rather than holding fixed stock, the fastest way to know what's currently available in your area of interest is to reach out directly."
+    },
+    {
+      question: "Can you help with the rental agreement or e-stamp paperwork?",
+      answer: `Yes — when you rent or lease a property through us, we assist with drafting and e-stamping the rental/lease agreement so everything is properly documented. Reach out via WhatsApp (${whatsappDisplay}) or the contact form to get started.`
+    }
+  ];
+}
 
 const breadcrumbs: BreadcrumbItem[] = [
   { name: 'Home', url: '/' },
@@ -73,6 +79,8 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 export default function Home() {
   const { properties: allProperties, fetchProperties } = usePropertyStore();
+  const { callNumber, whatsappNumber } = useSettingsStore(s => s.settings);
+  const faqData = buildHomeFaqData(formatPhoneDisplay(callNumber), formatPhoneDisplay(whatsappNumber));
 
   useEffect(() => {
     fetchProperties()
@@ -378,11 +386,11 @@ export default function Home() {
             </div>
             <div className="flex items-center gap-3">
               <a
-                href="tel:+919019488368"
+                href={toTelHref(callNumber)}
                 className="bg-brand-500 hover:bg-brand-600 text-navy-900 font-semibold text-xs sm:text-sm px-5 py-2.5 rounded-xl transition-all shadow-md flex items-center space-x-1.5"
               >
                 <Phone className="h-3.5 w-3.5" />
-                <span>+91 90194 88368</span>
+                <span>{formatPhoneDisplay(callNumber)}</span>
               </a>
               <Link
                 to="/services"

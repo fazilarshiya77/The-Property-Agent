@@ -4,24 +4,31 @@ import { Shield, Users, MapPin, Clock, Star, Award, ExternalLink, Home, ChevronR
 import { useScrollReveal, useSectionReveal } from '../hooks/useScrollReveal';
 import { SEO } from '../components/SEO';
 import type { BreadcrumbItem, FAQItem } from '../components/SEO';
+import { useSettingsStore } from '../stores/settingsStore';
+import { formatPhoneDisplay, toTelHref, toWhatsAppHref } from '../lib/phone';
 
-// About page FAQ data for AEO
-const aboutFaqData: FAQItem[] = [
-  {
-    question: "How can I contact The Property Agent?",
-    answer: "You can reach The Property Agent by phone at +91 90194 88368, WhatsApp at +91 90194 88368, email at trishnaproperties78@gmail.com, or visit our office at No. 84, 4th cross kashi nagar, yelachanahalli, B-78., Bengaluru, Karnataka. We are open Monday to Saturday, 9 AM to 7 PM."
-  },
-  {
-    question: "What services does The Property Agent offer across Karnataka?",
-    answer: "We help in three ways: 1) Buying — we actively search for plots, farmhouse plots, agricultural land, and homes matching your requirement, and support you through site visits, negotiation, and documentation. 2) Selling / Listing — if you have a property to sell or rent out, we list it and connect you with genuine buyers or tenants. 3) Renting & Leasing — we help tenants find rental or lease homes and assist with the agreement, including e-stamp paperwork."
-  },
-  {
-    question: "Does The Property Agent hold fixed property inventory?",
-    answer: "No — The Property Agent works as an active agent rather than holding fixed stock. Properties are added to this site as they become available and removed once sold, rented, or leased. Contact us directly to check on current availability in a specific area or category."
-  }
-];
+// About page FAQ data for AEO — a function of the admin-configured numbers
+// so the "How can I contact us" answer always reflects Settings.
+function buildAboutFaqData(callDisplay: string, whatsappDisplay: string): FAQItem[] {
+  return [
+    {
+      question: "How can I contact The Property Agent?",
+      answer: `You can reach The Property Agent by phone at ${callDisplay}, WhatsApp at ${whatsappDisplay}, email at trishnaproperties78@gmail.com, or visit our office at No. 84, 4th cross kashi nagar, yelachanahalli, B-78., Bengaluru, Karnataka. We are open Monday to Saturday, 9 AM to 7 PM.`
+    },
+    {
+      question: "What services does The Property Agent offer across Karnataka?",
+      answer: "We help in three ways: 1) Buying — we actively search for plots, farmhouse plots, agricultural land, and homes matching your requirement, and support you through site visits, negotiation, and documentation. 2) Selling / Listing — if you have a property to sell or rent out, we list it and connect you with genuine buyers or tenants. 3) Renting & Leasing — we help tenants find rental or lease homes and assist with the agreement, including e-stamp paperwork."
+    },
+    {
+      question: "Does The Property Agent hold fixed property inventory?",
+      answer: "No — The Property Agent works as an active agent rather than holding fixed stock. Properties are added to this site as they become available and removed once sold, rented, or leased. Contact us directly to check on current availability in a specific area or category."
+    }
+  ];
+}
 
 export default function About() {
+  const { callNumber, whatsappNumber } = useSettingsStore(s => s.settings);
+  const aboutFaqData = buildAboutFaqData(formatPhoneDisplay(callNumber), formatPhoneDisplay(whatsappNumber));
   const address = 'No. 84, 4th cross kashi nagar, yelachanahalli, B-78., Bengaluru, Karnataka';
   const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
   const mapsEmbed = `https://www.google.com/maps?q=${encodeURIComponent(address)}&output=embed`;
@@ -150,7 +157,7 @@ export default function About() {
       {/* Office & Map Section */}
       <section className="py-12 sm:py-16 lg:py-20 bg-neutral-50" aria-label="Visit our office in Bengaluru" itemScope itemType="https://schema.org/LocalBusiness">
         <meta itemProp="name" content="The Property Agent" />
-        <meta itemProp="telephone" content="+91 90194 88368" />
+        <meta itemProp="telephone" content={formatPhoneDisplay(callNumber)} />
         <meta itemProp="email" content="trishnaproperties78@gmail.com" />
 
         <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
@@ -245,9 +252,9 @@ export default function About() {
                   <div>
                     <h4 className="text-sm font-semibold text-navy-900">Call or WhatsApp</h4>
                     <p className="text-sm text-neutral-500 mt-1">
-                      <a href="tel:+919019488368" className="hover:text-brand-500 transition-colors">+91 90194 88368</a>
+                      <a href={toTelHref(callNumber)} className="hover:text-brand-500 transition-colors">{formatPhoneDisplay(callNumber)}</a>
                       {' · '}
-                      <a href="https://wa.me/919019488368" target="_blank" rel="noopener noreferrer" className="hover:text-brand-500 transition-colors">+91 90194 88368 (WhatsApp)</a>
+                      <a href={toWhatsAppHref(whatsappNumber)} target="_blank" rel="noopener noreferrer" className="hover:text-brand-500 transition-colors">{formatPhoneDisplay(whatsappNumber)} (WhatsApp)</a>
                     </p>
                   </div>
                 </div>

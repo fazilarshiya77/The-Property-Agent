@@ -12,12 +12,15 @@ import { SEO } from '../components/SEO';
 import type { BreadcrumbItem, PropertySchemaData } from '../components/SEO';
 import ShareModal from '../components/ShareModal';
 import EnquiryModal from '../components/EnquiryModal';
+import { useSettingsStore } from '../stores/settingsStore';
+import { formatPhoneDisplay, toTelHref, toWhatsAppHref } from '../lib/phone';
 
 export default function PropertyDetails() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { properties, fetchProperties, getPropertyById, loading } = usePropertyStore();
-  
+  const { callNumber, whatsappNumber } = useSettingsStore(s => s.settings);
+
   useEffect(() => {
     fetchProperties()
   }, [fetchProperties])
@@ -148,7 +151,7 @@ export default function PropertyDetails() {
   const badgeInfo = getBadgeInfo(property.type);
 
   // Build a rich, unique meta description for this property
-  const metaDescription = `${property.title} in ${property.location}. ${badgeInfo.label} at ${formatPrice(property.price, property.type)}${property.type === 'rent' ? '/month' : ''}. ${property.bedrooms > 0 ? `${property.bedrooms} bedrooms, ` : ''}${property.bathrooms} bathrooms, ${property.area} sqft. ${property.furnished === 'fully' ? 'Fully furnished.' : property.furnished === 'semi' ? 'Semi-furnished.' : ''} ${property.availability === 'Immediate' || property.availability === 'Ready to Move' ? 'Ready to move in.' : `Possession: ${property.availability}.`} Contact The Property Agent: +91 90194 88368.`;
+  const metaDescription = `${property.title} in ${property.location}. ${badgeInfo.label} at ${formatPrice(property.price, property.type)}${property.type === 'rent' ? '/month' : ''}. ${property.bedrooms > 0 ? `${property.bedrooms} bedrooms, ` : ''}${property.bathrooms} bathrooms, ${property.area} sqft. ${property.furnished === 'fully' ? 'Fully furnished.' : property.furnished === 'semi' ? 'Semi-furnished.' : ''} ${property.availability === 'Immediate' || property.availability === 'Ready to Move' ? 'Ready to move in.' : `Possession: ${property.availability}.`} Contact The Property Agent: ${formatPhoneDisplay(callNumber)}.`;
 
   return (
     <div className="min-h-screen bg-neutral-50 pb-24 lg:pb-8">
@@ -469,14 +472,14 @@ export default function PropertyDetails() {
                       <div className="text-sm font-medium text-navy-800">{property.contactEmail}</div>
                     </div>
                   </a>
-                  <a href="tel:+919019488368"
+                  <a href={toTelHref(callNumber)}
                     className="flex items-center space-x-3 p-3 rounded-xl bg-neutral-50 hover:bg-neutral-100 transition-colors"
-                    aria-label="Call The Property Agent at +91 90194 88368"
+                    aria-label={`Call The Property Agent at ${formatPhoneDisplay(callNumber)}`}
                   >
                     <Phone className="h-5 w-5 text-brand-500" aria-hidden="true" />
                     <div>
                       <div className="text-xs text-neutral-500">Phone</div>
-                      <div className="text-sm font-medium text-navy-800">+91 90194 88368</div>
+                      <div className="text-sm font-medium text-navy-800">{formatPhoneDisplay(callNumber)}</div>
                     </div>
                   </a>
                 </div>
@@ -515,16 +518,14 @@ export default function PropertyDetails() {
       {/* Mobile Sticky CTA Bar */}
       <div className="fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-neutral-200 p-3 flex items-center gap-2 lg:hidden shadow-xl">
         <a
-          href="tel:+919019488368"
+          href={toTelHref(callNumber)}
           className="flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-navy-900 text-white font-semibold text-xs sm:text-sm hover:bg-navy-950 transition-all active:scale-[0.98] shadow-sm"
         >
           <Phone className="h-4 w-4 text-brand-400" />
           <span>Call Now</span>
         </a>
         <a
-          href={`https://wa.me/919019488368?text=${encodeURIComponent(
-            `Hi The Property Agent, I am interested in "${property.title}" in ${property.location}. Please share more details.`
-          )}`}
+          href={toWhatsAppHref(whatsappNumber, `Hi The Property Agent, I am interested in "${property.title}" in ${property.location}. Please share more details.`)}
           target="_blank"
           rel="noopener noreferrer"
           className="flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-[#25D366] hover:bg-[#20bd5a] text-white font-semibold text-xs sm:text-sm transition-all active:scale-[0.98] shadow-sm"

@@ -1,7 +1,10 @@
 import { Link } from 'react-router-dom';
 import { Mail, Phone, MapPin, ExternalLink, MessageCircle } from 'lucide-react';
+import { useSettingsStore } from '../stores/settingsStore';
+import { formatPhoneDisplay, toTelHref, toWhatsAppHref } from '../lib/phone';
 
 export default function Footer() {
+  const { callNumber, whatsappNumber } = useSettingsStore(s => s.settings);
   const address = 'No. 84, 4th cross kashi nagar, yelachanahalli, B-78., Bengaluru, Karnataka';
   const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
   const mapsEmbed = `https://www.google.com/maps?q=${encodeURIComponent(address)}&output=embed`;
@@ -72,14 +75,14 @@ export default function Footer() {
               </li>
               <li className="flex items-start space-x-2.5 sm:space-x-3">
                 <Phone className="h-4 w-4 text-brand-400 mt-0.5 flex-shrink-0" />
-                <a href="tel:+919019488368" className="text-neutral-400 hover:text-brand-400 transition-colors">
-                  +91 90194 88368
+                <a href={toTelHref(callNumber)} className="text-neutral-400 hover:text-brand-400 transition-colors">
+                  {formatPhoneDisplay(callNumber)}
                 </a>
               </li>
               <li className="flex items-start space-x-2.5 sm:space-x-3">
                 <MessageCircle className="h-4 w-4 text-brand-400 mt-0.5 flex-shrink-0" />
-                <a href="https://wa.me/919019488368" target="_blank" rel="noopener noreferrer" className="text-neutral-400 hover:text-brand-400 transition-colors">
-                  +91 90194 88368 (WhatsApp)
+                <a href={toWhatsAppHref(whatsappNumber)} target="_blank" rel="noopener noreferrer" className="text-neutral-400 hover:text-brand-400 transition-colors">
+                  {formatPhoneDisplay(whatsappNumber)} (WhatsApp)
                 </a>
               </li>
               <li className="flex items-start space-x-2.5 sm:space-x-3">

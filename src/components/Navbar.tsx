@@ -1,11 +1,14 @@
 import { Link, useLocation } from 'react-router-dom';
 import { Home, Building, Info, Menu, X, Phone, Sparkles, MessageCircle, ScrollText } from 'lucide-react';
 import { useState, useEffect } from 'react';
+import { useSettingsStore } from '../stores/settingsStore';
+import { formatPhoneDisplay, toTelHref, toWhatsAppHref } from '../lib/phone';
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
+  const { callNumber, whatsappNumber } = useSettingsStore(s => s.settings);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -159,14 +162,14 @@ export default function Navbar() {
             </div>
             <div className="mt-8 pt-6 border-t border-neutral-100 space-y-2">
               <a
-                href="tel:+919019488368"
+                href={toTelHref(callNumber)}
                 className="flex items-center space-x-3 px-4 py-3 text-neutral-700 hover:text-brand-500 hover:bg-neutral-50 rounded-xl transition-colors"
               >
                 <Phone className="h-5 w-5 text-brand-500" />
-                <span className="text-sm font-medium">+91 90194 88368</span>
+                <span className="text-sm font-medium">{formatPhoneDisplay(callNumber)}</span>
               </a>
               <a
-                href="https://wa.me/919019488368?text=Hi%20The%20Property%20Agent%2C%20I%20would%20like%20to%20inquire%20about%20your%20properties%20and%20services."
+                href={toWhatsAppHref(whatsappNumber, "Hi The Property Agent, I would like to inquire about your properties and services.")}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center space-x-3 px-4 py-3 text-emerald-700 bg-emerald-50 hover:bg-emerald-100 rounded-xl transition-colors font-medium text-sm"

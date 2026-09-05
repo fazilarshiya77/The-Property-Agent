@@ -3,6 +3,8 @@ import { useSearchParams, Link } from 'react-router-dom';
 import PropertyCard from '../components/PropertyCard';
 import { usePropertyStore } from '../stores/propertyStore';
 import { Search, SlidersHorizontal, X, ChevronDown, Home, ChevronRight } from 'lucide-react';
+import { useSettingsStore } from '../stores/settingsStore';
+import { toWhatsAppHref } from '../lib/phone';
 import { useScrollReveal } from '../hooks/useScrollReveal';
 import { SEO, generateItemListSchema } from '../components/SEO';
 import type { BreadcrumbItem } from '../components/SEO';
@@ -27,6 +29,7 @@ const TYPE_PILLS: { id: TypeFilter; label: string }[] = [
 const LAND_TYPES: PropertyType[] = ['plot', 'farmhouse', 'land'];
 
 export default function Listings() {
+  const whatsappNumber = useSettingsStore(s => s.settings.whatsappNumber);
   const [searchParams, setSearchParams] = useSearchParams();
   const [searchTerm, setSearchTerm] = useState(searchParams.get('search') || '');
   const [propertyType, setPropertyType] = useState<TypeFilter>(
@@ -374,7 +377,7 @@ export default function Listings() {
                     className="text-brand-500 hover:text-brand-600 font-medium text-sm transition-colors">
                     Clear all filters
                   </button>
-                  <a href="https://wa.me/919019488368" target="_blank" rel="noopener noreferrer"
+                  <a href={toWhatsAppHref(whatsappNumber)} target="_blank" rel="noopener noreferrer"
                     className="bg-brand-500 hover:bg-brand-600 text-navy-900 font-semibold text-sm px-5 py-2.5 rounded-xl transition-all">
                     Ask on WhatsApp
                   </a>

@@ -1,7 +1,27 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, Building2, Users, CalendarCheck, Settings, LogOut, Search, Bell, Home } from 'lucide-react';
+import { LayoutDashboard, Building2, Users, CalendarCheck, Settings, LogOut, Search, Bell, Home, UserPlus, CalendarClock, Building as BuildingIcon } from 'lucide-react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { supabase } from '../../lib/supabase';
-import type { ReactNode } from 'react';
+import { useActivityStore } from '../../stores/activityStore';
+
+const NOTIFICATIONS_SEEN_KEY = 'tpa-admin-notifications-last-seen';
+
+function timeAgo(iso: string): string {
+  const diffMs = Date.now() - new Date(iso).getTime();
+  const mins = Math.floor(diffMs / 60000);
+  if (mins < 1) return 'just now';
+  if (mins < 60) return `${mins}m ago`;
+  const hrs = Math.floor(mins / 60);
+  if (hrs < 24) return `${hrs}h ago`;
+  const days = Math.floor(hrs / 24);
+  return `${days}d ago`;
+}
+
+function activityIcon(module: string) {
+  if (module === 'lead') return UserPlus;
+  if (module === 'site_visit') return CalendarClock;
+  return BuildingIcon;
+}
 
 const NAV_ITEMS = [
   { to: '/admin/dashboard', label: 'Dashboard', icon: LayoutDashboard, exact: true },
@@ -20,6 +40,47 @@ interface AdminLayoutProps {
 export default function AdminLayout({ title, subtitle, actions, children }: AdminLayoutProps) {
   const location = useLocation();
   const navigate = useNavigate();
+  const entries = useActivityStore(s => s.entries);
+  const fetchActivity = useActivityStore(s => s.fetchActivity);
+  const [notifOpen, setNotifOpen] = useState(false);
+  const [lastSeen, setLastSeen] = useState<string>(() => {
+    try {
+      return localStorage.getItem(NOTIFICATIONS_SEEN_KEY) || '';
+    } catch {
+      return '';
+    }
+  });
+  const notifRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    fetchActivity();
+  }, [fetchActivity]);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (notifRef.current && !notifRef.current.contains(e.target as Node)) {
+        setNotifOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const unreadCount = lastSeen ? entries.filter(e => e.timestamp > lastSeen).length : entries.length;
+
+  const handleToggleNotifications = () => {
+    const opening = !notifOpen;
+    setNotifOpen(opening);
+    if (opening) {
+      const now = new Date().toISOString();
+      setLastSeen(now);
+      try {
+        localStorage.setItem(NOTIFICATIONS_SEEN_KEY, now);
+      } catch {
+        // ignore — worst case the unread badge just doesn't persist across sessions
+      }
+    }
+  };
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -86,9 +147,50 @@ export default function AdminLayout({ title, subtitle, actions, children }: Admi
               />
             </div>
             <div className="flex items-center gap-3 ml-auto">
-              <button className="p-2 rounded-xl hover:bg-neutral-100 text-neutral-500 transition-colors relative" title="Notifications">
-                <Bell className="h-4.5 w-4.5" />
-              </button>
+              <div className="relative" ref={notifRef}>
+                <button
+                  onClick={handleToggleNotifications}
+                  className="p-2 rounded-xl hover:bg-neutral-100 text-neutral-500 transition-colors relative"
+                  title="Notifications"
+                  aria-label="Notifications"
+                  aria-expanded={notifOpen}
+                >
+                  <Bell className="h-4.5 w-4.5" />
+                  {unreadCount > 0 && (
+                    <span className="absolute -top-0.5 -right-0.5 h-4 min-w-[1rem] px-0.5 rounded-full bg-red-500 text-white text-[9px] font-bold flex items-center justify-center">
+                      {unreadCount > 9 ? '9+' : unreadCount}
+                    </span>
+                  )}
+                </button>
+                {notifOpen && (
+                  <div className="absolute right-0 top-full mt-2 w-80 max-w-[calc(100vw-2rem)] bg-white rounded-2xl shadow-2xl border border-neutral-100 overflow-hidden z-40 animate-scale-in origin-top-right">
+                    <div className="px-4 py-3 border-b border-neutral-100">
+                      <h3 className="text-sm font-bold text-navy-900">Notifications</h3>
+                      <p className="text-xs text-neutral-500">Recent leads, site visits & property activity</p>
+                    </div>
+                    <div className="max-h-96 overflow-y-auto">
+                      {entries.length === 0 ? (
+                        <p className="text-xs text-neutral-400 text-center py-8">No activity yet</p>
+                      ) : (
+                        entries.slice(0, 15).map(entry => {
+                          const Icon = activityIcon(entry.module);
+                          return (
+                            <div key={entry.id} className="flex items-start gap-3 px-4 py-3 hover:bg-neutral-50 border-b border-neutral-50 last:border-0">
+                              <div className="w-8 h-8 rounded-lg bg-brand-50 text-brand-600 flex items-center justify-center flex-shrink-0">
+                                <Icon className="h-4 w-4" />
+                              </div>
+                              <div className="min-w-0">
+                                <p className="text-xs text-navy-900 leading-snug">{entry.message}</p>
+                                <p className="text-[10px] text-neutral-400 mt-0.5">{timeAgo(entry.timestamp)}</p>
+                              </div>
+                            </div>
+                          );
+                        })
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
               <div className="flex items-center gap-2.5 pl-3 border-l border-neutral-100">
                 <div className="w-8 h-8 rounded-full bg-navy-900 text-white flex items-center justify-center text-xs font-bold flex-shrink-0">A</div>
                 <span className="text-sm font-medium text-navy-900 hidden md:inline">Admin</span>

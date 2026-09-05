@@ -5,6 +5,8 @@ import {
 } from 'lucide-react';
 import { SEO } from '../components/SEO';
 import type { BreadcrumbItem } from '../components/SEO';
+import { useSettingsStore } from '../stores/settingsStore';
+import { formatPhoneDisplay, toTelHref } from '../lib/phone';
 
 const LAST_UPDATED = 'September 4, 2026';
 
@@ -189,6 +191,7 @@ const SECTIONS = [
 ];
 
 export default function Terms() {
+  const callNumber = useSettingsStore(s => s.settings.callNumber);
   const breadcrumbs: BreadcrumbItem[] = [
     { name: 'Home', url: '/' },
     { name: 'Terms & Conditions', url: '/terms' },
@@ -303,9 +306,9 @@ export default function Terms() {
                 className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white/10 hover:bg-white/15 text-white text-sm font-semibold transition-colors border border-white/10">
                 <Mail className="h-4 w-4 text-brand-400" /> thepropertyagent129@gmail.com
               </a>
-              <a href="tel:+919019488368"
+              <a href={toTelHref(callNumber)}
                 className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-brand-500 hover:bg-brand-600 text-navy-900 text-sm font-semibold transition-colors">
-                <Phone className="h-4 w-4" /> +91 90194 88368
+                <Phone className="h-4 w-4" /> {formatPhoneDisplay(callNumber)}
               </a>
             </div>
           </section>
