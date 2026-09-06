@@ -4,10 +4,11 @@
 // derive the tel:/wa.me links and display formatting from it.
 
 /**
- * Normalizes free-form admin input into E.164 (e.g. "+919019488368").
- * Accepts a bare 10-digit Indian number, a "91XXXXXXXXXX" number, or a
- * full "+<countrycode><number>" international number. Returns null if the
- * input doesn't look like a usable phone number.
+ * Normalizes free-form admin input into E.164 for an Indian mobile number
+ * (e.g. "+919019488368"). Accepts a bare 10-digit number, a "91XXXXXXXXXX"
+ * number, or a "+91XXXXXXXXXX" number — the local (non-country-code) part
+ * must be exactly 10 digits. Returns null for anything else, including
+ * numbers longer or shorter than 10 digits.
  */
 export function normalizePhoneNumber(raw: string): string | null {
   const trimmed = raw.trim();
@@ -17,13 +18,14 @@ export function normalizePhoneNumber(raw: string): string | null {
 
   if (kept.startsWith('+')) {
     const digits = kept.slice(1);
-    return /^\d{10,15}$/.test(digits) ? `+${digits}` : null;
+    if (/^91\d{10}$/.test(digits)) return `+${digits}`;
+    if (/^\d{10}$/.test(digits)) return `+91${digits}`;
+    return null;
   }
 
   const digitsOnly = kept.replace(/\D/g, '');
   if (/^\d{10}$/.test(digitsOnly)) return `+91${digitsOnly}`;
   if (/^91\d{10}$/.test(digitsOnly)) return `+${digitsOnly}`;
-  if (/^\d{11,15}$/.test(digitsOnly)) return `+${digitsOnly}`;
 
   return null;
 }

@@ -153,7 +153,7 @@ export default function AdminSettings() {
       const n = normalizePhoneNumber(raw);
       if (!n) {
         setCallStatus('error');
-        setCallError(`"${raw}" isn't a valid phone number (e.g. +91 98765 43210).`);
+        setCallError(`"${raw}" isn't a valid 10-digit phone number (e.g. +91 98765 43210).`);
         return;
       }
       normalized.push(n);
@@ -172,7 +172,7 @@ export default function AdminSettings() {
     const normalized = normalizePhoneNumber(whatsappNumberInput);
     if (!normalized) {
       setWhatsappStatus('error');
-      setWhatsappError('Enter a valid phone number (e.g. +91 98765 12345).');
+      setWhatsappError('Enter a valid 10-digit phone number (e.g. +91 98765 12345).');
       return;
     }
     setWhatsappStatus('saving');
@@ -351,6 +351,7 @@ export default function AdminSettings() {
                         onChange={(e) => handleCallNumberChange(i, e.target.value)}
                         className={`${inputClass} pl-10`}
                         placeholder="+91 98765 43210"
+                        maxLength={17}
                       />
                     </div>
                     <button
@@ -400,6 +401,7 @@ export default function AdminSettings() {
                     onChange={(e) => { setWhatsappNumberInput(e.target.value); setWhatsappStatus('idle'); }}
                     className={`${inputClass} pl-10`}
                     placeholder="+91 98765 12345"
+                    maxLength={17}
                   />
                 </div>
                 <button type="submit" disabled={whatsappStatus === 'saving'} className={`${saveBtnClass} flex-shrink-0`}>
