@@ -101,8 +101,8 @@ export default function EnquiryModal({ isOpen, onClose, property }: EnquiryModal
 
           <ContactForm
             propertyTitle={property.title}
-            contactEmail={property.contactEmail}
-            propertyId={property.id}
+            propertyLocation={property.location}
+            propertyCode={property.propertyCode}
             bare
             onSuccess={() => {
               // Give the visitor a moment to see the success state before

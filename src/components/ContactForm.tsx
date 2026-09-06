@@ -1,22 +1,29 @@
 import { useState } from 'react';
-import { Send, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
+import { Send, CheckCircle, AlertCircle } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { logToGoogleSheet } from '@/lib/logger';
-import { supabase } from '@/lib/supabase';
 import { useSettingsStore } from '@/stores/settingsStore';
-import { formatPhoneDisplay } from '@/lib/phone';
+import { formatPhoneDisplay, toWhatsAppHref } from '@/lib/phone';
 
 interface ContactFormProps {
   propertyTitle?: string;
   serviceTitle?: string;
-  contactEmail: string;
+  /** Kept for backward compatibility with existing call sites; unused now
+   *  that this form no longer sends its own email — the enquiry goes
+   *  straight to WhatsApp instead. */
+  contactEmail?: string;
   propertyId?: string;
+  /** Shown as "Location: ..." in the WhatsApp message when this enquiry
+   *  is tied to a specific property. */
+  propertyLocation?: string;
+  /** Shown as "Property ID: ..." in the WhatsApp message — the
+   *  human-readable property code (e.g. "PA-KA-00214"), not the internal id. */
+  propertyCode?: string;
   /** Render without the outer Card chrome — for embedding inside a modal
    *  or other container that already provides its own padding/border. */
   bare?: boolean;
-  /** Called right after a successful submission (e.g. to auto-close a modal). */
+  /** Called right after the WhatsApp handoff (e.g. to auto-close a modal). */
   onSuccess?: () => void;
 }
 
@@ -27,8 +34,13 @@ const PREFERRED_CONTACT_OPTIONS = [
   { value: 'email', label: 'Email' },
 ] as const;
 
-export default function ContactForm({ propertyTitle, serviceTitle, contactEmail, propertyId, bare, onSuccess }: ContactFormProps) {
-  const callNumber = useSettingsStore(s => s.settings.callNumber);
+// This form is a WhatsApp enquiry mechanism only — it never touches
+// Supabase or the CRM. Submitting builds a clean, professional message
+// from the entered details and opens WhatsApp (via wa.me) for the
+// admin-configured WhatsApp number (Admin -> Settings -> Contact &
+// Communication), pre-filled and ready for the visitor to send.
+export default function ContactForm({ propertyTitle, serviceTitle, propertyLocation, propertyCode, bare, onSuccess }: ContactFormProps) {
+  const { callNumber, whatsappNumber, businessName } = useSettingsStore(s => s.settings);
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
@@ -40,9 +52,9 @@ export default function ContactForm({ propertyTitle, serviceTitle, contactEmail,
       ? `I would like to inquire about "${serviceTitle}"`
       : ''
   });
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [submitError, setSubmitError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   const [fieldErrors, setFieldErrors] = useState<{ name?: string; phone?: string }>({});
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -52,8 +64,9 @@ export default function ContactForm({ propertyTitle, serviceTitle, contactEmail,
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    setSubmitError(false);
 
     const errs: typeof fieldErrors = {};
     if (!formData.name.trim()) errs.name = 'Name is required';
@@ -64,89 +77,51 @@ export default function ContactForm({ propertyTitle, serviceTitle, contactEmail,
     }
     setFieldErrors({});
 
-    setIsSubmitting(true);
-    setSubmitError(false);
-
-    const preferredContactLabel = PREFERRED_CONTACT_OPTIONS.find(o => o.value === formData.preferredContact)?.label;
-    const notes = formData.preferredContact
-      ? `${formData.message}\n\nPreferred contact method: ${preferredContactLabel}`
-      : formData.message;
-
-    // Create a real lead in the CRM — additive alongside the existing
-    // email/WhatsApp flow, never blocking on it either way.
-    supabase.from('leads').insert([{
-      name: formData.name,
-      phone: formData.phone,
-      email: formData.email || null,
-      interested_property_id: propertyId || null,
-      property_type_interested: propertyTitle || serviceTitle || null,
-      notes,
-      source: 'website',
-      status: 'new',
-      temperature: 'warm',
-    }]).then(({ error }) => {
-      if (error) console.error('Error creating lead:', error);
-    });
-
-    try {
-      // 1. Send email using web3forms
-      const form = new FormData();
-      form.append('access_key', import.meta.env.VITE_WEB3FORMS_ACCESS_KEY || '0469cb33-7c50-44d8-b019-c70583307942');
-      form.append('name', formData.name);
-      form.append('phone', formData.phone);
-      form.append('email', formData.email);
-      form.append('preferred_contact', preferredContactLabel || 'No preference');
-      form.append('message', formData.message);
-      form.append('subject', propertyTitle ? `Inquiry: ${propertyTitle}` : "Inquiry - The Property Agent");
-      form.append('to', contactEmail || 'trishnaproperties78@gmail.com');
-
-      const response = await fetch('https://api.web3forms.com/submit', {
-        method: 'POST',
-        body: form,
-      });
-
-      const result = await response.json();
-
-      if (result.success) {
-        // 2. Log lead to Google Sheet
-        logToGoogleSheet({
-          logType: 'CONTACT_FORM',
-          message: `New Lead: ${formData.name}`,
-          details: {
-            name: formData.name,
-            phone: formData.phone,
-            email: formData.email,
-            message: formData.message,
-            propertyTitle: propertyTitle || 'General Inquiry',
-          },
-        });
-
-        setIsSubmitting(false);
-        setSubmitSuccess(true);
-        setFormData({ name: '', phone: '', email: '', preferredContact: '', message: '' });
-        onSuccess?.();
-        setTimeout(() => setSubmitSuccess(false), 6000);
-      } else {
-        throw new Error(result.message);
-      }
-    } catch (error) {
-      console.error('Error submitting form:', error);
-
-      // Log error to Google Sheet
-      logToGoogleSheet({
-        logType: 'ERROR',
-        message: 'Contact Form Submission Failed',
-        details: {
-          error: (error as Error).message,
-          name: formData.name,
-          email: formData.email,
-        },
-      });
-
-      setIsSubmitting(false);
+    if (!whatsappNumber.trim()) {
+      setErrorMessage("WhatsApp isn't configured yet, so we can't open a chat right now. Please call us directly, or try again shortly.");
       setSubmitError(true);
       setTimeout(() => setSubmitError(false), 6000);
+      return;
     }
+
+    const preferredContactLabel = PREFERRED_CONTACT_OPTIONS.find(o => o.value === formData.preferredContact)?.label;
+
+    const lines: string[] = [
+      `Hello ${businessName},`,
+      '',
+      propertyTitle
+        ? 'I am interested in this property and would like more information.'
+        : serviceTitle
+        ? `I would like to inquire about "${serviceTitle}".`
+        : 'I am interested in your properties and services and would like more information.',
+      '',
+      `Name: ${formData.name.trim()}`,
+      `Phone: ${formData.phone.trim()}`,
+    ];
+    if (formData.email.trim()) lines.push(`Email: ${formData.email.trim()}`);
+    if (preferredContactLabel) lines.push(`Preferred Contact: ${preferredContactLabel}`);
+
+    if (formData.message.trim()) {
+      lines.push('', 'Message:', formData.message.trim());
+    }
+
+    // Property-specific enquiries include the property's details; general
+    // enquiries (no propertyTitle) never fabricate this section.
+    if (propertyTitle) {
+      lines.push('', `Property: ${propertyTitle}`);
+      if (propertyLocation) lines.push(`Location: ${propertyLocation}`);
+      if (propertyCode) lines.push(`Property ID: ${propertyCode}`);
+    }
+
+    lines.push('', 'Thank you.');
+
+    const waLink = toWhatsAppHref(whatsappNumber, lines.join('\n'));
+    window.open(waLink, '_blank', 'noopener,noreferrer');
+
+    setSubmitSuccess(true);
+    setFormData({ name: '', phone: '', email: '', preferredContact: '', message: '' });
+    onSuccess?.();
+    setTimeout(() => setSubmitSuccess(false), 6000);
   };
 
   const titleText = propertyTitle ? 'Schedule a Visit' : serviceTitle ? `Request ${serviceTitle}` : 'Get in Touch';
@@ -159,8 +134,8 @@ export default function ContactForm({ propertyTitle, serviceTitle, contactEmail,
           <div className="w-16 h-16 bg-brand-50 rounded-full flex items-center justify-center mx-auto mb-4">
             <CheckCircle className="h-8 w-8 text-brand-500" />
           </div>
-          <h4 className="text-lg font-semibold text-navy-900">Thank you! Your enquiry has been submitted.</h4>
-          <p className="text-sm text-neutral-500 mt-2">We will contact you shortly.</p>
+          <h4 className="text-lg font-semibold text-navy-900">WhatsApp is open in a new tab</h4>
+          <p className="text-sm text-neutral-500 mt-2">Your message is ready — just hit Send in WhatsApp to reach us.</p>
         </div>
       ) : submitError ? (
         <div className="text-center py-8 animate-scale-in">
@@ -168,7 +143,7 @@ export default function ContactForm({ propertyTitle, serviceTitle, contactEmail,
             <AlertCircle className="h-8 w-8 text-red-500" />
           </div>
           <h4 className="text-lg font-semibold text-navy-900">Something went wrong</h4>
-          <p className="text-sm text-neutral-500 mt-2">We couldn't send your enquiry. Please try again, or call us directly at {formatPhoneDisplay(callNumber)}.</p>
+          <p className="text-sm text-neutral-500 mt-2">{errorMessage || `Please try again, or call us directly at ${formatPhoneDisplay(callNumber)}.`}</p>
         </div>
       ) : (
         <form onSubmit={handleSubmit} className="space-y-4" noValidate>
@@ -235,20 +210,10 @@ export default function ContactForm({ propertyTitle, serviceTitle, contactEmail,
           </div>
           <Button
             type="submit"
-            disabled={isSubmitting}
-            className="w-full h-12 bg-brand-500 hover:bg-brand-600 disabled:opacity-60 text-navy-900 font-semibold rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-brand-500/20 flex items-center justify-center space-x-2 border-none active:scale-[0.98]"
+            className="w-full h-12 bg-brand-500 hover:bg-brand-600 text-navy-900 font-semibold rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-brand-500/20 flex items-center justify-center space-x-2 border-none active:scale-[0.98]"
           >
-            {isSubmitting ? (
-              <>
-                <Loader2 className="h-4 w-4 animate-spin text-white" />
-                <span>Sending...</span>
-              </>
-            ) : (
-              <>
-                <span>Send Enquiry</span>
-                <Send className="h-4 w-4 text-white" />
-              </>
-            )}
+            <span>Send Enquiry</span>
+            <Send className="h-4 w-4 text-white" />
           </Button>
         </form>
       )}
