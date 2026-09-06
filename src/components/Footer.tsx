@@ -8,7 +8,7 @@ import { formatPhoneDisplay, toTelHref, toWhatsAppHref } from '../lib/phone';
 const SECOND_WHATSAPP_NUMBER = '+919845011138';
 
 export default function Footer() {
-  const { callNumber, whatsappNumber } = useSettingsStore(s => s.settings);
+  const { callNumbers, whatsappNumber } = useSettingsStore(s => s.settings);
   const address = 'No. 84, 4th cross kashi nagar, yelachanahalli, B-78., Bengaluru, Karnataka';
   const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
   const mapsEmbed = `https://www.google.com/maps?q=${encodeURIComponent(address)}&output=embed`;
@@ -77,12 +77,16 @@ export default function Footer() {
                   thepropertyagent129@gmail.com
                 </a>
               </li>
-              {callNumber && (
+              {callNumbers.length > 0 && (
                 <li className="flex items-start space-x-2.5 sm:space-x-3">
                   <Phone className="h-4 w-4 text-brand-400 mt-0.5 flex-shrink-0" />
-                  <a href={toTelHref(callNumber)} className="text-neutral-400 hover:text-brand-400 transition-colors">
-                    {formatPhoneDisplay(callNumber)}
-                  </a>
+                  <div className="flex flex-col">
+                    {callNumbers.map(num => (
+                      <a key={num} href={toTelHref(num)} className="text-neutral-400 hover:text-brand-400 transition-colors">
+                        {formatPhoneDisplay(num)}
+                      </a>
+                    ))}
+                  </div>
                 </li>
               )}
               <li className="flex items-start space-x-2.5 sm:space-x-3">

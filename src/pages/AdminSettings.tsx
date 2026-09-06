@@ -13,6 +13,8 @@ import {
   Loader2,
   Eye,
   EyeOff,
+  Plus,
+  X,
 } from 'lucide-react';
 import { useAdminGuard, useAuthStore } from '../stores/authStore';
 import { useSettingsStore } from '../stores/settingsStore';
@@ -86,8 +88,10 @@ export default function AdminSettings() {
   const [businessEmail, setBusinessEmail] = useState(settings.businessEmail);
   const [businessStatus, setBusinessStatus] = useState<SaveStatus>('idle');
 
-  // ── Call Number ──
-  const [callNumberInput, setCallNumberInput] = useState(settings.callNumber);
+  // ── Call Numbers (one or more) ──
+  const [callNumberInputs, setCallNumberInputs] = useState<string[]>(
+    settings.callNumbers.length > 0 ? settings.callNumbers : ['']
+  );
   const [callStatus, setCallStatus] = useState<SaveStatus>('idle');
   const [callError, setCallError] = useState('');
 
@@ -101,7 +105,7 @@ export default function AdminSettings() {
     if (!loaded) return;
     setBusinessName(settings.businessName);
     setBusinessEmail(settings.businessEmail);
-    setCallNumberInput(settings.callNumber);
+    setCallNumberInputs(settings.callNumbers.length > 0 ? settings.callNumbers : ['']);
     setWhatsappNumberInput(settings.whatsappNumber);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loaded]);
@@ -123,17 +127,41 @@ export default function AdminSettings() {
     if (!error) setTimeout(() => setBusinessStatus('idle'), 3000);
   };
 
-  const handleSaveCallNumber = async (e: React.FormEvent) => {
+  const handleCallNumberChange = (index: number, value: string) => {
+    setCallNumberInputs(prev => prev.map((n, i) => (i === index ? value : n)));
+    setCallStatus('idle');
+  };
+
+  const handleAddCallNumber = () => {
+    setCallNumberInputs(prev => [...prev, '']);
+    setCallStatus('idle');
+  };
+
+  const handleRemoveCallNumber = (index: number) => {
+    setCallNumberInputs(prev => (prev.length > 1 ? prev.filter((_, i) => i !== index) : ['']));
+    setCallStatus('idle');
+  };
+
+  const handleSaveCallNumbers = async (e: React.FormEvent) => {
     e.preventDefault();
-    const normalized = normalizePhoneNumber(callNumberInput);
-    if (!normalized) {
-      setCallStatus('error');
-      setCallError('Enter a valid phone number (e.g. +91 98765 43210).');
-      return;
+
+    // Blank rows are simply dropped rather than treated as errors — lets
+    // the admin leave a spare empty row without blocking Save.
+    const nonEmptyInputs = callNumberInputs.map(n => n.trim()).filter(Boolean);
+    const normalized: string[] = [];
+    for (const raw of nonEmptyInputs) {
+      const n = normalizePhoneNumber(raw);
+      if (!n) {
+        setCallStatus('error');
+        setCallError(`"${raw}" isn't a valid phone number (e.g. +91 98765 43210).`);
+        return;
+      }
+      normalized.push(n);
     }
+
     setCallStatus('saving');
-    const { error } = await updateSettings({ callNumber: normalized });
-    setCallNumberInput(normalized);
+    const { error } = await updateSettings({ callNumbers: normalized });
+    setCallNumberInputs(normalized.length > 0 ? normalized : ['']);
     setCallStatus(error ? 'error' : 'success');
     setCallError(error || '');
     if (!error) setTimeout(() => setCallStatus('idle'), 3000);
@@ -306,29 +334,53 @@ export default function AdminSettings() {
           description="The numbers used by the Call and WhatsApp buttons across the public website"
         >
           <div className="space-y-6">
-            {/* Call Number */}
-            <form onSubmit={handleSaveCallNumber}>
-              <label className="block text-xs font-semibold text-neutral-700 uppercase tracking-wider mb-1.5">Call Number</label>
+            {/* Call Numbers — one or more */}
+            <form onSubmit={handleSaveCallNumbers}>
+              <label className="block text-xs font-semibold text-neutral-700 uppercase tracking-wider mb-1.5">Call Numbers</label>
               <p className="text-xs text-neutral-500 mb-2">
-                Used by every "Call" button and CTA on the public website — header, footer, floating call button, property enquiry CTAs, and more.
+                Used by every "Call" button and CTA on the public website — header, footer, floating call button, property enquiry CTAs, and more. Add more than one if you want visitors to see multiple numbers to call.
               </p>
-              <div className="flex flex-col sm:flex-row gap-3">
-                <div className="relative flex-1">
-                  <Phone className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-neutral-400" />
-                  <input
-                    type="tel"
-                    value={callNumberInput}
-                    onChange={(e) => { setCallNumberInput(e.target.value); setCallStatus('idle'); }}
-                    className={`${inputClass} pl-10`}
-                    placeholder="+91 98765 43210"
-                  />
-                </div>
+              <div className="space-y-2.5">
+                {callNumberInputs.map((num, i) => (
+                  <div key={i} className="flex gap-2">
+                    <div className="relative flex-1">
+                      <Phone className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-neutral-400" />
+                      <input
+                        type="tel"
+                        value={num}
+                        onChange={(e) => handleCallNumberChange(i, e.target.value)}
+                        className={`${inputClass} pl-10`}
+                        placeholder="+91 98765 43210"
+                      />
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveCallNumber(i)}
+                      disabled={callNumberInputs.length === 1 && !num}
+                      className="flex-shrink-0 w-11 h-11 flex items-center justify-center rounded-xl border border-neutral-200 text-neutral-400 hover:text-red-500 hover:border-red-200 hover:bg-red-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                      aria-label="Remove this call number"
+                    >
+                      <X className="h-4 w-4" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+              <div className="flex items-center gap-3 mt-3">
+                <button
+                  type="button"
+                  onClick={handleAddCallNumber}
+                  className="inline-flex items-center gap-1.5 text-xs font-semibold text-brand-600 hover:text-brand-700 transition-colors"
+                >
+                  <Plus className="h-3.5 w-3.5" /> Add another number
+                </button>
+              </div>
+              <div className="flex items-center gap-3 mt-4">
                 <button type="submit" disabled={callStatus === 'saving'} className={`${saveBtnClass} flex-shrink-0`}>
                   {callStatus === 'saving' ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
                   Save Changes
                 </button>
+                <FieldStatus status={callStatus} errorMessage={callError} />
               </div>
-              <FieldStatus status={callStatus} errorMessage={callError} />
             </form>
 
             <div className="border-t border-neutral-100" />

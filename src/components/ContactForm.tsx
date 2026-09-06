@@ -40,7 +40,8 @@ const PREFERRED_CONTACT_OPTIONS = [
 // admin-configured WhatsApp number (Admin -> Settings -> Contact &
 // Communication), pre-filled and ready for the visitor to send.
 export default function ContactForm({ propertyTitle, serviceTitle, propertyLocation, propertyCode, bare, onSuccess }: ContactFormProps) {
-  const { callNumber, whatsappNumber, businessName } = useSettingsStore(s => s.settings);
+  const { callNumbers, whatsappNumber, businessName } = useSettingsStore(s => s.settings);
+  const callNumber = callNumbers[0] || '';
   const [formData, setFormData] = useState({
     name: '',
     phone: '',

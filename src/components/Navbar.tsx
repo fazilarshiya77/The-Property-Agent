@@ -8,7 +8,8 @@ export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
-  const { callNumber, whatsappNumber } = useSettingsStore(s => s.settings);
+  const { callNumbers, whatsappNumber } = useSettingsStore(s => s.settings);
+  const callNumber = callNumbers[0] || '';
 
   useEffect(() => {
     const handleScroll = () => {

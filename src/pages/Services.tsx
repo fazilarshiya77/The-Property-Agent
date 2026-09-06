@@ -48,7 +48,8 @@ function getServiceIcon(iconName: string, className: string = 'h-6 w-6') {
 }
 
 export default function Services() {
-  const { callNumber, whatsappNumber } = useSettingsStore(s => s.settings);
+  const { callNumbers, whatsappNumber } = useSettingsStore(s => s.settings);
+  const callNumber = callNumbers[0] || '';
   const location = useLocation();
   const serviceFormId = useId();
 

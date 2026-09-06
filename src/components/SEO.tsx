@@ -296,7 +296,7 @@ function generateItemListSchema(title: string, description: string, numberOfItem
 // ─── SEO COMPONENT ──────────────────────────────────────
 export const SEO: React.FC<SEOProps> = (props) => {
   const location = useLocation();
-  const callNumber = useSettingsStore(s => s.settings.callNumber);
+  const callNumber = useSettingsStore(s => s.settings.callNumbers[0] || '');
 
   const {
     title,

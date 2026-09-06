@@ -5,18 +5,14 @@ import { formatPhoneDisplay, toTelHref, toWhatsAppHref } from '../lib/phone';
 
 const WHATSAPP_MESSAGE = "Hi The Property Agent, I'd like to enquire about your properties and services.";
 
-// A second, always-available call number alongside the admin-configured
-// one (Admin -> Settings -> Contact & Communication).
-const SECOND_CALL_NUMBER = '+919845011138';
-
 // Two floating action buttons (WhatsApp + Call) fixed to the bottom-right
-// corner of every public page. WhatsApp opens the admin-configured number
-// (see Admin -> Settings -> Contact & Communication); Call lists that same
-// admin-configured number plus a second always-available call number.
+// corner of every public page. Both read live from Admin -> Settings ->
+// Contact & Communication — Call lists every configured call number,
+// WhatsApp uses the single configured WhatsApp number.
 export default function FloatingContactButtons() {
   const [openMenu, setOpenMenu] = useState<'whatsapp' | 'call' | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const { callNumber, whatsappNumber } = useSettingsStore(s => s.settings);
+  const { callNumbers, whatsappNumber } = useSettingsStore(s => s.settings);
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -36,10 +32,8 @@ export default function FloatingContactButtons() {
   }, []);
 
   const waLink = whatsappNumber ? toWhatsAppHref(whatsappNumber, WHATSAPP_MESSAGE) : '';
-  const callNumbers = Array.from(new Set([callNumber, SECOND_CALL_NUMBER].filter(Boolean)));
 
-  // Nothing configured at all (and no static fallback number either) —
-  // render nothing rather than a broken/empty widget.
+  // Nothing configured at all — render nothing rather than a broken/empty widget.
   if (!whatsappNumber && callNumbers.length === 0) return null;
 
   return (

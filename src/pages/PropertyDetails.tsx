@@ -19,7 +19,8 @@ export default function PropertyDetails() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { properties, fetchProperties, getPropertyById, loading } = usePropertyStore();
-  const { callNumber, whatsappNumber } = useSettingsStore(s => s.settings);
+  const { callNumbers, whatsappNumber } = useSettingsStore(s => s.settings);
+  const callNumber = callNumbers[0] || '';
 
   useEffect(() => {
     fetchProperties()
@@ -472,18 +473,18 @@ export default function PropertyDetails() {
                       <div className="text-sm font-medium text-navy-800">{property.contactEmail}</div>
                     </div>
                   </a>
-                  {callNumber && (
-                    <a href={toTelHref(callNumber)}
+                  {callNumbers.map((num, i) => (
+                    <a key={num} href={toTelHref(num)}
                       className="flex items-center space-x-3 p-3 rounded-xl bg-neutral-50 hover:bg-neutral-100 transition-colors"
-                      aria-label={`Call The Property Agent at ${formatPhoneDisplay(callNumber)}`}
+                      aria-label={`Call The Property Agent at ${formatPhoneDisplay(num)}`}
                     >
                       <Phone className="h-5 w-5 text-brand-500" aria-hidden="true" />
                       <div>
-                        <div className="text-xs text-neutral-500">Phone</div>
-                        <div className="text-sm font-medium text-navy-800">{formatPhoneDisplay(callNumber)}</div>
+                        <div className="text-xs text-neutral-500">{callNumbers.length > 1 ? `Phone ${i + 1}` : 'Phone'}</div>
+                        <div className="text-sm font-medium text-navy-800">{formatPhoneDisplay(num)}</div>
                       </div>
                     </a>
-                  )}
+                  ))}
                 </div>
               </div>
             </div>

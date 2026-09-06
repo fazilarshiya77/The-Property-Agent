@@ -27,7 +27,8 @@ function buildAboutFaqData(callDisplay: string, whatsappDisplay: string): FAQIte
 }
 
 export default function About() {
-  const { callNumber, whatsappNumber } = useSettingsStore(s => s.settings);
+  const { callNumbers, whatsappNumber } = useSettingsStore(s => s.settings);
+  const callNumber = callNumbers[0] || '';
   const aboutFaqData = buildAboutFaqData(formatPhoneDisplay(callNumber), formatPhoneDisplay(whatsappNumber));
   const address = 'No. 84, 4th cross kashi nagar, yelachanahalli, B-78., Bengaluru, Karnataka';
   const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
@@ -252,8 +253,13 @@ export default function About() {
                   <div>
                     <h4 className="text-sm font-semibold text-navy-900">Call or WhatsApp</h4>
                     <p className="text-sm text-neutral-500 mt-1">
-                      {callNumber && <a href={toTelHref(callNumber)} className="hover:text-brand-500 transition-colors">{formatPhoneDisplay(callNumber)}</a>}
-                      {callNumber && whatsappNumber && ' · '}
+                      {callNumbers.map((num, i) => (
+                        <span key={num}>
+                          {i > 0 && ' · '}
+                          <a href={toTelHref(num)} className="hover:text-brand-500 transition-colors">{formatPhoneDisplay(num)}</a>
+                        </span>
+                      ))}
+                      {callNumbers.length > 0 && whatsappNumber && ' · '}
                       {whatsappNumber && <a href={toWhatsAppHref(whatsappNumber)} target="_blank" rel="noopener noreferrer" className="hover:text-brand-500 transition-colors">{formatPhoneDisplay(whatsappNumber)} (WhatsApp)</a>}
                     </p>
                   </div>

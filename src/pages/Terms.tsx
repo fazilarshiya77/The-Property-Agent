@@ -191,7 +191,7 @@ const SECTIONS = [
 ];
 
 export default function Terms() {
-  const callNumber = useSettingsStore(s => s.settings.callNumber);
+  const callNumber = useSettingsStore(s => s.settings.callNumbers[0] || '');
   const breadcrumbs: BreadcrumbItem[] = [
     { name: 'Home', url: '/' },
     { name: 'Terms & Conditions', url: '/terms' },

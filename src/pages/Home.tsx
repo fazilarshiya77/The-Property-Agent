@@ -79,7 +79,8 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 export default function Home() {
   const { properties: allProperties, fetchProperties } = usePropertyStore();
-  const { callNumber, whatsappNumber } = useSettingsStore(s => s.settings);
+  const { callNumbers, whatsappNumber } = useSettingsStore(s => s.settings);
+  const callNumber = callNumbers[0] || '';
   const faqData = buildHomeFaqData(formatPhoneDisplay(callNumber), formatPhoneDisplay(whatsappNumber));
 
   useEffect(() => {

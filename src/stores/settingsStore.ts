@@ -2,19 +2,21 @@ import { create } from 'zustand'
 import { supabase } from '../lib/supabase'
 
 export interface SiteSettings {
-  callNumber: string
+  /** One or more call numbers, in display order — callNumbers[0] is the
+   *  "primary" number used anywhere the site only shows a single Call CTA. */
+  callNumbers: string[]
   whatsappNumber: string
   businessName: string
   businessEmail: string
 }
 
-// No fake/hardcoded phone numbers as a fallback: callNumber/whatsappNumber
+// No fake/hardcoded phone numbers as a fallback: callNumbers/whatsappNumber
 // start empty and stay empty if the row hasn't loaded yet, doesn't exist,
-// or Supabase is unreachable. Consuming components treat an empty string
-// as "not configured" and hide/disable that CTA rather than ever showing
-// or dialing a made-up number.
+// or Supabase is unreachable. Consuming components treat an empty
+// value/array as "not configured" and hide/disable that CTA rather than
+// ever showing or dialing a made-up number.
 export const DEFAULT_SITE_SETTINGS: SiteSettings = {
-  callNumber: '',
+  callNumbers: [],
   whatsappNumber: '',
   businessName: 'The Property Agent',
   businessEmail: 'trishnaproperties78@gmail.com',
@@ -29,7 +31,7 @@ interface SettingsStore {
 }
 
 const fromRow = (row: any): SiteSettings => ({
-  callNumber: row.call_number || '',
+  callNumbers: Array.isArray(row.call_numbers) ? row.call_numbers.filter(Boolean) : [],
   whatsappNumber: row.whatsapp_number || '',
   businessName: row.business_name || DEFAULT_SITE_SETTINGS.businessName,
   businessEmail: row.business_email || DEFAULT_SITE_SETTINGS.businessEmail,
@@ -64,8 +66,8 @@ export const useSettingsStore = create<SettingsStore>((set, get) => ({
   },
 
   updateSettings: async (partial) => {
-    const payload: Record<string, string> = {}
-    if (partial.callNumber !== undefined) payload.call_number = partial.callNumber
+    const payload: Record<string, string | string[]> = {}
+    if (partial.callNumbers !== undefined) payload.call_numbers = partial.callNumbers
     if (partial.whatsappNumber !== undefined) payload.whatsapp_number = partial.whatsappNumber
     if (partial.businessName !== undefined) payload.business_name = partial.businessName
     if (partial.businessEmail !== undefined) payload.business_email = partial.businessEmail
