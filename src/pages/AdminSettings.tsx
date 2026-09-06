@@ -22,6 +22,19 @@ import { supabase } from '../lib/supabase';
 import { normalizePhoneNumber } from '../lib/phone';
 import AdminLayout from '../components/admin/AdminLayout';
 
+// Keeps phone-number fields strictly to a 10-digit Indian mobile number as
+// the admin types/pastes: strips everything but digits, drops a leading
+// "91" country code if it makes the number too long, then hard-caps at 10
+// digits — typing further simply has no effect, exactly like a native
+// maxlength on a digits-only field.
+function sanitizePhoneInput(raw: string): string {
+  let digits = raw.replace(/\D/g, '');
+  if (digits.length > 10 && digits.startsWith('91')) {
+    digits = digits.slice(2);
+  }
+  return digits.slice(0, 10);
+}
+
 // ─── Shared section shell ────────────────────────────────
 function SettingsSection({ icon: Icon, title, description, children }: {
   icon: React.ElementType;
@@ -128,7 +141,8 @@ export default function AdminSettings() {
   };
 
   const handleCallNumberChange = (index: number, value: string) => {
-    setCallNumberInputs(prev => prev.map((n, i) => (i === index ? value : n)));
+    const sanitized = sanitizePhoneInput(value);
+    setCallNumberInputs(prev => prev.map((n, i) => (i === index ? sanitized : n)));
     setCallStatus('idle');
   };
 
@@ -153,7 +167,7 @@ export default function AdminSettings() {
       const n = normalizePhoneNumber(raw);
       if (!n) {
         setCallStatus('error');
-        setCallError(`"${raw}" isn't a valid 10-digit phone number (e.g. +91 98765 43210).`);
+        setCallError(`"${raw}" isn't a valid 10-digit phone number (e.g. 9876543210).`);
         return;
       }
       normalized.push(n);
@@ -172,7 +186,7 @@ export default function AdminSettings() {
     const normalized = normalizePhoneNumber(whatsappNumberInput);
     if (!normalized) {
       setWhatsappStatus('error');
-      setWhatsappError('Enter a valid 10-digit phone number (e.g. +91 98765 12345).');
+      setWhatsappError('Enter a valid 10-digit phone number (e.g. 9876512345).');
       return;
     }
     setWhatsappStatus('saving');
@@ -350,8 +364,8 @@ export default function AdminSettings() {
                         value={num}
                         onChange={(e) => handleCallNumberChange(i, e.target.value)}
                         className={`${inputClass} pl-10`}
-                        placeholder="+91 98765 43210"
-                        maxLength={17}
+                        placeholder="9876543210"
+                        maxLength={10}
                       />
                     </div>
                     <button
@@ -398,10 +412,10 @@ export default function AdminSettings() {
                   <input
                     type="tel"
                     value={whatsappNumberInput}
-                    onChange={(e) => { setWhatsappNumberInput(e.target.value); setWhatsappStatus('idle'); }}
+                    onChange={(e) => { setWhatsappNumberInput(sanitizePhoneInput(e.target.value)); setWhatsappStatus('idle'); }}
                     className={`${inputClass} pl-10`}
-                    placeholder="+91 98765 12345"
-                    maxLength={17}
+                    placeholder="9876512345"
+                    maxLength={10}
                   />
                 </div>
                 <button type="submit" disabled={whatsappStatus === 'saving'} className={`${saveBtnClass} flex-shrink-0`}>
