@@ -19,21 +19,8 @@ import {
 import { useAdminGuard, useAuthStore } from '../stores/authStore';
 import { useSettingsStore } from '../stores/settingsStore';
 import { supabase } from '../lib/supabase';
-import { normalizePhoneNumber } from '../lib/phone';
+import { normalizePhoneNumber, sanitizePhoneDigits as sanitizePhoneInput } from '../lib/phone';
 import AdminLayout from '../components/admin/AdminLayout';
-
-// Keeps phone-number fields strictly to a 10-digit Indian mobile number as
-// the admin types/pastes: strips everything but digits, drops a leading
-// "91" country code if it makes the number too long, then hard-caps at 10
-// digits — typing further simply has no effect, exactly like a native
-// maxlength on a digits-only field.
-function sanitizePhoneInput(raw: string): string {
-  let digits = raw.replace(/\D/g, '');
-  if (digits.length > 10 && digits.startsWith('91')) {
-    digits = digits.slice(2);
-  }
-  return digits.slice(0, 10);
-}
 
 // ─── Shared section shell ────────────────────────────────
 function SettingsSection({ icon: Icon, title, description, children }: {

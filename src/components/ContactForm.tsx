@@ -4,7 +4,20 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/com
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useSettingsStore } from '@/stores/settingsStore';
-import { formatPhoneDisplay, toWhatsAppHref } from '@/lib/phone';
+import { formatPhoneDisplay, toWhatsAppHref, sanitizePhoneDigits } from '@/lib/phone';
+
+// Keeps the Full Name field to letters and spaces only, as the visitor types.
+function sanitizeNameInput(raw: string): string {
+  return raw.replace(/[^a-zA-Z\s]/g, '');
+}
+
+// Keeps the Message field to letters, numbers, and spaces only — no
+// special characters — as the visitor types.
+function sanitizeMessageInput(raw: string): string {
+  return raw.replace(/[^a-zA-Z0-9\s]/g, '');
+}
+
+const EMAIL_PATTERN = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
 interface ContactFormProps {
   propertyTitle?: string;
@@ -56,13 +69,37 @@ export default function ContactForm({ propertyTitle, serviceTitle, propertyLocat
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [submitError, setSubmitError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-  const [fieldErrors, setFieldErrors] = useState<{ name?: string; phone?: string }>({});
+  const [fieldErrors, setFieldErrors] = useState<{ name?: string; phone?: string; email?: string }>({});
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const clearFieldError = (field: keyof typeof fieldErrors) => {
+    if (fieldErrors[field]) setFieldErrors(prev => ({ ...prev, [field]: undefined }));
+  };
+
+  // Name/Message are sanitized as the visitor types (letters-only,
+  // letters+numbers-only respectively); Phone is capped at 10 digits.
+  // Email isn't stripped character-by-character — @ and . are valid and
+  // needed — instead it's checked against a standard pattern on submit.
+  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData(prev => ({ ...prev, name: sanitizeNameInput(e.target.value) }));
+    clearFieldError('name');
+  };
+
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData(prev => ({ ...prev, phone: sanitizePhoneDigits(e.target.value) }));
+    clearFieldError('phone');
+  };
+
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData(prev => ({ ...prev, email: e.target.value }));
+    clearFieldError('email');
+  };
+
+  const handleMessageChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setFormData(prev => ({ ...prev, message: sanitizeMessageInput(e.target.value) }));
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-    if (fieldErrors[e.target.name as 'name' | 'phone']) {
-      setFieldErrors(prev => ({ ...prev, [e.target.name]: undefined }));
-    }
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -72,6 +109,10 @@ export default function ContactForm({ propertyTitle, serviceTitle, propertyLocat
     const errs: typeof fieldErrors = {};
     if (!formData.name.trim()) errs.name = 'Name is required';
     if (!formData.phone.trim()) errs.phone = 'Phone number is required';
+    else if (formData.phone.trim().length !== 10) errs.phone = 'Enter a 10-digit phone number';
+    if (formData.email.trim() && !EMAIL_PATTERN.test(formData.email.trim())) {
+      errs.email = 'Enter a valid email address (e.g. name@gmail.com)';
+    }
     if (Object.keys(errs).length > 0) {
       setFieldErrors(errs);
       return;
@@ -97,7 +138,7 @@ export default function ContactForm({ propertyTitle, serviceTitle, propertyLocat
         : 'I am interested in your properties and services and would like more information.',
       '',
       `Name: ${formData.name.trim()}`,
-      `Phone: ${formData.phone.trim()}`,
+      `Phone: +91 ${formData.phone.trim()}`,
     ];
     if (formData.email.trim()) lines.push(`Email: ${formData.email.trim()}`);
     if (preferredContactLabel) lines.push(`Preferred Contact: ${preferredContactLabel}`);
@@ -156,7 +197,7 @@ export default function ContactForm({ propertyTitle, serviceTitle, propertyLocat
               type="text"
               name="name"
               value={formData.name}
-              onChange={handleChange}
+              onChange={handleNameChange}
               className={`h-11 px-4 bg-neutral-50 border rounded-xl focus-visible:ring-brand-500/20 text-sm ${
                 fieldErrors.name ? 'border-red-300 focus-visible:border-red-500' : 'border-neutral-200 focus-visible:border-brand-500'
               }`}
@@ -170,11 +211,12 @@ export default function ContactForm({ propertyTitle, serviceTitle, propertyLocat
               type="tel"
               name="phone"
               value={formData.phone}
-              onChange={handleChange}
+              onChange={handlePhoneChange}
+              maxLength={10}
               className={`h-11 px-4 bg-neutral-50 border rounded-xl focus-visible:ring-brand-500/20 text-sm ${
                 fieldErrors.phone ? 'border-red-300 focus-visible:border-red-500' : 'border-neutral-200 focus-visible:border-brand-500'
               }`}
-              placeholder="+91 XXXXX XXXXX"
+              placeholder="9876543210"
             />
             {fieldErrors.phone && <p className="text-xs text-red-500 mt-1">{fieldErrors.phone}</p>}
           </div>
@@ -184,10 +226,13 @@ export default function ContactForm({ propertyTitle, serviceTitle, propertyLocat
               type="email"
               name="email"
               value={formData.email}
-              onChange={handleChange}
-              className="h-11 px-4 bg-neutral-50 border border-neutral-200 rounded-xl focus-visible:ring-brand-500/20 focus-visible:border-brand-500 text-sm"
+              onChange={handleEmailChange}
+              className={`h-11 px-4 bg-neutral-50 border rounded-xl focus-visible:ring-brand-500/20 text-sm ${
+                fieldErrors.email ? 'border-red-300 focus-visible:border-red-500' : 'border-neutral-200 focus-visible:border-brand-500'
+              }`}
               placeholder="you@example.com"
             />
+            {fieldErrors.email && <p className="text-xs text-red-500 mt-1">{fieldErrors.email}</p>}
           </div>
           <div>
             <label className="block text-xs font-semibold text-neutral-700 uppercase tracking-wider mb-1.5">Preferred Contact Method</label>
@@ -205,7 +250,7 @@ export default function ContactForm({ propertyTitle, serviceTitle, propertyLocat
             <textarea
               name="message"
               value={formData.message}
-              onChange={handleChange}
+              onChange={handleMessageChange}
               rows={3}
               className="w-full px-4 py-3 bg-neutral-50 border border-neutral-200 rounded-xl focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 outline-none transition-all text-sm resize-none"
               placeholder="Tell us what you're looking for..."

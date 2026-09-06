@@ -35,6 +35,20 @@ export function isValidPhoneNumber(raw: string): boolean {
   return normalizePhoneNumber(raw) !== null;
 }
 
+/**
+ * Keeps a phone-number input field strictly to a 10-digit Indian mobile
+ * number as the user types/pastes: strips everything but digits, drops a
+ * leading "91" country code if it makes the number too long, then
+ * hard-caps at 10 digits — typing further simply has no effect.
+ */
+export function sanitizePhoneDigits(raw: string): string {
+  let digits = raw.replace(/\D/g, '');
+  if (digits.length > 10 && digits.startsWith('91')) {
+    digits = digits.slice(2);
+  }
+  return digits.slice(0, 10);
+}
+
 /** Formats an E.164 number for display — "+919019488368" -> "+91 90194 88368". */
 export function formatPhoneDisplay(e164: string): string {
   const indian = e164.match(/^\+91(\d{5})(\d{5})$/);
