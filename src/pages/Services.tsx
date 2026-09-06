@@ -465,15 +465,17 @@ export default function Services() {
                   >
                     Details
                   </button>
-                  <a
-                    href={toWhatsAppHref(whatsappNumber, `Hello The Property Agent, I'd like help with "${service.title}". Please share more details.`)}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 p-2.5 rounded-xl transition-colors"
-                    aria-label={`WhatsApp inquiry for ${service.title}`}
-                  >
-                    <MessageSquare className="h-4 w-4" />
-                  </a>
+                  {whatsappNumber && (
+                    <a
+                      href={toWhatsAppHref(whatsappNumber, `Hello The Property Agent, I'd like help with "${service.title}". Please share more details.`)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 p-2.5 rounded-xl transition-colors"
+                      aria-label={`WhatsApp inquiry for ${service.title}`}
+                    >
+                      <MessageSquare className="h-4 w-4" />
+                    </a>
+                  )}
                 </div>
               </article>
             ))}
@@ -520,15 +522,17 @@ export default function Services() {
                   </div>
                 </div>
 
-                <div className="flex items-start space-x-3.5 p-3.5 bg-neutral-50 rounded-xl border border-neutral-100">
-                  <div className="w-9 h-9 rounded-lg bg-gold-100 flex items-center justify-center text-gold-600 flex-shrink-0 mt-0.5">
-                    <Headphones className="h-4 w-4" />
+                {callNumber && (
+                  <div className="flex items-start space-x-3.5 p-3.5 bg-neutral-50 rounded-xl border border-neutral-100">
+                    <div className="w-9 h-9 rounded-lg bg-gold-100 flex items-center justify-center text-gold-600 flex-shrink-0 mt-0.5">
+                      <Headphones className="h-4 w-4" />
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-bold text-navy-900">Need Immediate Help?</h4>
+                      <p className="text-xs text-neutral-500 mt-0.5">Call us directly at <a href={toTelHref(callNumber)} className="text-brand-600 font-bold hover:underline">{formatPhoneDisplay(callNumber)}</a></p>
+                    </div>
                   </div>
-                  <div>
-                    <h4 className="text-sm font-bold text-navy-900">Need Immediate Help?</h4>
-                    <p className="text-xs text-neutral-500 mt-0.5">Call us directly at <a href={toTelHref(callNumber)} className="text-brand-600 font-bold hover:underline">{formatPhoneDisplay(callNumber)}</a></p>
-                  </div>
-                </div>
+                )}
               </div>
 
               {/* Service Areas */}
@@ -554,6 +558,7 @@ export default function Services() {
                     Thank you for reaching out to The Property Agent. We'll call or WhatsApp you shortly at your registered number.
                   </p>
                   <div className="mt-6 flex justify-center gap-3">
+                    {whatsappNumber && (
                     <a
                       href={toWhatsAppHref(whatsappNumber, "Hello The Property Agent, I just submitted an inquiry online.")}
                       target="_blank"
@@ -563,6 +568,7 @@ export default function Services() {
                       <MessageSquare className="h-4 w-4" />
                       <span>Chat on WhatsApp</span>
                     </a>
+                    )}
                   </div>
                 </div>
               ) : submitError ? (
@@ -908,13 +914,15 @@ export default function Services() {
             >
               Tell Us What You Need
             </a>
-            <a
-              href={toTelHref(callNumber)}
-              className="bg-white/10 hover:bg-white/20 text-white font-semibold px-6 sm:px-8 py-3 rounded-xl transition-all border border-white/10 text-sm inline-flex items-center justify-center space-x-2"
-            >
-              <Phone className="h-4 w-4 text-brand-400" />
-              <span>Call {formatPhoneDisplay(callNumber)}</span>
-            </a>
+            {callNumber && (
+              <a
+                href={toTelHref(callNumber)}
+                className="bg-white/10 hover:bg-white/20 text-white font-semibold px-6 sm:px-8 py-3 rounded-xl transition-all border border-white/10 text-sm inline-flex items-center justify-center space-x-2"
+              >
+                <Phone className="h-4 w-4 text-brand-400" />
+                <span>Call {formatPhoneDisplay(callNumber)}</span>
+              </a>
+            )}
           </div>
         </div>
       </section>
@@ -983,15 +991,17 @@ export default function Services() {
               >
                 Send an Inquiry
               </button>
-              <a
-                href={toWhatsAppHref(whatsappNumber, `Hello The Property Agent, I'd like help with "${selectedServiceForModal.title}".`)}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-sm py-3 px-5 rounded-xl transition-all text-center inline-flex items-center justify-center space-x-2"
-              >
-                <MessageSquare className="h-4 w-4" />
-                <span>WhatsApp</span>
-              </a>
+              {whatsappNumber && (
+                <a
+                  href={toWhatsAppHref(whatsappNumber, `Hello The Property Agent, I'd like help with "${selectedServiceForModal.title}".`)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-sm py-3 px-5 rounded-xl transition-all text-center inline-flex items-center justify-center space-x-2"
+                >
+                  <MessageSquare className="h-4 w-4" />
+                  <span>WhatsApp</span>
+                </a>
+              )}
             </div>
           </div>
         </div>

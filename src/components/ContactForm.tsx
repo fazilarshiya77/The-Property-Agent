@@ -143,7 +143,9 @@ export default function ContactForm({ propertyTitle, serviceTitle, propertyLocat
             <AlertCircle className="h-8 w-8 text-red-500" />
           </div>
           <h4 className="text-lg font-semibold text-navy-900">Something went wrong</h4>
-          <p className="text-sm text-neutral-500 mt-2">{errorMessage || `Please try again, or call us directly at ${formatPhoneDisplay(callNumber)}.`}</p>
+          <p className="text-sm text-neutral-500 mt-2">
+            {errorMessage || (callNumber ? `Please try again, or call us directly at ${formatPhoneDisplay(callNumber)}.` : 'Please try again shortly.')}
+          </p>
         </div>
       ) : (
         <form onSubmit={handleSubmit} className="space-y-4" noValidate>

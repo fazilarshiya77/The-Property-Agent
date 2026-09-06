@@ -385,13 +385,15 @@ export default function Home() {
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <a
-                href={toTelHref(callNumber)}
-                className="bg-brand-500 hover:bg-brand-600 text-navy-900 font-semibold text-xs sm:text-sm px-5 py-2.5 rounded-xl transition-all shadow-md flex items-center space-x-1.5"
-              >
-                <Phone className="h-3.5 w-3.5" />
-                <span>{formatPhoneDisplay(callNumber)}</span>
-              </a>
+              {callNumber && (
+                <a
+                  href={toTelHref(callNumber)}
+                  className="bg-brand-500 hover:bg-brand-600 text-navy-900 font-semibold text-xs sm:text-sm px-5 py-2.5 rounded-xl transition-all shadow-md flex items-center space-x-1.5"
+                >
+                  <Phone className="h-3.5 w-3.5" />
+                  <span>{formatPhoneDisplay(callNumber)}</span>
+                </a>
+              )}
               <Link
                 to="/services"
                 className="bg-white/10 hover:bg-white/20 text-white font-semibold text-xs sm:text-sm px-4 py-2.5 rounded-xl transition-all border border-white/10"

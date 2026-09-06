@@ -252,9 +252,9 @@ export default function About() {
                   <div>
                     <h4 className="text-sm font-semibold text-navy-900">Call or WhatsApp</h4>
                     <p className="text-sm text-neutral-500 mt-1">
-                      <a href={toTelHref(callNumber)} className="hover:text-brand-500 transition-colors">{formatPhoneDisplay(callNumber)}</a>
-                      {' · '}
-                      <a href={toWhatsAppHref(whatsappNumber)} target="_blank" rel="noopener noreferrer" className="hover:text-brand-500 transition-colors">{formatPhoneDisplay(whatsappNumber)} (WhatsApp)</a>
+                      {callNumber && <a href={toTelHref(callNumber)} className="hover:text-brand-500 transition-colors">{formatPhoneDisplay(callNumber)}</a>}
+                      {callNumber && whatsappNumber && ' · '}
+                      {whatsappNumber && <a href={toWhatsAppHref(whatsappNumber)} target="_blank" rel="noopener noreferrer" className="hover:text-brand-500 transition-colors">{formatPhoneDisplay(whatsappNumber)} (WhatsApp)</a>}
                     </p>
                   </div>
                 </div>

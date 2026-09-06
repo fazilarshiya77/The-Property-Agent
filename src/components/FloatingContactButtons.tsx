@@ -35,15 +35,20 @@ export default function FloatingContactButtons() {
     };
   }, []);
 
-  const waLink = toWhatsAppHref(whatsappNumber, WHATSAPP_MESSAGE);
-  const callNumbers = Array.from(new Set([callNumber, SECOND_CALL_NUMBER]));
+  const waLink = whatsappNumber ? toWhatsAppHref(whatsappNumber, WHATSAPP_MESSAGE) : '';
+  const callNumbers = Array.from(new Set([callNumber, SECOND_CALL_NUMBER].filter(Boolean)));
+
+  // Nothing configured at all (and no static fallback number either) —
+  // render nothing rather than a broken/empty widget.
+  if (!whatsappNumber && callNumbers.length === 0) return null;
 
   return (
     <div
       ref={containerRef}
       className="fixed bottom-20 right-4 sm:bottom-6 sm:right-6 z-40 flex flex-col items-end gap-3"
     >
-      {/* WhatsApp button + popover */}
+      {/* WhatsApp button + popover — hidden entirely if no WhatsApp number is configured */}
+      {whatsappNumber && (
       <div className="relative">
         {openMenu === 'whatsapp' && (
           <div className="absolute bottom-full right-0 mb-3 w-64 bg-white rounded-2xl shadow-2xl border border-neutral-100 p-3 animate-scale-in origin-bottom-right">
@@ -83,8 +88,10 @@ export default function FloatingContactButtons() {
           <MessageCircle className="h-6 w-6 sm:h-7 sm:w-7" fill="currentColor" strokeWidth={0} />
         </button>
       </div>
+      )}
 
-      {/* Call button + popover */}
+      {/* Call button + popover — hidden entirely if no call number is configured at all */}
+      {callNumbers.length > 0 && (
       <div className="relative">
         {openMenu === 'call' && (
           <div className="absolute bottom-full right-0 mb-3 w-64 bg-white rounded-2xl shadow-2xl border border-neutral-100 p-3 animate-scale-in origin-bottom-right">
@@ -127,6 +134,7 @@ export default function FloatingContactButtons() {
           <Phone className="h-6 w-6 sm:h-7 sm:w-7" fill="currentColor" strokeWidth={0} />
         </button>
       </div>
+      )}
     </div>
   );
 }

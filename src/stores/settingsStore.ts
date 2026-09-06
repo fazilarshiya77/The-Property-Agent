@@ -8,12 +8,14 @@ export interface SiteSettings {
   businessEmail: string
 }
 
-// Same numbers/details the site shipped with before this became
-// admin-editable — used as the fallback until the row loads (or if
-// Supabase is unreachable), so nothing on the public site ever breaks.
+// No fake/hardcoded phone numbers as a fallback: callNumber/whatsappNumber
+// start empty and stay empty if the row hasn't loaded yet, doesn't exist,
+// or Supabase is unreachable. Consuming components treat an empty string
+// as "not configured" and hide/disable that CTA rather than ever showing
+// or dialing a made-up number.
 export const DEFAULT_SITE_SETTINGS: SiteSettings = {
-  callNumber: '+919019488368',
-  whatsappNumber: '+919019488368',
+  callNumber: '',
+  whatsappNumber: '',
   businessName: 'The Property Agent',
   businessEmail: 'trishnaproperties78@gmail.com',
 }
@@ -27,8 +29,8 @@ interface SettingsStore {
 }
 
 const fromRow = (row: any): SiteSettings => ({
-  callNumber: row.call_number || DEFAULT_SITE_SETTINGS.callNumber,
-  whatsappNumber: row.whatsapp_number || DEFAULT_SITE_SETTINGS.whatsappNumber,
+  callNumber: row.call_number || '',
+  whatsappNumber: row.whatsapp_number || '',
   businessName: row.business_name || DEFAULT_SITE_SETTINGS.businessName,
   businessEmail: row.business_email || DEFAULT_SITE_SETTINGS.businessEmail,
 })

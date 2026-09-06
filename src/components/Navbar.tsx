@@ -161,22 +161,26 @@ export default function Navbar() {
               })}
             </div>
             <div className="mt-8 pt-6 border-t border-neutral-100 space-y-2">
-              <a
-                href={toTelHref(callNumber)}
-                className="flex items-center space-x-3 px-4 py-3 text-neutral-700 hover:text-brand-500 hover:bg-neutral-50 rounded-xl transition-colors"
-              >
-                <Phone className="h-5 w-5 text-brand-500" />
-                <span className="text-sm font-medium">{formatPhoneDisplay(callNumber)}</span>
-              </a>
-              <a
-                href={toWhatsAppHref(whatsappNumber, "Hi The Property Agent, I would like to inquire about your properties and services.")}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center space-x-3 px-4 py-3 text-emerald-700 bg-emerald-50 hover:bg-emerald-100 rounded-xl transition-colors font-medium text-sm"
-              >
-                <MessageCircle className="h-5 w-5 fill-emerald-600 text-emerald-600" />
-                <span>Chat on WhatsApp</span>
-              </a>
+              {callNumber && (
+                <a
+                  href={toTelHref(callNumber)}
+                  className="flex items-center space-x-3 px-4 py-3 text-neutral-700 hover:text-brand-500 hover:bg-neutral-50 rounded-xl transition-colors"
+                >
+                  <Phone className="h-5 w-5 text-brand-500" />
+                  <span className="text-sm font-medium">{formatPhoneDisplay(callNumber)}</span>
+                </a>
+              )}
+              {whatsappNumber && (
+                <a
+                  href={toWhatsAppHref(whatsappNumber, "Hi The Property Agent, I would like to inquire about your properties and services.")}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center space-x-3 px-4 py-3 text-emerald-700 bg-emerald-50 hover:bg-emerald-100 rounded-xl transition-colors font-medium text-sm"
+                >
+                  <MessageCircle className="h-5 w-5 fill-emerald-600 text-emerald-600" />
+                  <span>Chat on WhatsApp</span>
+                </a>
+              )}
               <Link
                 to="/about#contact"
                 className="block mt-3 text-center bg-brand-500 hover:bg-brand-600 text-navy-900 font-semibold py-3.5 rounded-xl transition-colors"

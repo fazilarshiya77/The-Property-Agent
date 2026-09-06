@@ -77,18 +77,22 @@ export default function Footer() {
                   thepropertyagent129@gmail.com
                 </a>
               </li>
-              <li className="flex items-start space-x-2.5 sm:space-x-3">
-                <Phone className="h-4 w-4 text-brand-400 mt-0.5 flex-shrink-0" />
-                <a href={toTelHref(callNumber)} className="text-neutral-400 hover:text-brand-400 transition-colors">
-                  {formatPhoneDisplay(callNumber)}
-                </a>
-              </li>
+              {callNumber && (
+                <li className="flex items-start space-x-2.5 sm:space-x-3">
+                  <Phone className="h-4 w-4 text-brand-400 mt-0.5 flex-shrink-0" />
+                  <a href={toTelHref(callNumber)} className="text-neutral-400 hover:text-brand-400 transition-colors">
+                    {formatPhoneDisplay(callNumber)}
+                  </a>
+                </li>
+              )}
               <li className="flex items-start space-x-2.5 sm:space-x-3">
                 <MessageCircle className="h-4 w-4 text-brand-400 mt-0.5 flex-shrink-0" />
                 <div className="flex flex-col">
-                  <a href={toWhatsAppHref(whatsappNumber)} target="_blank" rel="noopener noreferrer" className="text-neutral-400 hover:text-brand-400 transition-colors">
-                    {formatPhoneDisplay(whatsappNumber)} (WhatsApp)
-                  </a>
+                  {whatsappNumber && (
+                    <a href={toWhatsAppHref(whatsappNumber)} target="_blank" rel="noopener noreferrer" className="text-neutral-400 hover:text-brand-400 transition-colors">
+                      {formatPhoneDisplay(whatsappNumber)} (WhatsApp)
+                    </a>
+                  )}
                   {SECOND_WHATSAPP_NUMBER !== whatsappNumber && (
                     <a href={toWhatsAppHref(SECOND_WHATSAPP_NUMBER)} target="_blank" rel="noopener noreferrer" className="text-neutral-400 hover:text-brand-400 transition-colors">
                       {formatPhoneDisplay(SECOND_WHATSAPP_NUMBER)}

@@ -472,16 +472,18 @@ export default function PropertyDetails() {
                       <div className="text-sm font-medium text-navy-800">{property.contactEmail}</div>
                     </div>
                   </a>
-                  <a href={toTelHref(callNumber)}
-                    className="flex items-center space-x-3 p-3 rounded-xl bg-neutral-50 hover:bg-neutral-100 transition-colors"
-                    aria-label={`Call The Property Agent at ${formatPhoneDisplay(callNumber)}`}
-                  >
-                    <Phone className="h-5 w-5 text-brand-500" aria-hidden="true" />
-                    <div>
-                      <div className="text-xs text-neutral-500">Phone</div>
-                      <div className="text-sm font-medium text-navy-800">{formatPhoneDisplay(callNumber)}</div>
-                    </div>
-                  </a>
+                  {callNumber && (
+                    <a href={toTelHref(callNumber)}
+                      className="flex items-center space-x-3 p-3 rounded-xl bg-neutral-50 hover:bg-neutral-100 transition-colors"
+                      aria-label={`Call The Property Agent at ${formatPhoneDisplay(callNumber)}`}
+                    >
+                      <Phone className="h-5 w-5 text-brand-500" aria-hidden="true" />
+                      <div>
+                        <div className="text-xs text-neutral-500">Phone</div>
+                        <div className="text-sm font-medium text-navy-800">{formatPhoneDisplay(callNumber)}</div>
+                      </div>
+                    </a>
+                  )}
                 </div>
               </div>
             </div>
@@ -515,25 +517,31 @@ export default function PropertyDetails() {
         property={property}
       />
 
-      {/* Mobile Sticky CTA Bar */}
-      <div className="fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-neutral-200 p-3 flex items-center gap-2 lg:hidden shadow-xl">
-        <a
-          href={toTelHref(callNumber)}
-          className="flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-navy-900 text-white font-semibold text-xs sm:text-sm hover:bg-navy-950 transition-all active:scale-[0.98] shadow-sm"
-        >
-          <Phone className="h-4 w-4 text-brand-400" />
-          <span>Call Now</span>
-        </a>
-        <a
-          href={toWhatsAppHref(whatsappNumber, `Hi The Property Agent, I am interested in "${property.title}" in ${property.location}. Please share more details.`)}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-[#25D366] hover:bg-[#20bd5a] text-white font-semibold text-xs sm:text-sm transition-all active:scale-[0.98] shadow-sm"
-        >
-          <MessageCircle className="h-4 w-4 fill-current" />
-          <span>WhatsApp</span>
-        </a>
-      </div>
+      {/* Mobile Sticky CTA Bar — hidden entirely if neither number is configured */}
+      {(callNumber || whatsappNumber) && (
+        <div className="fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-neutral-200 p-3 flex items-center gap-2 lg:hidden shadow-xl">
+          {callNumber && (
+            <a
+              href={toTelHref(callNumber)}
+              className="flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-navy-900 text-white font-semibold text-xs sm:text-sm hover:bg-navy-950 transition-all active:scale-[0.98] shadow-sm"
+            >
+              <Phone className="h-4 w-4 text-brand-400" />
+              <span>Call Now</span>
+            </a>
+          )}
+          {whatsappNumber && (
+            <a
+              href={toWhatsAppHref(whatsappNumber, `Hi The Property Agent, I am interested in "${property.title}" in ${property.location}. Please share more details.`)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-[#25D366] hover:bg-[#20bd5a] text-white font-semibold text-xs sm:text-sm transition-all active:scale-[0.98] shadow-sm"
+            >
+              <MessageCircle className="h-4 w-4 fill-current" />
+              <span>WhatsApp</span>
+            </a>
+          )}
+        </div>
+      )}
     </div>
   );
 }
