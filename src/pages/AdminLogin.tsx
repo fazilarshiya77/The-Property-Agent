@@ -38,6 +38,7 @@ export default function AdminLogin() {
         title="Admin Login - The Property Agent"
         description="Admin login for The Property Agent dashboard"
         type="website"
+        noIndex
       />
       <div className="w-full max-w-md">
         <div className="text-center mb-8">

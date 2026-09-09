@@ -1,38 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-
-  <!-- Home Page -->
-  <url>
-    <loc>https://www.thepropertyagent.in/</loc>
-    <lastmod>2026-09-01</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>1.0</priority>
-  </url>
-
-  <!-- All Listings Page -->
-  <url>
-    <loc>https://www.thepropertyagent.in/listings</loc>
-    <lastmod>2026-09-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <!-- Services Page -->
-  <url>
-    <loc>https://www.thepropertyagent.in/services</loc>
-    <lastmod>2026-09-01</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-
-  <!-- About Page -->
-  <url>
-    <loc>https://www.thepropertyagent.in/about</loc>
-    <lastmod>2026-09-01</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-
-  <!-- Individual property URLs will be added back here once real listings go live -->
-
-</urlset>
+<!--
+  Sitemap index — this is the single URL registered with Google Search
+  Console / referenced from robots.txt. It fans out to:
+   - sitemap-pages.xml: the site's static pages (kept up to date by hand)
+   - sitemap-properties.xml: every currently published property listing,
+     generated live on each request from Supabase (api/sitemap-properties.ts)
+     so it can never go stale as listings are added, sold, or removed.
+-->
+<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <sitemap>
+    <loc>https://www.thepropertyagent.in/sitemap-pages.xml</loc>
+    <lastmod>2026-09-09</lastmod>
+  </sitemap>
+  <sitemap>
+    <loc>https://www.thepropertyagent.in/sitemap-properties.xml</loc>
+  </sitemap>
+</sitemapindex>

@@ -1,5 +1,6 @@
 {
   "rewrites": [
+    { "source": "/sitemap-properties.xml", "destination": "/api/sitemap-properties" },
     { "source": "/((?!.*\\.[a-zA-Z0-9]+$).*)", "destination": "/index.html" }
   ]
 }
