@@ -1,14 +1,14 @@
 import { Link } from 'react-router-dom';
 import {
   Home, ChevronRight, ScrollText, ShieldCheck, Building2, AlertTriangle, Users,
-  MessageCircle, Copyright, Link2, Scale, Lock, RefreshCw, Gavel, Mail, Phone,
+  MessageCircle, Copyright, Link2, Scale, Lock, RefreshCw, Gavel, Mail, Phone, Cookie,
 } from 'lucide-react';
 import { SEO } from '../components/SEO';
 import type { BreadcrumbItem } from '../components/SEO';
 import { useSettingsStore } from '../stores/settingsStore';
 import { formatPhoneDisplay, toTelHref } from '../lib/phone';
 
-const LAST_UPDATED = 'September 4, 2026';
+const LAST_UPDATED = 'September 9, 2026';
 
 const SECTIONS = [
   {
@@ -155,18 +155,56 @@ const SECTIONS = [
     icon: Lock,
     title: '9. Privacy',
     body: (
-      <p>
-        We collect only the information you choose to share with us — primarily through enquiry and
-        contact forms — and use it solely to respond to your request and provide our services. We do
-        not knowingly sell your personal information. If you have questions about how your data is
-        handled, please contact us using the details below.
-      </p>
+      <>
+        <p>
+          We collect only the information you choose to share with us — primarily through enquiry and
+          contact forms — and use it solely to respond to your request and provide our services. We do
+          not knowingly sell your personal information.
+        </p>
+        <p className="mt-3">
+          We process personal data in accordance with the Information Technology Act, 2000 and the
+          Digital Personal Data Protection Act, 2023 ("DPDP Act"), and applicable rules made thereunder.
+          As a "Data Fiduciary" under the DPDP Act, we collect your personal data (name, phone number,
+          email, and any message you send us) only with your consent, for the specific purpose of
+          responding to your enquiry and providing our real estate services, and we retain it only as
+          long as reasonably necessary for that purpose. You have the right to access, correct, or
+          request deletion of your personal data at any time by contacting us using the details below.
+        </p>
+        <p className="mt-3">
+          If you have questions about how your data is handled, please contact us using the details
+          below.
+        </p>
+      </>
+    ),
+  },
+  {
+    id: 'cookies',
+    icon: Cookie,
+    title: '10. Cookies & Local Storage',
+    body: (
+      <>
+        <p>
+          This website uses cookies and similar browser storage (such as localStorage) to make the site
+          work properly and to remember your preferences. Specifically, we use:
+        </p>
+        <ul className="mt-3 space-y-2 list-disc list-inside marker:text-brand-500">
+          <li><span className="font-semibold text-navy-900">Strictly necessary storage</span> — to keep the admin CRM's login session working, and to remember that you've already seen the welcome enquiry popup so it doesn't reappear on every page during your visit.</li>
+          <li><span className="font-semibold text-navy-900">Functional cookies</span> — to remember your cookie consent choice itself.</li>
+          <li><span className="font-semibold text-navy-900">Third-party cookies</span> — embedded content such as Google Maps, YouTube, or Vimeo (where a property has a video) may set their own cookies when you interact with them. These are governed by the respective third party's own cookie and privacy policy, not ours.</li>
+        </ul>
+        <p className="mt-3">
+          We do not use cookies for third-party advertising or cross-site tracking. When you first visit
+          this website, you'll see a cookie consent banner — you can accept or decline non-essential
+          cookies there. Strictly necessary cookies/storage cannot be disabled, as the site cannot
+          function correctly without them (for example, the admin login would not work).
+        </p>
+      </>
     ),
   },
   {
     id: 'changes',
     icon: RefreshCw,
-    title: '10. Changes to These Terms',
+    title: '11. Changes to These Terms',
     body: (
       <p>
         We may revise these Terms &amp; Conditions periodically to reflect changes in our services or
@@ -179,7 +217,7 @@ const SECTIONS = [
   {
     id: 'governing-law',
     icon: Gavel,
-    title: '11. Governing Law & Jurisdiction',
+    title: '12. Governing Law & Jurisdiction',
     body: (
       <p>
         These Terms &amp; Conditions are governed by the laws of India. Any disputes arising out of or

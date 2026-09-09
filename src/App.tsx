@@ -6,6 +6,7 @@ import ScrollToTop from "./components/ScrollToTop";
 import SmoothScrollProvider from "./components/SmoothScrollProvider";
 import FloatingContactButtons from "./components/FloatingContactButtons";
 import WelcomePopup from "./components/WelcomePopup";
+import CookieConsent from "./components/CookieConsent";
 import Home from "./pages/Home";
 import Listings from "./pages/Listings";
 import PropertyDetails from "./pages/PropertyDetails";
@@ -70,6 +71,7 @@ function AppLayout() {
       <ScrollToTop />
       <FloatingContactButtons />
       <WelcomePopup />
+      <CookieConsent />
     </div>
   );
 }

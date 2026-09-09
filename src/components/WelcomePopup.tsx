@@ -3,7 +3,7 @@ import { X, MessageSquareText } from 'lucide-react';
 import ContactForm from './ContactForm';
 
 const SESSION_KEY = 'tpa-welcome-popup-shown';
-const SHOW_DELAY_MS = 4000;
+const SHOW_DELAY_MS = 6000;
 
 // A one-time-per-session enquiry popup shown a few seconds after the
 // homepage first loads. Reuses the shared ContactForm (bare) inside the
