@@ -19,6 +19,7 @@ import AdminPropertyForm from "./pages/AdminPropertyForm";
 import AdminLeads from "./pages/AdminLeads";
 import AdminSiteVisits from "./pages/AdminSiteVisits";
 import AdminSettings from "./pages/AdminSettings";
+import NotFound from "./pages/NotFound";
 import { SEOProvider, SEO } from "./components/SEO";
 import { useSettingsStore } from "./stores/settingsStore";
 
@@ -44,6 +45,7 @@ function AppLayout() {
         <Route path="/admin/leads" element={<AdminLeads />} />
         <Route path="/admin/site-visits" element={<AdminSiteVisits />} />
         <Route path="/admin/settings" element={<AdminSettings />} />
+        <Route path="*" element={<AdminLogin />} />
       </Routes>
     );
   }
@@ -60,6 +62,7 @@ function AppLayout() {
             <Route path="/services" element={<Services />} />
             <Route path="/about" element={<About />} />
             <Route path="/terms" element={<Terms />} />
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </main>
         <Footer />

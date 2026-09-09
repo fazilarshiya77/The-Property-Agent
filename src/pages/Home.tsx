@@ -127,9 +127,9 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-neutral-50/50">
       <SEO
-        title="Plots, Farmhouses, Land, Rentals & Properties Across Karnataka"
-        description="The Property Agent deals in plot sales, farmhouse plots, agricultural land, rental & lease homes, and commercial properties across Karnataka. Listings are added and updated regularly."
-        keywords="The Property Agent, Karnataka real estate agent, plot for sale Karnataka, farmhouse plot Karnataka, agricultural land for sale Karnataka, rental house Karnataka, lease property Karnataka, commercial property Karnataka"
+        title="Plots, Farmhouses & Land for Sale — Bengaluru & Karnataka"
+        description="The Property Agent deals in plot sales, farmhouse plots, agricultural land, rental & lease homes, and commercial properties in Bengaluru and across Karnataka. Listings are added and updated regularly."
+        keywords="The Property Agent, real estate agent Bengaluru, Karnataka real estate agent, plot for sale Bengaluru, plot for sale Karnataka, farmhouse plot Karnataka, agricultural land for sale Karnataka, rental house Bengaluru, lease property Karnataka, commercial property Karnataka"
         type="website"
         canonicalPath="/"
         location="Karnataka, India"
