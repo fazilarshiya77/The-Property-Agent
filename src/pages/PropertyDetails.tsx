@@ -54,9 +54,23 @@ export default function PropertyDetails() {
   if (!property) {
     return (
       <div className="min-h-screen flex items-center justify-center">
+        {/* No property matches this id — most often because it was sold/rented and
+            removed. Without this, the page would silently keep whatever <title>/
+            canonical tag the previous route left behind (or the static index.html
+            defaults on a fresh load), so a dead/expired link — exactly the kind an
+            ad or old bookmark points to — would report itself as something it isn't.
+            noIndex + a canonical pointing at this same (now-invalid) path keeps the
+            page's own SEO signals honest instead of inheriting stale ones. */}
+        <SEO
+          title="Property Not Found"
+          description="This property listing is no longer available — it may have been sold, rented, or removed. Browse our current listings instead."
+          canonicalPath={`/listings/${id || ''}`}
+          noIndex
+        />
         <div className="text-center">
           <div className="text-5xl mb-4">🏠</div>
           <h2 className="text-2xl font-bold text-navy-800 mb-3">Property Not Found</h2>
+          <p className="text-sm text-neutral-500 mb-4 max-w-sm mx-auto">This listing may have been sold, rented, or removed. Browse our current listings instead.</p>
           <Link to="/listings" className="text-brand-500 hover:text-brand-600 font-semibold">
             ← Back to Listings
           </Link>
@@ -125,6 +139,7 @@ export default function PropertyDetails() {
   ];
 
   const propertySchemaData: PropertySchemaData = {
+    id: property.id,
     name: property.title,
     description: property.description,
     price: property.price,

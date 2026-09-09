@@ -23,6 +23,10 @@ interface FAQItem {
 }
 
 interface PropertySchemaData {
+  /** The property's actual route id (property.id) — used to build the
+   *  schema's `url` so it matches the real /listings/:id page and the
+   *  canonical tag exactly, instead of a title-derived path that 404s. */
+  id: string;
   name: string;
   description: string;
   price: number;
@@ -206,7 +210,7 @@ function generatePropertySchema(property: PropertySchemaData): object {
     '@type': 'RealEstateListing',
     name: property.name,
     description: property.description,
-    url: `${SITE_URL}/listings/${encodeURIComponent(property.name)}`,
+    url: `${SITE_URL}/listings/${property.id}`,
     image: property.images.map(img => img.startsWith('http') ? img : `${SITE_URL}${img}`),
     datePosted: new Date().toISOString().split('T')[0],
     offers: {
