@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Alias of /sitemap.xml (same sitemap index), served at /sitemaps.xml too
+  in case that's the URL referenced anywhere. /sitemap.xml remains the
+  canonical one listed in robots.txt. It fans out to:
+   - sitemap-pages.xml: the site's static pages (kept up to date by hand)
+   - sitemap-properties.xml: every currently published property listing,
+     generated live on each request from Supabase (api/sitemap-properties.ts)
+     so it can never go stale as listings are added, sold, or removed.
+-->
+<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <sitemap>
+    <loc>https://www.thepropertyagent.in/sitemap-pages.xml</loc>
+    <lastmod>2026-09-11</lastmod>
+  </sitemap>
+  <sitemap>
+    <loc>https://www.thepropertyagent.in/sitemap-properties.xml</loc>
+  </sitemap>
+</sitemapindex>
