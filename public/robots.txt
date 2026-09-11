@@ -15,6 +15,9 @@ Crawl-delay: 1
 # Sitemap location
 Sitemap: https://www.thepropertyagent.in/sitemap.xml
 
+# LLM/AI summary of this business — see https://llmstxt.org/
+# https://www.thepropertyagent.in/llms.txt
+
 # Google-specific
 User-agent: Googlebot
 Allow: /
@@ -43,5 +46,21 @@ Allow: /
 Disallow: /admin
 
 User-agent: PerplexityBot
+Allow: /
+Disallow: /admin
+
+User-agent: ClaudeBot
+Allow: /
+Disallow: /admin
+
+User-agent: Claude-Web
+Allow: /
+Disallow: /admin
+
+User-agent: OAI-SearchBot
+Allow: /
+Disallow: /admin
+
+User-agent: Applebot-Extended
 Allow: /
 Disallow: /admin

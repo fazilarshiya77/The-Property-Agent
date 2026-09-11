@@ -154,7 +154,7 @@ export default function Services() {
       formPayload.append('preferred_area', formData.locality);
       formPayload.append('message', formData.message);
       formPayload.append('subject', `Property Inquiry: ${serviceTitle} - ${formData.name}`);
-      formPayload.append('to', 'trishnaproperties78@gmail.com');
+      formPayload.append('to', 'thepropertyagent129@gmail.com');
 
       const response = await fetch('https://api.web3forms.com/submit', {
         method: 'POST',

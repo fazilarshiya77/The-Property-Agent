@@ -44,7 +44,7 @@ const emptyForm: Omit<Property, 'id' | 'propertyCode'> = {
   bedrooms: 2, bathrooms: 2, area: 0, furnished: 'semi', deposit: '',
   availability: 'Immediate', amenities: [], highlights: [], images: [], imageCaptions: [], coverImageIndex: 0,
   videos: [],
-  description: '', shortDescription: '', contactEmail: 'trishnaproperties78@gmail.com', mapQuery: '',
+  description: '', shortDescription: '', contactEmail: 'thepropertyagent129@gmail.com', mapQuery: '',
   reviews: [], attributes: {}, negotiable: false, priceType: 'total', isFeatured: false, isUrgent: false,
   district: '', taluk: '', cityTown: '', landmark: '', pincode: '', locationVisibility: 'exact',
   legal: {}, source: {},

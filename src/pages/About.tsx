@@ -159,7 +159,7 @@ export default function About() {
       <section className="py-12 sm:py-16 lg:py-20 bg-neutral-50" aria-label="Visit our office in Bengaluru" itemScope itemType="https://schema.org/LocalBusiness">
         <meta itemProp="name" content="The Property Agent" />
         <meta itemProp="telephone" content={formatPhoneDisplay(callNumber)} />
-        <meta itemProp="email" content="trishnaproperties78@gmail.com" />
+        <meta itemProp="email" content="thepropertyagent129@gmail.com" />
 
         <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
           <div ref={officeHeaderRef} className="text-center mb-8 sm:mb-12">

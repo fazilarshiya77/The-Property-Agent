@@ -19,7 +19,7 @@ export const DEFAULT_SITE_SETTINGS: SiteSettings = {
   callNumbers: [],
   whatsappNumber: '',
   businessName: 'The Property Agent',
-  businessEmail: 'trishnaproperties78@gmail.com',
+  businessEmail: 'thepropertyagent129@gmail.com',
 }
 
 interface SettingsStore {

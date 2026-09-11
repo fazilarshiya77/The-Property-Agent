@@ -102,14 +102,20 @@
           "@type": ["RealEstateAgent", "LocalBusiness"],
           "@id": "https://www.thepropertyagent.in/#organization",
           "name": "The Property Agent",
-          "alternateName": "The Property Agent",
+          "alternateName": "The Property Agent Karnataka",
           "description": "The Property Agent is an independent real estate agent covering all of Karnataka, dealing in plot sales, farmhouse plots, agricultural land, rental & lease homes, and commercial properties as they become available.",
           "url": "https://www.thepropertyagent.in",
-          "logo": "https://www.thepropertyagent.in/logo.jpg",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://www.thepropertyagent.in/logo.jpg",
+            "width": 512,
+            "height": 512
+          },
           "image": "https://www.thepropertyagent.in/logo.jpg",
           "telephone": "+91 90194 88368",
-          "email": "trishnaproperties78@gmail.com",
+          "email": "thepropertyagent129@gmail.com",
           "currenciesAccepted": "INR",
+          "paymentAccepted": "Cash, Bank Transfer, UPI",
           "address": {
             "@type": "PostalAddress",
             "streetAddress": "No. 84, 4th cross kashi nagar, yelachanahalli, B-78.",
@@ -122,6 +128,7 @@
             "latitude": "12.9716",
             "longitude": "77.5946"
           },
+          "hasMap": "https://www.google.com/maps/search/?api=1&query=No.%2084%2C%204th%20cross%20kashi%20nagar%2C%20yelachanahalli%2C%20B-78.%2C%20Bengaluru%2C%20Karnataka",
           "openingHoursSpecification": [
             {
               "@type": "OpeningHoursSpecification",
@@ -131,7 +138,13 @@
             }
           ],
           "areaServed": [
-            {"@type": "State", "name": "Karnataka"}
+            {"@type": "State", "name": "Karnataka"},
+            {"@type": "City", "name": "Bengaluru"}
+          ],
+          "knowsAbout": [
+            "Plot Sales", "Farmhouse Plots", "Agricultural Land", "Rental Properties",
+            "Lease Properties", "Commercial Properties", "Real Estate Documentation",
+            "Site Visits", "Property Valuation"
           ],
           "hasOfferCatalog": {
             "@type": "OfferCatalog",
@@ -146,7 +159,26 @@
               { "@type": "OfferCatalog", "name": "Commercial Properties" }
             ]
           },
-          "sameAs": []
+          "contactPoint": [
+            {
+              "@type": "ContactPoint",
+              "telephone": "+91 90194 88368",
+              "contactType": "customer service",
+              "areaServed": "IN",
+              "availableLanguage": ["English", "Kannada"]
+            },
+            {
+              "@type": "ContactPoint",
+              "telephone": "+91 98450 11138",
+              "contactType": "sales",
+              "areaServed": "IN",
+              "availableLanguage": ["English", "Kannada"]
+            }
+          ],
+          "sameAs": [
+            "https://www.google.com/maps/search/?api=1&query=No.%2084%2C%204th%20cross%20kashi%20nagar%2C%20yelachanahalli%2C%20B-78.%2C%20Bengaluru%2C%20Karnataka",
+            "https://wa.me/919019488368"
+          ]
         }
       ]
     }
@@ -175,7 +207,7 @@
              app can load the live, admin-configured numbers from Supabase
              (Admin -> Settings -> Contact & Communication). Update these by
              hand if the business's primary number changes permanently. -->
-        <p>Contact us: <a href="tel:+919019488368">+91 90194 88368</a> | WhatsApp: <a href="https://wa.me/919019488368">+91 90194 88368</a> | <a href="mailto:trishnaproperties78@gmail.com">trishnaproperties78@gmail.com</a></p>
+        <p>Contact us: <a href="tel:+919019488368">+91 90194 88368</a> or <a href="tel:+919845011138">+91 98450 11138</a> | WhatsApp: <a href="https://wa.me/919019488368">+91 90194 88368</a> | <a href="mailto:thepropertyagent129@gmail.com">thepropertyagent129@gmail.com</a></p>
         <p>Visit us: No. 84, 4th cross kashi nagar, yelachanahalli, B-78., Bengaluru, Karnataka</p>
         <h2>Property Categories</h2>
         <ul style="list-style: none; padding: 0;">

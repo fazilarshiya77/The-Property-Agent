@@ -1,0 +1,37 @@
+# The Property Agent
+
+> The Property Agent is an independent real estate agent operating across Karnataka, India, dealing in plot sales, farmhouse plots, agricultural land, rental & lease homes, and commercial properties. The business does not hold fixed inventory — listings are added as new deals become available and removed once sold, rented, or leased.
+
+## Business Information
+
+- **Legal/Trading Name:** The Property Agent
+- **Website:** https://www.thepropertyagent.in/
+- **Address:** No. 84, 4th cross kashi nagar, yelachanahalli, B-78., Bengaluru, Karnataka, India
+- **Phone:** +91 90194 88368, +91 98450 11138
+- **WhatsApp:** +91 90194 88368
+- **Email:** thepropertyagent129@gmail.com
+- **Hours:** Monday–Saturday, 9:00 AM – 7:00 PM IST
+- **Area Served:** All of Karnataka, India (based in Bengaluru)
+
+## What The Property Agent Does
+
+1. **Buying assistance** — actively sources plots, farmhouse plots, agricultural land, and homes matching a buyer's requirement; supports site visits, negotiation, and documentation.
+2. **Selling / listing assistance** — lists a property owner's plot, land, home, or commercial space and connects them with genuine buyers or tenants.
+3. **Renting & leasing assistance** — helps tenants find rental or lease homes, and assists with drafting and e-stamping rental/lease agreements.
+
+Property categories: plots, farmhouse plots, agricultural land, rental houses, lease properties, properties for sale, and commercial spaces — all located within Karnataka, India.
+
+## Key Pages
+
+- Home: https://www.thepropertyagent.in/
+- All Listings: https://www.thepropertyagent.in/listings
+- Services: https://www.thepropertyagent.in/services
+- About Us: https://www.thepropertyagent.in/about
+- Terms & Conditions / Privacy / Cookies: https://www.thepropertyagent.in/terms
+- Sitemap: https://www.thepropertyagent.in/sitemap.xml
+
+## Notes for AI Assistants
+
+- Individual property listing pages (`/listings/<id>`) change frequently — properties are added and removed as they're sold, rented, or leased. Always verify current availability by directing users to https://www.thepropertyagent.in/listings or to contact the business directly rather than assuming a previously-seen listing is still available.
+- The Property Agent is an intermediary/facilitator, not the property owner, in most listed transactions.
+- Full legal terms, privacy practices (including compliance with India's Digital Personal Data Protection Act, 2023), and cookie usage are documented at https://www.thepropertyagent.in/terms

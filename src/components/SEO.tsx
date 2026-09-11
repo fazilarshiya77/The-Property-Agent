@@ -2,13 +2,12 @@ import React from 'react';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import { useLocation } from 'react-router-dom';
 import { useSettingsStore } from '../stores/settingsStore';
-import { formatPhoneDisplay } from '../lib/phone';
 
 // ─── CONSTANTS ──────────────────────────────────────────
 const SITE_URL = 'https://www.thepropertyagent.in';
 const SITE_NAME = 'The Property Agent';
 const DEFAULT_OG_IMAGE = `${SITE_URL}/logo.jpg`;
-const EMAIL = 'trishnaproperties78@gmail.com';
+const EMAIL = 'thepropertyagent129@gmail.com';
 const ADDRESS = 'No. 84, 4th cross kashi nagar, yelachanahalli, B-78., Bengaluru, Karnataka';
 
 // ─── TYPES ──────────────────────────────────────────────
@@ -110,7 +109,18 @@ function generateWebSiteSchema(): object {
 }
 
 /** RealEstateAgent + LocalBusiness combined schema */
-function generateBusinessSchema(phone: string): object {
+function generateBusinessSchema(callNumbers: string[], whatsappNumber: string): object {
+  const primaryPhone = callNumbers[0] || '';
+  const waDigits = whatsappNumber.replace(/\D/g, '');
+
+  const contactPoints = callNumbers.map((num, i) => ({
+    '@type': 'ContactPoint',
+    telephone: num,
+    contactType: i === 0 ? 'customer service' : 'sales',
+    areaServed: 'IN',
+    availableLanguage: ['English', 'Kannada'],
+  }));
+
   return {
     '@context': 'https://schema.org',
     '@type': ['RealEstateAgent', 'LocalBusiness'],
@@ -119,9 +129,14 @@ function generateBusinessSchema(phone: string): object {
     alternateName: 'The Property Agent Karnataka',
     description: 'The Property Agent is an independent real estate agent covering all of Karnataka, dealing in plot sales, farmhouse plots, agricultural land, rental & lease homes, and commercial properties as they become available.',
     url: SITE_URL,
-    logo: DEFAULT_OG_IMAGE,
+    logo: {
+      '@type': 'ImageObject',
+      url: DEFAULT_OG_IMAGE,
+      width: 512,
+      height: 512,
+    },
     image: DEFAULT_OG_IMAGE,
-    telephone: phone,
+    telephone: primaryPhone,
     email: EMAIL,
     currenciesAccepted: 'INR',
     paymentAccepted: 'Cash, Bank Transfer, UPI',
@@ -137,6 +152,7 @@ function generateBusinessSchema(phone: string): object {
       latitude: '12.9716',
       longitude: '77.5946',
     },
+    hasMap: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(ADDRESS)}`,
     openingHoursSpecification: [
       {
         '@type': 'OpeningHoursSpecification',
@@ -147,6 +163,12 @@ function generateBusinessSchema(phone: string): object {
     ],
     areaServed: [
       { '@type': 'State', name: 'Karnataka' },
+      { '@type': 'City', name: 'Bengaluru' },
+    ],
+    knowsAbout: [
+      'Plot Sales', 'Farmhouse Plots', 'Agricultural Land', 'Rental Properties',
+      'Lease Properties', 'Commercial Properties', 'Real Estate Documentation',
+      'Site Visits', 'Property Valuation',
     ],
     hasOfferCatalog: {
       '@type': 'OfferCatalog',
@@ -161,8 +183,10 @@ function generateBusinessSchema(phone: string): object {
         { '@type': 'OfferCatalog', name: 'Commercial Properties' },
       ],
     },
+    ...(contactPoints.length > 0 ? { contactPoint: contactPoints } : {}),
     sameAs: [
       `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(ADDRESS)}`,
+      ...(waDigits ? [`https://wa.me/${waDigits}`] : []),
     ],
     founder: {
       '@type': 'Organization',
@@ -300,7 +324,7 @@ function generateItemListSchema(title: string, description: string, numberOfItem
 // ─── SEO COMPONENT ──────────────────────────────────────
 export const SEO: React.FC<SEOProps> = (props) => {
   const location = useLocation();
-  const callNumber = useSettingsStore(s => s.settings.callNumbers[0] || '');
+  const { callNumbers, whatsappNumber } = useSettingsStore(s => s.settings);
 
   const {
     title,
@@ -411,7 +435,7 @@ export const SEO: React.FC<SEOProps> = (props) => {
 
       {/* ─── Structured Data: Business/Organization (always) ─── */}
       <script type="application/ld+json">
-        {JSON.stringify(generateBusinessSchema(formatPhoneDisplay(callNumber)))}
+        {JSON.stringify(generateBusinessSchema(callNumbers, whatsappNumber))}
       </script>
 
       {/* ─── Structured Data: Breadcrumbs ─── */}
